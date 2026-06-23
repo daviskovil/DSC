@@ -1,0 +1,12 @@
+.claude/
+_bmad/
+_bmad-output/
+UI Reference/
+UI UX Reference/
+*.docx
+*.txt
+*.pdf
+*.ai
+*.eps
+__MACOSX/
+*.zip

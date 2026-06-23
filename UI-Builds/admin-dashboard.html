@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DSC — Admin Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet"/>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --brand-red:    #ed1c24;
+  --brand-dark:   #231f20;
+  --brand-dark2:  #2e2a2b;
+  --brand-dark3:  #3a3536;
+  --bg:           #f4f5f7;
+  --surface:      #ffffff;
+  --border:       #e8e9ec;
+  --text-primary: #1a1a1a;
+  --text-secondary: #6b7280;
+  --text-muted:   #9ca3af;
+  --sidebar-w:    220px;
+  --header-h:     60px;
+  --green:        #16a34a;
+  --green-light:  #dcfce7;
+  --amber:        #d97706;
+  --amber-light:  #fef3c7;
+  --red-light:    #fee2e2;
+  --blue:         #2563eb;
+  --blue-light:   #dbeafe;
+  --shadow-sm:    0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:    0 4px 12px rgba(0,0,0,.08), 0 2px 4px rgba(0,0,0,.04);
+  --shadow-lg:    0 10px 30px rgba(0,0,0,.10);
+  --radius:       12px;
+  --radius-sm:    8px;
+  --radius-xs:    6px;
+}
+
+html, body { height: 100%; font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text-primary); font-size: 14px; }
+
+/* ── LAYOUT ─────────────────────────────────────────── */
+.shell { display: flex; height: 100vh; overflow: hidden; }
+
+/* ── SIDEBAR ─────────────────────────────────────────── */
+.sidebar {
+  width: var(--sidebar-w);
+  min-width: var(--sidebar-w);
+  background: var(--brand-dark);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: fixed;
+  left: 0; top: 0;
+  z-index: 100;
+  border-right: 1px solid var(--brand-dark3);
+}
+
+.sidebar-logo {
+  padding: 18px 20px 16px;
+  border-bottom: 1px solid var(--brand-dark3);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  width: 34px; height: 34px;
+  background: var(--brand-red);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.logo-icon svg { width: 20px; height: 20px; fill: white; }
+
+.logo-text { display: flex; flex-direction: column; }
+.logo-text .logo-brand {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: #fff;
+  letter-spacing: -0.2px;
+  line-height: 1;
+}
+.logo-text .logo-brand span { color: var(--brand-red); }
+.logo-text .logo-sub {
+  font-size: 10px;
+  color: rgba(255,255,255,0.35);
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.sidebar-section {
+  padding: 16px 12px 8px;
+}
+.sidebar-section-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.25);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 0 8px;
+  margin-bottom: 6px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  color: rgba(255,255,255,0.55);
+  font-size: 13.5px;
+  font-weight: 400;
+  transition: all 0.15s ease;
+  text-decoration: none;
+  position: relative;
+  margin-bottom: 1px;
+}
+.nav-item:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.85); }
+.nav-item.active {
+  background: rgba(237,28,36,0.15);
+  color: #fff;
+  font-weight: 500;
+}
+.nav-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 50%;
+  transform: translateY(-50%);
+  width: 3px; height: 20px;
+  background: var(--brand-red);
+  border-radius: 0 3px 3px 0;
+}
+.nav-item i, .nav-item [data-lucide] { width: 16px; height: 16px; flex-shrink: 0; }
+.nav-badge {
+  margin-left: auto;
+  background: var(--brand-red);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 20px;
+  min-width: 18px;
+  text-align: center;
+}
+
+.sidebar-bottom {
+  margin-top: auto;
+  padding: 12px;
+  border-top: 1px solid var(--brand-dark3);
+}
+.user-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.user-card:hover { background: rgba(255,255,255,0.06); }
+.user-avatar {
+  width: 32px; height: 32px;
+  background: var(--brand-red);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: white;
+  flex-shrink: 0;
+}
+.user-info { flex: 1; min-width: 0; }
+.user-name { font-size: 13px; font-weight: 500; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.user-role { font-size: 11px; color: rgba(255,255,255,0.35); }
+
+/* ── MAIN ────────────────────────────────────────────── */
+.main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── HEADER ──────────────────────────────────────────── */
+.header {
+  height: var(--header-h);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  gap: 16px;
+  flex-shrink: 0;
+  z-index: 50;
+}
+.header-title {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--text-primary);
+}
+.header-search {
+  flex: 1;
+  max-width: 320px;
+  position: relative;
+  margin-left: 8px;
+}
+.header-search input {
+  width: 100%;
+  padding: 7px 12px 7px 34px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--text-primary);
+  background: var(--bg);
+  outline: none;
+  transition: border-color 0.15s;
+}
+.header-search input:focus { border-color: var(--brand-red); }
+.header-search [data-lucide] {
+  position: absolute;
+  left: 10px; top: 50%;
+  transform: translateY(-50%);
+  width: 15px; height: 15px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+.header-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+.icon-btn {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s;
+  color: var(--text-secondary);
+  position: relative;
+}
+.icon-btn:hover { background: var(--bg); color: var(--text-primary); }
+.icon-btn [data-lucide] { width: 16px; height: 16px; }
+.notif-dot {
+  position: absolute;
+  top: 7px; right: 7px;
+  width: 7px; height: 7px;
+  background: var(--brand-red);
+  border-radius: 50%;
+  border: 2px solid white;
+}
+.header-date {
+  font-size: 12px;
+  color: var(--text-muted);
+  padding: 0 4px;
+}
+.btn-primary {
+  display: flex; align-items: center; gap: 6px;
+  padding: 7px 14px;
+  background: var(--brand-red);
+  color: white;
+  border: none;
+  border-radius: var(--radius-xs);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-primary:hover { background: #c8161d; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(237,28,36,0.3); }
+.btn-primary [data-lucide] { width: 14px; height: 14px; }
+
+/* ── CONTENT ─────────────────────────────────────────── */
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* scrollbar */
+.content::-webkit-scrollbar { width: 5px; }
+.content::-webkit-scrollbar-track { background: transparent; }
+.content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+
+/* ── WELCOME BAR ─────────────────────────────────────── */
+.welcome-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  animation: fadeUp 0.4s ease both;
+}
+.welcome-text h1 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+.welcome-text h1 span { color: var(--brand-red); }
+.welcome-text p { font-size: 13px; color: var(--text-secondary); margin-top: 3px; }
+.week-badge {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+.week-badge [data-lucide] { width: 13px; height: 13px; color: var(--brand-red); }
+
+/* ── STAT CARDS ──────────────────────────────────────── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+.stat-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  animation: fadeUp 0.4s ease both;
+}
+.stat-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+.stat-card.red::after   { background: var(--brand-red); }
+.stat-card.green::after { background: var(--green); }
+.stat-card.amber::after { background: var(--amber); }
+.stat-card.blue::after  { background: var(--blue); }
+.stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.stat-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.stat-icon {
+  width: 36px; height: 36px;
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+}
+.stat-icon.red   { background: var(--red-light);   color: var(--brand-red); }
+.stat-icon.green { background: var(--green-light);  color: var(--green); }
+.stat-icon.amber { background: var(--amber-light);  color: var(--amber); }
+.stat-icon.blue  { background: var(--blue-light);   color: var(--blue); }
+.stat-icon [data-lucide] { width: 18px; height: 18px; }
+.stat-trend {
+  display: flex; align-items: center; gap: 3px;
+  font-size: 11px; font-weight: 600;
+  padding: 3px 7px;
+  border-radius: 20px;
+}
+.stat-trend.up   { color: var(--green); background: var(--green-light); }
+.stat-trend.down { color: var(--brand-red); background: var(--red-light); }
+.stat-trend [data-lucide] { width: 11px; height: 11px; }
+.stat-value {
+  font-family: 'Outfit', sans-serif;
+  font-size: 30px;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1;
+  margin-bottom: 4px;
+  letter-spacing: -0.5px;
+}
+.stat-label { font-size: 12.5px; color: var(--text-secondary); font-weight: 400; }
+.stat-progress {
+  margin-top: 12px;
+  height: 4px;
+  background: var(--bg);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.stat-progress-bar {
+  height: 100%;
+  border-radius: 10px;
+  transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
+}
+.stat-progress-bar.red   { background: var(--brand-red); }
+.stat-progress-bar.green { background: var(--green); }
+.stat-progress-bar.amber { background: var(--amber); }
+.stat-progress-bar.blue  { background: var(--blue); }
+.stat-progress-label {
+  display: flex; justify-content: space-between;
+  margin-top: 5px;
+  font-size: 10.5px;
+  color: var(--text-muted);
+}
+
+/* ── TWO-COLUMN GRID ─────────────────────────────────── */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 14px;
+  align-items: start;
+}
+
+/* ── CARD ────────────────────────────────────────────── */
+.card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  animation: fadeUp 0.5s ease both;
+}
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.card-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex; align-items: center; gap: 8px;
+}
+.card-title [data-lucide] { width: 16px; height: 16px; color: var(--brand-red); }
+.card-actions { display: flex; align-items: center; gap: 8px; }
+.link-btn {
+  font-size: 12px;
+  color: var(--brand-red);
+  text-decoration: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.link-btn:hover { opacity: 0.75; }
+.filter-btn {
+  display: flex; align-items: center; gap: 4px;
+  padding: 5px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  background: var(--surface);
+  font-size: 12px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+}
+.filter-btn [data-lucide] { width: 12px; height: 12px; }
+
+/* ── AE TABLE ────────────────────────────────────────── */
+.ae-table { width: 100%; border-collapse: collapse; }
+.ae-table th {
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  color: var(--text-muted);
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+.ae-table th:first-child { padding-left: 20px; }
+.ae-table th:last-child  { padding-right: 20px; }
+.ae-table td {
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 13.5px;
+  color: var(--text-primary);
+  transition: background 0.12s;
+}
+.ae-table td:first-child { padding-left: 20px; }
+.ae-table td:last-child  { padding-right: 20px; }
+.ae-table tr:last-child td { border-bottom: none; }
+.ae-table tbody tr:hover td { background: #fafafa; cursor: pointer; }
+
+.ae-person { display: flex; align-items: center; gap: 10px; }
+.ae-avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700;
+  flex-shrink: 0;
+  color: white;
+}
+.ae-name { font-weight: 500; font-size: 13.5px; }
+.ae-company { font-size: 11.5px; color: var(--text-muted); }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: 11.5px;
+  font-weight: 600;
+}
+.badge-green  { background: var(--green-light);  color: var(--green); }
+.badge-amber  { background: var(--amber-light);  color: var(--amber); }
+.badge-red    { background: var(--red-light);    color: var(--brand-red); }
+.badge-blue   { background: var(--blue-light);   color: var(--blue); }
+.badge-gray   { background: #f3f4f6; color: var(--text-muted); }
+.badge .dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+
+.city-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.city-tag [data-lucide] { width: 12px; height: 12px; }
+
+.progress-mini {
+  display: flex; align-items: center; gap: 8px;
+}
+.progress-mini-bar {
+  width: 64px; height: 5px;
+  background: var(--bg);
+  border-radius: 10px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.progress-mini-fill { height: 100%; border-radius: 10px; background: var(--brand-red); }
+.progress-mini-text { font-size: 12px; color: var(--text-muted); }
+
+/* ── RIGHT PANEL ─────────────────────────────────────── */
+.right-col { display: flex; flex-direction: column; gap: 14px; }
+
+/* Outreach Health */
+.outreach-list { padding: 8px 0; }
+.outreach-item {
+  display: flex;
+  align-items: center;
+  padding: 11px 20px;
+  gap: 12px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.outreach-item:last-child { border-bottom: none; }
+.outreach-item:hover { background: var(--bg); }
+.outreach-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+.outreach-label { flex: 1; font-size: 13px; color: var(--text-primary); }
+.outreach-count { font-size: 13px; font-weight: 700; font-family: 'Outfit', sans-serif; color: var(--text-primary); }
+.outreach-bar-wrap { width: 70px; height: 5px; background: var(--bg); border-radius: 10px; overflow: hidden; }
+.outreach-bar { height: 100%; border-radius: 10px; }
+
+/* Agent Activity */
+.agent-list { padding: 4px 0; }
+.agent-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.agent-item:last-child { border-bottom: none; }
+.agent-item:hover { background: var(--bg); }
+.agent-avatar {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: var(--brand-dark);
+  color: white;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700;
+  flex-shrink: 0;
+  font-family: 'Outfit', sans-serif;
+}
+.agent-info { flex: 1; min-width: 0; }
+.agent-name { font-size: 13px; font-weight: 500; }
+.agent-sub  { font-size: 11.5px; color: var(--text-muted); margin-top: 1px; }
+.agent-stat { text-align: right; }
+.agent-stat-num { font-size: 15px; font-weight: 700; font-family: 'Outfit', sans-serif; color: var(--text-primary); }
+.agent-stat-label { font-size: 10.5px; color: var(--text-muted); }
+
+/* ── BOTTOM ROW ──────────────────────────────────────── */
+.bottom-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+/* Meetings */
+.meeting-list { padding: 4px 0; }
+.meeting-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.meeting-item:last-child { border-bottom: none; }
+.meeting-item:hover { background: var(--bg); }
+.meeting-date-box {
+  width: 40px;
+  background: var(--bg);
+  border-radius: 8px;
+  text-align: center;
+  padding: 5px 0;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+}
+.meeting-date-month { font-size: 9px; font-weight: 600; text-transform: uppercase; color: var(--brand-red); letter-spacing: 0.5px; }
+.meeting-date-day   { font-size: 17px; font-weight: 800; font-family: 'Outfit', sans-serif; color: var(--text-primary); line-height: 1; }
+.meeting-info { flex: 1; min-width: 0; }
+.meeting-company { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.meeting-ae      { font-size: 11.5px; color: var(--text-muted); margin-top: 2px; }
+.meeting-time    { font-size: 11.5px; color: var(--text-muted); margin-top: 2px; display: flex; align-items: center; gap: 3px; }
+.meeting-time [data-lucide] { width: 11px; height: 11px; }
+.meeting-status { flex-shrink: 0; }
+
+/* Open Questions */
+.oq-list { padding: 4px 0; }
+.oq-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 11px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.oq-item:last-child { border-bottom: none; }
+.oq-num {
+  width: 22px; height: 22px;
+  background: var(--brand-dark);
+  color: white;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-family: 'Outfit', sans-serif;
+  margin-top: 1px;
+}
+.oq-text { flex: 1; font-size: 13px; color: var(--text-primary); line-height: 1.4; }
+.oq-owner {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  margin-top: 3px;
+}
+.oq-owner strong { color: var(--brand-red); }
+
+/* ── ANIMATIONS ──────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.stat-card:nth-child(1) { animation-delay: 0.05s; }
+.stat-card:nth-child(2) { animation-delay: 0.10s; }
+.stat-card:nth-child(3) { animation-delay: 0.15s; }
+.stat-card:nth-child(4) { animation-delay: 0.20s; }
+.two-col > *:nth-child(1) { animation-delay: 0.25s; }
+.two-col > *:nth-child(2) { animation-delay: 0.30s; }
+.bottom-row > *:nth-child(1) { animation-delay: 0.35s; }
+.bottom-row > *:nth-child(2) { animation-delay: 0.40s; }
+
+/* pulsing dot */
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+.live-dot {
+  display: inline-block;
+  width: 7px; height: 7px;
+  background: var(--green);
+  border-radius: 50%;
+  animation: pulse 1.8s ease-in-out infinite;
+  margin-right: 4px;
+}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- ── SIDEBAR ────────────────────────────────────────── -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon">
+      <!-- Simplified Dataskate icon -->
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path fill="white" d="M12 4C7.58 4 4 7.58 4 12s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/>
+        <path fill="white" d="M12 8v4.5l3 1.5-.75 1.5L11 13.5V8z"/>
+      </svg>
+    </div>
+    <div class="logo-text">
+      <div class="logo-brand">data<span>skate</span></div>
+      <div class="logo-sub">Sales Center</div>
+    </div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">Main</div>
+    <div class="nav-item active">
+      <i data-lucide="layout-dashboard"></i> Dashboard
+    </div>
+    <div class="nav-item">
+      <i data-lucide="users"></i> AE Directory
+      <span class="nav-badge">100</span>
+    </div>
+    <div class="nav-item">
+      <i data-lucide="send"></i> Outreach Health
+    </div>
+    <div class="nav-item">
+      <i data-lucide="user-check"></i> Field Agents
+    </div>
+    <div class="nav-item">
+      <i data-lucide="calendar"></i> Meetings
+      <span class="nav-badge">4</span>
+    </div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">Content</div>
+    <div class="nav-item">
+      <i data-lucide="book-open"></i> Knowledge Hub
+    </div>
+    <div class="nav-item">
+      <i data-lucide="bar-chart-2"></i> Reports
+    </div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">Admin</div>
+    <div class="nav-item">
+      <i data-lucide="shield"></i> Access Management
+    </div>
+    <div class="nav-item">
+      <i data-lucide="settings"></i> Settings
+    </div>
+  </div>
+
+  <div class="sidebar-bottom">
+    <div class="user-card">
+      <div class="user-avatar">D</div>
+      <div class="user-info">
+        <div class="user-name">Davis Rajan</div>
+        <div class="user-role">DSC Head · Admin</div>
+      </div>
+      <i data-lucide="chevron-up" style="width:14px;height:14px;color:rgba(255,255,255,.3)"></i>
+    </div>
+  </div>
+</aside>
+
+<!-- ── MAIN ────────────────────────────────────────────── -->
+<div class="main">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-title">Admin Dashboard</div>
+    <div class="header-search">
+      <i data-lucide="search"></i>
+      <input type="text" placeholder="Search AEs, campaigns, meetings…"/>
+    </div>
+    <div class="header-actions">
+      <span class="header-date">Thursday, 19 Jun 2026</span>
+      <div class="icon-btn" title="Notifications">
+        <i data-lucide="bell"></i>
+        <div class="notif-dot"></div>
+      </div>
+      <div class="icon-btn" title="Refresh">
+        <i data-lucide="refresh-cw"></i>
+      </div>
+      <button class="btn-primary">
+        <i data-lucide="plus"></i> New AE
+      </button>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- WELCOME -->
+    <div class="welcome-bar">
+      <div class="welcome-text">
+        <h1>Good morning, <span>Davis</span> 👋</h1>
+        <p>Here's your DSC operational snapshot for today.</p>
+      </div>
+      <div class="week-badge">
+        <i data-lucide="zap"></i>
+        <span class="live-dot"></span> Live — refreshed just now
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card red">
+        <div class="stat-header">
+          <div class="stat-icon red"><i data-lucide="users"></i></div>
+          <div class="stat-trend up"><i data-lucide="trending-up"></i> +8</div>
+        </div>
+        <div class="stat-value" data-target="47">0</div>
+        <div class="stat-label">AEs Engaged</div>
+        <div class="stat-progress"><div class="stat-progress-bar red" style="width:0%" data-width="47%"></div></div>
+        <div class="stat-progress-label"><span>47 of 100 target AEs</span><span>47%</span></div>
+      </div>
+
+      <div class="stat-card green">
+        <div class="stat-header">
+          <div class="stat-icon green"><i data-lucide="send"></i></div>
+          <div class="stat-trend up"><i data-lucide="trending-up"></i> +3</div>
+        </div>
+        <div class="stat-value" data-target="12">0</div>
+        <div class="stat-label">Active Campaigns</div>
+        <div class="stat-progress"><div class="stat-progress-bar green" style="width:0%" data-width="60%"></div></div>
+        <div class="stat-progress-label"><span>Track A + B combined</span><span>12 live</span></div>
+      </div>
+
+      <div class="stat-card amber">
+        <div class="stat-header">
+          <div class="stat-icon amber"><i data-lucide="calendar-check"></i></div>
+          <div class="stat-trend up"><i data-lucide="trending-up"></i> +5</div>
+        </div>
+        <div class="stat-value" data-target="23">0</div>
+        <div class="stat-label">Meetings Booked</div>
+        <div class="stat-progress"><div class="stat-progress-bar amber" style="width:0%" data-width="77%"></div></div>
+        <div class="stat-progress-label"><span>This month</span><span>23 of 30 goal</span></div>
+      </div>
+
+      <div class="stat-card blue">
+        <div class="stat-header">
+          <div class="stat-icon blue"><i data-lucide="book-open"></i></div>
+          <div class="stat-trend up"><i data-lucide="trending-up"></i> +2</div>
+        </div>
+        <div class="stat-value" data-target="8">0</div>
+        <div class="stat-label">Knowledge Hub Articles</div>
+        <div class="stat-progress"><div class="stat-progress-bar blue" style="width:0%" data-width="53%"></div></div>
+        <div class="stat-progress-label"><span>Target: 15 articles</span><span>8 published</span></div>
+      </div>
+    </div>
+
+    <!-- TWO-COLUMN -->
+    <div class="two-col">
+
+      <!-- AE TABLE -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i data-lucide="users"></i> AE Engagement Overview</div>
+          <div class="card-actions">
+            <div class="filter-btn"><i data-lucide="filter"></i> Filter</div>
+            <a class="link-btn">View all →</a>
+          </div>
+        </div>
+        <table class="ae-table">
+          <thead>
+            <tr>
+              <th>Account Executive</th>
+              <th>City</th>
+              <th>Status</th>
+              <th>Campaigns</th>
+              <th>Outreach</th>
+              <th>Meetings</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><div class="ae-person"><div class="ae-avatar" style="background:#ed1c24">SC</div><div><div class="ae-name">Sarah Chen</div><div class="ae-company">Salesforce · MuleSoft</div></div></div></td>
+              <td><div class="city-tag"><i data-lucide="map-pin"></i> Chicago</div></td>
+              <td><span class="badge badge-green"><span class="dot"></span> Partner</span></td>
+              <td>3 active</td>
+              <td><div class="progress-mini"><div class="progress-mini-bar"><div class="progress-mini-fill" style="width:85%"></div></div><span class="progress-mini-text">85%</span></div></td>
+              <td><strong>5</strong></td>
+            </tr>
+            <tr>
+              <td><div class="ae-person"><div class="ae-avatar" style="background:#2563eb">MT</div><div><div class="ae-name">Michael Torres</div><div class="ae-company">Salesforce · MuleSoft</div></div></div></td>
+              <td><div class="city-tag"><i data-lucide="map-pin"></i> San Francisco</div></td>
+              <td><span class="badge badge-green"><span class="dot"></span> Active</span></td>
+              <td>2 active</td>
+              <td><div class="progress-mini"><div class="progress-mini-bar"><div class="progress-mini-fill" style="width:62%"></div></div><span class="progress-mini-text">62%</span></div></td>
+              <td><strong>2</strong></td>
+            </tr>
+            <tr>
+              <td><div class="ae-person"><div class="ae-avatar" style="background:#16a34a">JW</div><div><div class="ae-name">James Williams</div><div class="ae-company">Salesforce · MuleSoft</div></div></div></td>
+              <td><div class="city-tag"><i data-lucide="map-pin"></i> Atlanta</div></td>
+              <td><span class="badge badge-amber"><span class="dot"></span> Visited</span></td>
+              <td>1 active</td>
+              <td><div class="progress-mini"><div class="progress-mini-bar"><div class="progress-mini-fill" style="width:40%"></div></div><span class="progress-mini-text">40%</span></div></td>
+              <td><strong>1</strong></td>
+            </tr>
+            <tr>
+              <td><div class="ae-person"><div class="ae-avatar" style="background:#7c3aed">PR</div><div><div class="ae-name">Priya Raj</div><div class="ae-company">Salesforce · MuleSoft</div></div></div></td>
+              <td><div class="city-tag"><i data-lucide="map-pin"></i> Chicago</div></td>
+              <td><span class="badge badge-amber"><span class="dot"></span> Visited</span></td>
+              <td>1 active</td>
+              <td><div class="progress-mini"><div class="progress-mini-bar"><div class="progress-mini-fill" style="width:28%"></div></div><span class="progress-mini-text">28%</span></div></td>
+              <td><strong>0</strong></td>
+            </tr>
+            <tr>
+              <td><div class="ae-person"><div class="ae-avatar" style="background:#0891b2">DK</div><div><div class="ae-name">Derek Kim</div><div class="ae-company">Salesforce · MuleSoft</div></div></div></td>
+              <td><div class="city-tag"><i data-lucide="map-pin"></i> San Francisco</div></td>
+              <td><span class="badge badge-gray"><span class="dot"></span> Not Contacted</span></td>
+              <td>—</td>
+              <td><div class="progress-mini"><div class="progress-mini-bar"><div class="progress-mini-fill" style="width:0%"></div></div><span class="progress-mini-text">0%</span></div></td>
+              <td><strong>0</strong></td>
+            </tr>
+            <tr>
+              <td><div class="ae-person"><div class="ae-avatar" style="background:#d97706">AL</div><div><div class="ae-name">Amanda Liu</div><div class="ae-company">Salesforce · MuleSoft</div></div></div></td>
+              <td><div class="city-tag"><i data-lucide="map-pin"></i> Atlanta</div></td>
+              <td><span class="badge badge-gray"><span class="dot"></span> Not Contacted</span></td>
+              <td>—</td>
+              <td><div class="progress-mini"><div class="progress-mini-bar"><div class="progress-mini-fill" style="width:0%"></div></div><span class="progress-mini-text">0%</span></div></td>
+              <td><strong>0</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div class="right-col">
+
+        <!-- Outreach Health -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i data-lucide="activity"></i> Outreach Health</div>
+            <a class="link-btn">Details →</a>
+          </div>
+          <div class="outreach-list">
+            <div class="outreach-item">
+              <div class="outreach-dot" style="background:#16a34a"></div>
+              <span class="outreach-label">Hot — Ready for meeting</span>
+              <span class="outreach-count">14</span>
+              <div class="outreach-bar-wrap"><div class="outreach-bar" style="width:47%;background:#16a34a"></div></div>
+            </div>
+            <div class="outreach-item">
+              <div class="outreach-dot" style="background:#d97706"></div>
+              <span class="outreach-label">Warm — Engaged</span>
+              <span class="outreach-count">38</span>
+              <div class="outreach-bar-wrap"><div class="outreach-bar" style="width:63%;background:#d97706"></div></div>
+            </div>
+            <div class="outreach-item">
+              <div class="outreach-dot" style="background:#ed1c24"></div>
+              <span class="outreach-label">Cold — No response</span>
+              <span class="outreach-count">186</span>
+              <div class="outreach-bar-wrap"><div class="outreach-bar" style="width:100%;background:#ed1c24"></div></div>
+            </div>
+            <div class="outreach-item">
+              <div class="outreach-dot" style="background:#2563eb"></div>
+              <span class="outreach-label">Emails sent this month</span>
+              <span class="outreach-count">12.4k</span>
+              <div class="outreach-bar-wrap"><div class="outreach-bar" style="width:82%;background:#2563eb"></div></div>
+            </div>
+            <div class="outreach-item">
+              <div class="outreach-dot" style="background:#7c3aed"></div>
+              <span class="outreach-label">LinkedIn touches</span>
+              <span class="outreach-count">2.1k</span>
+              <div class="outreach-bar-wrap"><div class="outreach-bar" style="width:35%;background:#7c3aed"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Field Agent Activity -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i data-lucide="user-check"></i> Field Agent Activity</div>
+            <a class="link-btn">View all →</a>
+          </div>
+          <div class="agent-list">
+            <div class="agent-item">
+              <div class="agent-avatar">R</div>
+              <div class="agent-info">
+                <div class="agent-name">Ryan Mitchell</div>
+                <div class="agent-sub">Chicago, SFO, Atlanta · This week: 6 visits</div>
+              </div>
+              <div class="agent-stat">
+                <div class="agent-stat-num">6</div>
+                <div class="agent-stat-label">visits</div>
+              </div>
+            </div>
+            <div class="agent-item">
+              <div class="agent-avatar" style="background:#ed1c24">V</div>
+              <div class="agent-info">
+                <div class="agent-name">Vivek (Ops)</div>
+                <div class="agent-sub">Automation · 3 campaigns configured</div>
+              </div>
+              <div class="agent-stat">
+                <div class="agent-stat-num">3</div>
+                <div class="agent-stat-label">setups</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /right-col -->
+    </div><!-- /two-col -->
+
+    <!-- BOTTOM ROW -->
+    <div class="bottom-row">
+
+      <!-- Recent Meetings -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i data-lucide="calendar"></i> Upcoming Meetings</div>
+          <div class="card-actions">
+            <a class="link-btn">View all →</a>
+          </div>
+        </div>
+        <div class="meeting-list">
+          <div class="meeting-item">
+            <div class="meeting-date-box"><div class="meeting-date-month">JUN</div><div class="meeting-date-day">22</div></div>
+            <div class="meeting-info">
+              <div class="meeting-company">Accenture — VP Integration</div>
+              <div class="meeting-ae">AE: Sarah Chen · Via Track A</div>
+              <div class="meeting-time"><i data-lucide="clock"></i> 2:00 PM CST</div>
+            </div>
+            <div class="meeting-status"><span class="badge badge-green">Confirmed</span></div>
+          </div>
+          <div class="meeting-item">
+            <div class="meeting-date-box"><div class="meeting-date-month">JUN</div><div class="meeting-date-day">24</div></div>
+            <div class="meeting-info">
+              <div class="meeting-company">Deloitte Digital — CTO Office</div>
+              <div class="meeting-ae">AE: Michael Torres · Via Track B</div>
+              <div class="meeting-time"><i data-lucide="clock"></i> 10:30 AM PST</div>
+            </div>
+            <div class="meeting-status"><span class="badge badge-amber">Brief Pending</span></div>
+          </div>
+          <div class="meeting-item">
+            <div class="meeting-date-box"><div class="meeting-date-month">JUN</div><div class="meeting-date-day">25</div></div>
+            <div class="meeting-info">
+              <div class="meeting-company">Home Depot — Enterprise IT</div>
+              <div class="meeting-ae">AE: James Williams · Via Track A</div>
+              <div class="meeting-time"><i data-lucide="clock"></i> 3:00 PM EST</div>
+            </div>
+            <div class="meeting-status"><span class="badge badge-green">Confirmed</span></div>
+          </div>
+          <div class="meeting-item">
+            <div class="meeting-date-box"><div class="meeting-date-month">JUN</div><div class="meeting-date-day">26</div></div>
+            <div class="meeting-info">
+              <div class="meeting-company">Delta Airlines — Architecture</div>
+              <div class="meeting-ae">AE: Sarah Chen · Via Track A</div>
+              <div class="meeting-time"><i data-lucide="clock"></i> 1:00 PM EST</div>
+            </div>
+            <div class="meeting-status"><span class="badge badge-blue">Scheduled</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Open Questions -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i data-lucide="help-circle"></i> Open Questions</div>
+          <span class="badge badge-red">6 pending</span>
+        </div>
+        <div class="oq-list">
+          <div class="oq-item">
+            <div class="oq-num">1</div>
+            <div>
+              <div class="oq-text">Which external CRM will Dataskate use — HubSpot or Salesforce?</div>
+              <div class="oq-owner">Owner: <strong>Davis</strong> · Due: Before Phase 2</div>
+            </div>
+          </div>
+          <div class="oq-item">
+            <div class="oq-num">2</div>
+            <div>
+              <div class="oq-text">Initial 100 AE list + assigned accounts from Kailash</div>
+              <div class="oq-owner">Owner: <strong>Kailash</strong> · Due: Week 1</div>
+            </div>
+          </div>
+          <div class="oq-item">
+            <div class="oq-num">3</div>
+            <div>
+              <div class="oq-text">CRD content format and field definitions</div>
+              <div class="oq-owner">Owner: <strong>Davis + Kailash</strong> · Due: Week 2</div>
+            </div>
+          </div>
+          <div class="oq-item">
+            <div class="oq-num">4</div>
+            <div>
+              <div class="oq-text">Which LinkedIn automation tool to use?</div>
+              <div class="oq-owner">Owner: <strong>Vivek</strong> · Due: Week 1</div>
+            </div>
+          </div>
+          <div class="oq-item">
+            <div class="oq-num">5</div>
+            <div>
+              <div class="oq-text">Email warm-up timeline for Instantly before full launch</div>
+              <div class="oq-owner">Owner: <strong>Vivek</strong> · Due: Week 1</div>
+            </div>
+          </div>
+          <div class="oq-item">
+            <div class="oq-num">6</div>
+            <div>
+              <div class="oq-text">Knowledge Hub content review & approval process</div>
+              <div class="oq-owner">Owner: <strong>Davis</strong> · Due: Before launch</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /bottom-row -->
+
+  </div><!-- /content -->
+</div><!-- /main -->
+</div><!-- /shell -->
+
+<!-- DEMO SWITCHER -->
+<div style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#231f20;border:1px solid rgba(255,255,255,.12);border-radius:30px;padding:8px 14px;display:flex;align-items:center;gap:10px;z-index:999;box-shadow:0 8px 32px rgba(0,0,0,.4);">
+  <span style="font-size:11px;color:rgba(255,255,255,.35);letter-spacing:.5px;">DSC DEMO</span>
+  <div style="width:1px;height:14px;background:rgba(255,255,255,.1);"></div>
+  <a href="index.html" style="font-size:12px;color:rgba(255,255,255,.5);text-decoration:none;padding:4px 8px;border-radius:6px;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">Home</a>
+  <a href="admin-dashboard.html" style="font-size:12px;font-weight:600;color:#ff6b70;text-decoration:none;padding:4px 8px;border-radius:6px;background:rgba(237,28,36,.2);">Admin</a>
+  <a href="staff-interface.html" style="font-size:12px;color:rgba(255,255,255,.5);text-decoration:none;padding:4px 8px;border-radius:6px;" onmouseover="this.style.background='rgba(217,119,6,.2)';this.style.color='#fbbf24'" onmouseout="this.style.background='';this.style.color='rgba(255,255,255,.5)'">Staff</a>
+  <a href="ae-interface.html" style="font-size:12px;color:rgba(255,255,255,.5);text-decoration:none;padding:4px 8px;border-radius:6px;" onmouseover="this.style.background='rgba(37,99,235,.2)';this.style.color='#60a5fa'" onmouseout="this.style.background='';this.style.color='rgba(255,255,255,.5)'">AE View</a>
+</div>
+
+<script>
+// Init Lucide icons
+lucide.createIcons();
+
+// Animated counters
+function animateCounter(el, target, duration = 1200) {
+  let start = null;
+  const step = (timestamp) => {
+    if (!start) start = timestamp;
+    const progress = Math.min((timestamp - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.floor(ease * target);
+    if (progress < 1) requestAnimationFrame(step);
+    else el.textContent = target;
+  };
+  requestAnimationFrame(step);
+}
+
+// Animate progress bars
+function animateBars() {
+  document.querySelectorAll('.stat-progress-bar[data-width]').forEach(bar => {
+    setTimeout(() => { bar.style.width = bar.dataset.width; }, 300);
+  });
+}
+
+window.addEventListener('load', () => {
+  // Counter animations
+  setTimeout(() => {
+    document.querySelectorAll('.stat-value[data-target]').forEach(el => {
+      animateCounter(el, parseInt(el.dataset.target));
+    });
+    animateBars();
+  }, 200);
+});
+
+// Nav item clicks
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', () => {
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    item.classList.add('active');
+  });
+});
+
+// Refresh button spin
+const refreshBtn = document.querySelector('[title="Refresh"]');
+if (refreshBtn) {
+  refreshBtn.addEventListener('click', () => {
+    const icon = refreshBtn.querySelector('[data-lucide]');
+    icon.style.transition = 'transform 0.6s ease';
+    icon.style.transform = 'rotate(360deg)';
+    setTimeout(() => { icon.style.transform = ''; }, 700);
+  });
+}
+</script>
+</body>
+</html>

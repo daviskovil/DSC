@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DSC — Meeting Handoff Brief · Accenture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet"/>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --red: #ed1c24; --dark: #231f20;
+  --bg: #f4f5f7; --surface: #fff; --border: #e8e9ec;
+  --text-1: #1a1a1a; --text-2: #6b7280; --text-3: #9ca3af;
+  --green: #16a34a; --green-bg: #dcfce7;
+  --amber: #d97706; --amber-bg: #fef3c7;
+  --blue: #2563eb; --blue-bg: #dbeafe;
+  --purple: #7c3aed; --purple-bg: #ede9fe;
+}
+html, body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text-1); font-size: 14px; min-height: 100vh; }
+
+/* ── TOPBAR ──────────────────────────────────────── */
+.topbar {
+  background: var(--dark); padding: 0 28px; height: 54px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 50;
+}
+.topbar-left { display: flex; align-items: center; gap: 16px; }
+.back-link {
+  display: flex; align-items: center; gap: 6px;
+  color: rgba(255,255,255,.5); font-size: 13px; cursor: pointer;
+  text-decoration: none; transition: color .15s;
+}
+.back-link:hover { color: #fff; }
+.back-link [data-lucide] { width: 14px; height: 14px; }
+.topbar-divider { width: 1px; height: 18px; background: rgba(255,255,255,.1); }
+.topbar-title { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 14px; color: #fff; }
+.topbar-badge {
+  background: rgba(237,28,36,.2); border: 1px solid rgba(237,28,36,.3);
+  color: #ff6b70; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px;
+}
+.topbar-right { display: flex; align-items: center; gap: 8px; }
+.btn-ghost {
+  display: flex; align-items: center; gap: 5px;
+  padding: 7px 13px; border: 1px solid rgba(255,255,255,.15);
+  border-radius: 8px; background: transparent; color: rgba(255,255,255,.6);
+  font-size: 12.5px; cursor: pointer; font-family: 'DM Sans', sans-serif;
+  transition: all .15s;
+}
+.btn-ghost:hover { background: rgba(255,255,255,.08); color: #fff; }
+.btn-ghost [data-lucide] { width: 13px; height: 13px; }
+.btn-red-sm {
+  display: flex; align-items: center; gap: 5px; padding: 7px 14px;
+  background: var(--red); color: #fff; border: none; border-radius: 8px;
+  font-size: 12.5px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif;
+}
+.btn-red-sm [data-lucide] { width: 13px; height: 13px; }
+
+/* ── PAGE ────────────────────────────────────────── */
+.page { max-width: 820px; margin: 0 auto; padding: 32px 24px 60px; }
+
+/* ── BRIEF HEADER ────────────────────────────────── */
+.brief-header {
+  background: linear-gradient(135deg, var(--dark) 0%, #3a3536 100%);
+  border-radius: 16px; padding: 28px 32px; margin-bottom: 24px;
+  position: relative; overflow: hidden;
+  animation: fadeUp .4s ease both;
+}
+.brief-header::before {
+  content: ''; position: absolute; right: -40px; top: -40px;
+  width: 200px; height: 200px; background: var(--red); border-radius: 50%; opacity: .08;
+}
+.brief-header::after {
+  content: 'CONFIDENTIAL'; position: absolute; bottom: 16px; right: 24px;
+  font-size: 10px; font-weight: 700; letter-spacing: 2px; color: rgba(255,255,255,.12);
+}
+.brief-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.brief-type-badge {
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(237,28,36,.2); border: 1px solid rgba(237,28,36,.3);
+  color: #ff6b70; font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 20px;
+  letter-spacing: .5px;
+}
+.brief-type-badge [data-lucide] { width: 11px; height: 11px; }
+.brief-generated { font-size: 11.5px; color: rgba(255,255,255,.3); }
+.brief-company { font-family: 'Outfit', sans-serif; font-size: 28px; font-weight: 800; color: #fff; margin-bottom: 6px; }
+.brief-meeting-line { font-size: 14px; color: rgba(255,255,255,.55); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+.brief-meeting-line [data-lucide] { width: 14px; height: 14px; }
+.brief-stats { display: flex; gap: 28px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,.1); }
+.brief-stat-num { font-family: 'Outfit', sans-serif; font-size: 20px; font-weight: 800; color: #fff; }
+.brief-stat-label { font-size: 11px; color: rgba(255,255,255,.35); margin-top: 1px; }
+.brief-stat-divider { width: 1px; background: rgba(255,255,255,.1); align-self: stretch; }
+
+/* ── SECTIONS ────────────────────────────────────── */
+.section {
+  background: var(--surface); border-radius: 14px;
+  border: 1px solid var(--border); margin-bottom: 16px;
+  overflow: hidden;
+  animation: fadeUp .4s ease both;
+}
+.section:nth-child(2) { animation-delay: .05s; }
+.section:nth-child(3) { animation-delay: .10s; }
+.section:nth-child(4) { animation-delay: .15s; }
+.section:nth-child(5) { animation-delay: .20s; }
+
+.section-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 15px 22px; border-bottom: 1px solid var(--border);
+}
+.section-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.section-icon [data-lucide] { width: 15px; height: 15px; }
+.section-icon.red    { background: var(--red); }
+.section-icon.red [data-lucide] { color: #fff; }
+.section-icon.blue   { background: var(--blue-bg);   color: var(--blue); }
+.section-icon.blue [data-lucide]   { color: var(--blue); }
+.section-icon.green  { background: var(--green-bg);  }
+.section-icon.green [data-lucide]  { color: var(--green); }
+.section-icon.amber  { background: var(--amber-bg);  }
+.section-icon.amber [data-lucide]  { color: var(--amber); }
+.section-icon.purple { background: var(--purple-bg); }
+.section-icon.purple [data-lucide] { color: var(--purple); }
+.section-label { font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 700; }
+.section-tag { margin-left: auto; font-size: 11px; color: var(--text-3); background: var(--bg); padding: 2px 9px; border-radius: 20px; border: 1px solid var(--border); }
+.section-body { padding: 20px 22px; }
+
+/* ── CONTACT CARD ────────────────────────────────── */
+.contact-card {
+  display: flex; gap: 18px; padding: 18px;
+  background: var(--bg); border-radius: 12px; margin-bottom: 14px; align-items: flex-start;
+}
+.contact-av {
+  width: 52px; height: 52px; border-radius: 14px;
+  background: var(--blue); display: flex; align-items: center; justify-content: center;
+  font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 18px; color: #fff; flex-shrink: 0;
+}
+.contact-info { flex: 1; }
+.contact-name { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 17px; color: var(--text-1); }
+.contact-title { font-size: 13.5px; color: var(--text-2); margin-bottom: 8px; }
+.contact-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.contact-chip {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 12px; color: var(--text-2); background: var(--surface);
+  border: 1px solid var(--border); padding: 4px 10px; border-radius: 6px;
+}
+.contact-chip [data-lucide] { width: 12px; height: 12px; color: var(--text-3); }
+
+.contact-note {
+  display: flex; gap: 12px; padding: 12px 16px;
+  background: #fffbeb; border: 1px solid #fde68a; border-radius: 10px;
+  align-items: flex-start;
+}
+.contact-note [data-lucide] { width: 16px; height: 16px; color: var(--amber); flex-shrink: 0; margin-top: 1px; }
+.contact-note p { font-size: 13px; color: #92400e; line-height: 1.5; }
+
+/* ── COMPANY GRID ────────────────────────────────── */
+.company-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+.company-stat {
+  background: var(--bg); border-radius: 10px; padding: 14px 16px;
+}
+.company-stat-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .6px; color: var(--text-3); margin-bottom: 5px; }
+.company-stat-value { font-weight: 600; font-size: 14.5px; color: var(--text-1); }
+.company-stat-sub { font-size: 12px; color: var(--text-2); margin-top: 2px; }
+
+.mulesoft-fit {
+  background: var(--green-bg); border: 1px solid #86efac; border-radius: 10px; padding: 14px 16px;
+  display: flex; align-items: flex-start; gap: 12px;
+}
+.fit-icon { width: 30px; height: 30px; background: var(--green); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.fit-icon [data-lucide] { width: 15px; height: 15px; color: #fff; }
+.fit-title { font-weight: 700; font-size: 13.5px; color: var(--green); margin-bottom: 4px; }
+.fit-desc  { font-size: 13px; color: #166534; line-height: 1.5; }
+
+/* ── TALKING POINTS ──────────────────────────────── */
+.talking-point {
+  display: flex; gap: 14px; padding: 14px 0;
+  border-bottom: 1px solid var(--border); align-items: flex-start;
+}
+.talking-point:last-child { border-bottom: none; }
+.tp-num {
+  width: 26px; height: 26px; border-radius: 8px; background: var(--dark);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 12px; color: #fff; flex-shrink: 0; margin-top: 1px;
+}
+.tp-content { flex: 1; }
+.tp-label { font-weight: 700; font-size: 14px; color: var(--text-1); margin-bottom: 5px; }
+.tp-text { font-size: 13px; color: var(--text-2); line-height: 1.55; }
+.tp-tag {
+  display: inline-flex; align-items: center; gap: 4px; margin-top: 6px;
+  font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 20px;
+}
+.tp-tag.opener  { background: var(--blue-bg);   color: var(--blue); }
+.tp-tag.proof   { background: var(--green-bg);  color: var(--green); }
+.tp-tag.hook    { background: var(--purple-bg); color: var(--purple); }
+.tp-tag.close   { background: var(--amber-bg);  color: var(--amber); }
+
+/* ── OBJECTION HANDLER ───────────────────────────── */
+.objection {
+  background: var(--bg); border-radius: 10px; padding: 14px 16px; margin-bottom: 10px;
+  border-left: 3px solid var(--amber);
+}
+.objection-q { font-weight: 600; font-size: 13.5px; color: var(--text-1); margin-bottom: 6px; }
+.objection-q::before { content: '💬 '; }
+.objection-a { font-size: 13px; color: var(--text-2); line-height: 1.5; }
+
+/* ── CASE STUDIES ────────────────────────────────── */
+.case-study {
+  display: flex; gap: 16px; padding: 16px;
+  background: var(--bg); border-radius: 12px; margin-bottom: 10px; align-items: flex-start;
+}
+.case-study:last-child { margin-bottom: 0; }
+.cs-icon { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.cs-icon [data-lucide] { width: 18px; height: 18px; color: #fff; }
+.cs-title { font-weight: 700; font-size: 14px; color: var(--text-1); margin-bottom: 4px; }
+.cs-desc  { font-size: 13px; color: var(--text-2); line-height: 1.45; }
+.cs-result { margin-top: 6px; font-size: 12px; font-weight: 600; color: var(--green); display: flex; align-items: center; gap: 4px; }
+.cs-result [data-lucide] { width: 12px; height: 12px; }
+.cs-share {
+  margin-left: auto; flex-shrink: 0; align-self: center;
+  display: flex; align-items: center; gap: 4px;
+  font-size: 12px; font-weight: 600; color: var(--red); cursor: pointer;
+}
+.cs-share [data-lucide] { width: 13px; height: 13px; }
+
+/* ── FOOTER ──────────────────────────────────────── */
+.brief-footer {
+  background: var(--dark); border-radius: 14px; padding: 20px 24px;
+  display: flex; align-items: center; justify-content: space-between; margin-top: 16px;
+  animation: fadeUp .4s ease .25s both;
+}
+.footer-left p { font-size: 12.5px; color: rgba(255,255,255,.4); }
+.footer-left strong { color: rgba(255,255,255,.7); }
+.footer-actions { display: flex; gap: 8px; }
+
+/* ── ANIMATIONS ──────────────────────────────────── */
+@keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* PRINT ──────────────────────────────────────────── */
+@media print {
+  .topbar, .brief-footer, .demo-bar { display: none !important; }
+  .page { padding: 0; max-width: 100%; }
+  .section, .brief-header { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <a href="ae-interface.html" class="back-link"><i data-lucide="arrow-left"></i> AE Dashboard</a>
+    <div class="topbar-divider"></div>
+    <div class="topbar-title">Meeting Handoff Brief</div>
+    <div class="topbar-badge"><i data-lucide="zap" style="display:inline;width:10px;height:10px;"></i> Auto-generated by DSC</div>
+  </div>
+  <div class="topbar-right">
+    <button class="btn-ghost" onclick="window.print()"><i data-lucide="printer"></i> Print</button>
+    <button class="btn-ghost"><i data-lucide="share-2"></i> Share</button>
+    <button class="btn-ghost"><i data-lucide="download"></i> Export PDF</button>
+    <button class="btn-red-sm"><i data-lucide="check"></i> Mark as Reviewed</button>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- BRIEF HEADER -->
+  <div class="brief-header">
+    <div class="brief-meta">
+      <div class="brief-type-badge"><i data-lucide="file-text"></i> MEETING HANDOFF BRIEF</div>
+      <div class="brief-generated">Generated by DSC · Jun 20, 2026 · 9:14 AM</div>
+    </div>
+    <div class="brief-company">Accenture</div>
+    <div class="brief-meeting-line">
+      <i data-lucide="calendar"></i> Jun 22, 2026 · 2:00 PM CST
+      <span style="color:rgba(255,255,255,.2)">·</span>
+      <i data-lucide="video"></i> Google Meet + Potential in-person (Accenture Chicago)
+      <span style="color:rgba(255,255,255,.2)">·</span>
+      <i data-lucide="user"></i> Sarah Chen
+    </div>
+    <div class="brief-stats">
+      <div>
+        <div class="brief-stat-num">38</div>
+        <div class="brief-stat-label">Emails Sent</div>
+      </div>
+      <div class="brief-stat-divider"></div>
+      <div>
+        <div class="brief-stat-num" style="color:#fbbf24">44%</div>
+        <div class="brief-stat-label">Open Rate</div>
+      </div>
+      <div class="brief-stat-divider"></div>
+      <div>
+        <div class="brief-stat-num" style="color:#4ade80">6</div>
+        <div class="brief-stat-label">Replies Received</div>
+      </div>
+      <div class="brief-stat-divider"></div>
+      <div>
+        <div class="brief-stat-num">14</div>
+        <div class="brief-stat-label">Days of Outreach</div>
+      </div>
+      <div class="brief-stat-divider"></div>
+      <div>
+        <div class="brief-stat-num" style="color:#4ade80">✓</div>
+        <div class="brief-stat-label">Meeting Confirmed</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 1: WHO YOU'RE MEETING -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon blue"><i data-lucide="user"></i></div>
+      <div class="section-label">Who You're Meeting</div>
+      <div class="section-tag">Decision Maker Profile</div>
+    </div>
+    <div class="section-body">
+      <div class="contact-card">
+        <div class="contact-av">MS</div>
+        <div class="contact-info">
+          <div class="contact-name">Mark Stevens</div>
+          <div class="contact-title">VP of Integration Architecture · Accenture North America</div>
+          <div class="contact-chips">
+            <div class="contact-chip"><i data-lucide="linkedin"></i> /in/markstevens-accenture</div>
+            <div class="contact-chip"><i data-lucide="building-2"></i> Chicago HQ</div>
+            <div class="contact-chip"><i data-lucide="clock"></i> 14 yrs at Accenture</div>
+            <div class="contact-chip"><i data-lucide="users"></i> Team of 80+ engineers</div>
+          </div>
+        </div>
+      </div>
+      <div class="contact-note">
+        <i data-lucide="lightbulb"></i>
+        <p><strong>Key insight:</strong> Mark replied to our outreach mentioning he's evaluating "API governance at scale" across Accenture's business units. He opened 4 of our emails. He's technically deep — avoid surface-level MuleSoft pitch. Lead with architecture credibility and delivery track record.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: COMPANY CONTEXT -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon red"><i data-lucide="building-2"></i></div>
+      <div class="section-label">Company Context</div>
+      <div class="section-tag">Know Before You Go</div>
+    </div>
+    <div class="section-body">
+      <div class="company-grid">
+        <div class="company-stat">
+          <div class="company-stat-label">Industry</div>
+          <div class="company-stat-value">Professional Services</div>
+          <div class="company-stat-sub">IT Consulting + Digital Transformation</div>
+        </div>
+        <div class="company-stat">
+          <div class="company-stat-label">Size</div>
+          <div class="company-stat-value">500,000+ employees</div>
+          <div class="company-stat-sub">Fortune Global 500 · $64B revenue</div>
+        </div>
+        <div class="company-stat">
+          <div class="company-stat-label">Tech Stack (Known)</div>
+          <div class="company-stat-value">MuleSoft · SAP · AWS</div>
+          <div class="company-stat-sub">Heavy cloud + integration footprint</div>
+        </div>
+        <div class="company-stat">
+          <div class="company-stat-label">Current Initiative</div>
+          <div class="company-stat-value">API-Led Modernization</div>
+          <div class="company-stat-sub">Across 12 BUs globally — $200M program</div>
+        </div>
+      </div>
+      <div class="mulesoft-fit">
+        <div class="fit-icon"><i data-lucide="target"></i></div>
+        <div>
+          <div class="fit-title">MuleSoft Fit — Excellent</div>
+          <div class="fit-desc">Accenture is already a MuleSoft customer. They're exploring expanding the license footprint across additional BUs. Mark's team manages the integration architecture for North America — a direct path to a large implementation contract for Dataskate.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: TALKING POINTS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon green"><i data-lucide="message-square"></i></div>
+      <div class="section-label">Suggested Talking Points</div>
+      <div class="section-tag">Use in sequence</div>
+    </div>
+    <div class="section-body">
+      <div class="talking-point">
+        <div class="tp-num">1</div>
+        <div class="tp-content">
+          <div class="tp-label">Open with the API governance angle</div>
+          <div class="tp-text">Mark mentioned API governance in his reply. Open with: <em>"We've been helping teams like yours implement API-led connectivity governance across large, multi-BU environments — I wanted to show you specifically how we handled that for a similar consulting firm."</em></div>
+          <div><span class="tp-tag opener">Opener</span></div>
+        </div>
+      </div>
+      <div class="talking-point">
+        <div class="tp-num">2</div>
+        <div class="tp-content">
+          <div class="tp-label">Lead with delivery credibility — not MuleSoft features</div>
+          <div class="tp-text">Mark is technical. Skip the vendor pitch. Lead with Dataskate's delivery speed: <em>"We typically run discovery → scoping → first integration in 8 weeks. Our team handles the full implementation lifecycle, not just the license."</em></div>
+          <div><span class="tp-tag proof">Proof Point</span></div>
+        </div>
+      </div>
+      <div class="talking-point">
+        <div class="tp-num">3</div>
+        <div class="tp-content">
+          <div class="tp-label">Ask about cross-BU integration pain</div>
+          <div class="tp-text">The discovery question that opens deals: <em>"You mentioned scaling API governance across BUs — what's the biggest friction point you're hitting when trying to standardize across different teams?"</em></div>
+          <div><span class="tp-tag hook">Discovery Hook</span></div>
+        </div>
+      </div>
+      <div class="talking-point">
+        <div class="tp-num">4</div>
+        <div class="tp-content">
+          <div class="tp-label">Reference the Deloitte Digital case study</div>
+          <div class="tp-text">Accenture respects peer evidence from similar firms. Share the Deloitte Digital case study — same consulting context, similar API governance challenge, 40% faster integration across 12 BUs. Have it ready to screen share.</div>
+          <div><span class="tp-tag proof">Peer Evidence</span></div>
+        </div>
+      </div>
+      <div class="talking-point">
+        <div class="tp-num">5</div>
+        <div class="tp-content">
+          <div class="tp-label">Close with a specific next step</div>
+          <div class="tp-text">Don't leave open-ended. Close with: <em>"Would it make sense for my team to do a quick 2-hour discovery call with your integration leads? We can have a scope draft back to you in 72 hours."</em></div>
+          <div><span class="tp-tag close">Close</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: OBJECTION HANDLING -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon amber"><i data-lucide="shield"></i></div>
+      <div class="section-label">Likely Objections + Responses</div>
+      <div class="section-tag">Be ready for these</div>
+    </div>
+    <div class="section-body">
+      <div class="objection">
+        <div class="objection-q">"We have internal teams that handle MuleSoft integrations already."</div>
+        <div class="objection-a"><strong>Your answer:</strong> "That's exactly why we work well alongside internal teams — we handle the surge capacity and specialized use cases. Your team focuses on governance, we handle the implementation sprint. No conflicts."</div>
+      </div>
+      <div class="objection">
+        <div class="objection-q">"We're already working with [another SI partner]."</div>
+        <div class="objection-a"><strong>Your answer:</strong> "Great — most of our best client relationships are alongside existing SIs. We tend to fill the gap on speed and cost. What if we did a small POC alongside your current engagement to show you the difference?"</div>
+      </div>
+      <div class="objection">
+        <div class="objection-q">"We don't have budget right now."</div>
+        <div class="objection-a"><strong>Your answer:</strong> "Completely understand. What I'd suggest is a scoping call — zero cost, zero commitment. You get a detailed scope, timeline, and estimate. You can use that internally regardless of who you choose to work with."</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: CASE STUDIES -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon purple"><i data-lucide="book-open"></i></div>
+      <div class="section-label">Relevant Dataskate Case Studies</div>
+      <div class="section-tag">Share these</div>
+    </div>
+    <div class="section-body">
+      <div class="case-study">
+        <div class="cs-icon" style="background:#6366f1;"><i data-lucide="layers"></i></div>
+        <div style="flex:1;">
+          <div class="cs-title">API-Led Connectivity for Global Consulting — Deloitte Digital</div>
+          <div class="cs-desc">Implemented MuleSoft API-led architecture across 12 business units. Standardized integration governance, reduced time-to-market for new integrations by 40%.</div>
+          <div class="cs-result"><i data-lucide="trending-up"></i> 40% faster integration delivery · 12 BUs connected · 8-week implementation</div>
+        </div>
+        <div class="cs-share"><i data-lucide="share-2"></i> Share</div>
+      </div>
+      <div class="case-study">
+        <div class="cs-icon" style="background:#16a34a;"><i data-lucide="database"></i></div>
+        <div style="flex:1;">
+          <div class="cs-title">Multi-BU Data Mesh Implementation — PwC Advisory</div>
+          <div class="cs-desc">Built a data integration layer connecting 8 advisory BUs using MuleSoft. Enabled real-time cross-BU reporting for the first time in company history.</div>
+          <div class="cs-result"><i data-lucide="trending-up"></i> Real-time data across 8 BUs · 60% reduction in manual reporting · 6 weeks to delivery</div>
+        </div>
+        <div class="cs-share"><i data-lucide="share-2"></i> Share</div>
+      </div>
+      <div class="case-study">
+        <div class="cs-icon" style="background:#d97706;"><i data-lucide="zap"></i></div>
+        <div style="flex:1;">
+          <div class="cs-title">API Governance at Scale — Fortune 500 Manufacturing Firm</div>
+          <div class="cs-desc">Established enterprise API governance framework using MuleSoft API Manager. Reduced rogue API sprawl by 70% within first quarter.</div>
+          <div class="cs-result"><i data-lucide="trending-up"></i> 70% reduction in ungoverned APIs · Enterprise-wide policy enforcement · On-time delivery</div>
+        </div>
+        <div class="cs-share"><i data-lucide="share-2"></i> Share</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="brief-footer">
+    <div class="footer-left">
+      <p>Brief prepared by <strong>Dataskate DSC Team</strong> · For internal use only · <strong>Sarah Chen, MuleSoft AE</strong></p>
+      <p style="margin-top:3px;">Questions? Contact the DSC team before your meeting.</p>
+    </div>
+    <div class="footer-actions">
+      <button class="btn-ghost" onclick="window.print()" style="color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.15)"><i data-lucide="printer"></i> Print Brief</button>
+      <button class="btn-red-sm"><i data-lucide="arrow-left"></i> Back to Dashboard</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- DEMO SWITCHER -->
+<div style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#231f20;border:1px solid rgba(255,255,255,.12);border-radius:30px;padding:8px 14px;display:flex;align-items:center;gap:10px;z-index:999;box-shadow:0 8px 32px rgba(0,0,0,.4);">
+  <span style="font-size:11px;color:rgba(255,255,255,.35);letter-spacing:.5px;">DSC DEMO</span>
+  <div style="width:1px;height:14px;background:rgba(255,255,255,.1);"></div>
+  <a href="index.html" style="font-size:12px;color:rgba(255,255,255,.5);text-decoration:none;padding:4px 8px;border-radius:6px;transition:all .15s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">Home</a>
+  <a href="admin-dashboard.html" style="font-size:12px;color:rgba(255,255,255,.5);text-decoration:none;padding:4px 8px;border-radius:6px;transition:all .15s;" onmouseover="this.style.background='rgba(237,28,36,.2)';this.style.color='#ff6b70'" onmouseout="this.style.background='';this.style.color='rgba(255,255,255,.5)'">Admin</a>
+  <a href="staff-interface.html" style="font-size:12px;color:rgba(255,255,255,.5);text-decoration:none;padding:4px 8px;border-radius:6px;" onmouseover="this.style.background='rgba(217,119,6,.2)';this.style.color='#fbbf24'" onmouseout="this.style.background='';this.style.color='rgba(255,255,255,.5)'">Staff</a>
+  <a href="ae-interface.html" style="font-size:12px;color:rgba(255,255,255,.5);text-decoration:none;padding:4px 8px;border-radius:6px;" onmouseover="this.style.background='rgba(37,99,235,.2)';this.style.color='#60a5fa'" onmouseout="this.style.background='';this.style.color='rgba(255,255,255,.5)'">AE View</a>
+</div>
+
+<script>
+lucide.createIcons();
+document.querySelector('.btn-red-sm:last-child').addEventListener('click', () => { window.location.href = 'ae-interface.html'; });
+</script>
+</body>
+</html>

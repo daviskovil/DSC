@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DSC — AE Hub · Sarah Chen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet"/>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+:root {
+  --red:#ed1c24;
+  --navy:#13192b;       /* sidebar bg — proper dark navy like Copper */
+  --navy-2:#1c2538;     /* slightly lighter navy for hover */
+  --navy-3:#222d42;     /* active item bg */
+
+  --bg:#eef0f4;         /* page background */
+  --surface:#ffffff;
+  --border:#e3e6ec;
+  --border-strong:#c8cdd8;
+
+  --text-1:#111827;
+  --text-2:#4b5563;
+  --text-3:#9ca3af;
+
+  --green:#15803d;  --green-bg:#dcfce7; --green-bd:#86efac;
+  --amber:#b45309;  --amber-bg:#fef3c7; --amber-bd:#fcd34d;
+  --blue:#1d4ed8;   --blue-bg:#dbeafe;  --blue-bd:#93c5fd;
+  --purple:#6d28d9; --purple-bg:#ede9fe;--purple-bd:#c4b5fd;
+  --teal:#0f766e;   --teal-bg:#ccfbf1;  --teal-bd:#5eead4;
+
+  --sidebar:226px;
+  --r:14px;
+  --sh:0 1px 3px rgba(0,0,0,.06);
+  --sh-md:0 6px 24px rgba(0,0,0,.09);
+}
+
+html,body { height:100%; font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text-1); font-size:14px; }
+.shell { display:flex; height:100vh; overflow:hidden; }
+
+
+/* ═══════════════════════════════════════
+   SIDEBAR  — dark navy, Copper-inspired
+═══════════════════════════════════════ */
+.sidebar {
+  width:var(--sidebar); min-width:var(--sidebar);
+  background:var(--navy);
+  display:flex; flex-direction:column;
+  height:100vh; position:fixed; left:0; top:0; z-index:100;
+}
+
+/* Logo row */
+.sb-logo {
+  display:flex; align-items:center; gap:11px;
+  padding:22px 20px 20px;
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+.sb-logo-icon { width:32px; height:28px; flex-shrink:0; }
+.sb-logo-icon svg { width:32px; height:28px; }
+.sb-logo-text .name { font-family:'Outfit',sans-serif; font-weight:800; font-size:16px; color:#fff; letter-spacing:-.2px; }
+.sb-logo-text .name span { color:var(--red); }
+.sb-logo-text .tag { font-size:10px; font-weight:600; color:rgba(255,255,255,.2); letter-spacing:1.4px; text-transform:uppercase; margin-top:4px; }
+
+/* Nav */
+.sb-nav { flex:1; overflow-y:auto; padding:18px 12px 10px; }
+.sb-nav::-webkit-scrollbar { width:0; }
+
+.sb-group { margin-bottom:24px; }
+.sb-group-label {
+  font-size:10px; font-weight:700; letter-spacing:1.3px; text-transform:uppercase;
+  color:rgba(255,255,255,.18); padding:0 8px; margin-bottom:5px;
+  display:flex; align-items:center; gap:7px;
+}
+.sb-group-label::after { content:''; flex:1; height:1px; background:rgba(255,255,255,.06); }
+
+.sb-item {
+  display:flex; align-items:center; gap:10px;
+  padding:9px 10px; border-radius:8px; margin-bottom:1px;
+  font-size:13px; color:rgba(255,255,255,.38);
+  cursor:pointer; transition:all .15s; position:relative; user-select:none;
+}
+.sb-item:hover { background:var(--navy-2); color:rgba(255,255,255,.75); }
+.sb-item.active {
+  background:var(--navy-3);
+  color:#fff; font-weight:600;
+}
+.sb-item.active::before {
+  content:''; position:absolute; left:0; top:50%; transform:translateY(-50%);
+  width:3px; height:22px; background:var(--red); border-radius:0 3px 3px 0;
+}
+.sb-item [data-lucide] { width:15px; height:15px; flex-shrink:0; }
+.sb-item.muted { opacity:.22; pointer-events:none; }
+
+/* User footer */
+.sb-user {
+  padding:12px; border-top:1px solid rgba(255,255,255,.05);
+}
+.sb-user-card {
+  display:flex; align-items:center; gap:10px;
+  padding:9px 8px; border-radius:8px; cursor:pointer; transition:background .15s;
+}
+.sb-user-card:hover { background:var(--navy-2); }
+.sb-av {
+  width:32px; height:32px; background:var(--red); border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Outfit',sans-serif; font-weight:800; font-size:11px; color:#fff; flex-shrink:0;
+}
+.sb-uname { font-size:13px; font-weight:600; color:#fff; }
+.sb-urole { font-size:11px; color:rgba(255,255,255,.28); margin-top:1px; }
+
+
+/* ═══════════════════════════════════════
+   TOPBAR
+═══════════════════════════════════════ */
+.main { margin-left:var(--sidebar); flex:1; display:flex; flex-direction:column; height:100vh; overflow:hidden; }
+
+.topbar {
+  height:56px; background:var(--surface);
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:center; padding:0 26px; gap:14px; flex-shrink:0;
+}
+.topbar-logo img { height:24px; display:block; }
+.topbar-sep { width:1px; height:18px; background:var(--border); }
+.topbar-label { font-size:13px; color:var(--text-3); font-weight:500; }
+.topbar-right { margin-left:auto; display:flex; align-items:center; gap:9px; }
+
+.online-pill {
+  display:flex; align-items:center; gap:6px;
+  background:var(--green-bg); border:1px solid var(--green-bd);
+  padding:4px 12px; border-radius:30px; font-size:12px; font-weight:600; color:var(--green);
+}
+.pulse { width:7px; height:7px; border-radius:50%; background:var(--green); animation:pulse 2s ease infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
+
+.icon-btn {
+  width:34px; height:34px; border-radius:8px; border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; color:var(--text-2); transition:all .15s; position:relative;
+}
+.icon-btn:hover { background:var(--bg); }
+.icon-btn [data-lucide] { width:15px; height:15px; }
+.notif-dot { position:absolute; top:7px; right:7px; width:7px; height:7px; background:var(--red); border-radius:50%; border:2px solid #fff; }
+
+
+/* ═══════════════════════════════════════
+   SCROLL CONTENT
+═══════════════════════════════════════ */
+.content { flex:1; overflow-y:auto; padding:28px 26px 110px; }
+.content::-webkit-scrollbar { width:4px; }
+.content::-webkit-scrollbar-thumb { background:var(--border-strong); border-radius:10px; }
+
+
+/* ═══════════════════════════════════════
+   WELCOME STRIP  — flat dark card, no gradient
+═══════════════════════════════════════ */
+.welcome {
+  background:var(--navy);  /* flat solid navy — clean like Copper */
+  border-radius:16px;
+  padding:26px 30px;
+  display:flex; align-items:center; justify-content:space-between; gap:24px;
+  margin-bottom:36px;
+  position:relative; overflow:hidden;
+  animation:fadeUp .35s ease both;
+}
+/* Very subtle dot-grid texture — no colour gradient */
+.welcome::after {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background-image:radial-gradient(circle, rgba(255,255,255,.06) 1px, transparent 1px);
+  background-size:22px 22px;
+}
+.welcome-left { position:relative; z-index:1; }
+.welcome-eyebrow {
+  display:flex; align-items:center; gap:8px;
+  font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase;
+  color:rgba(255,255,255,.35); margin-bottom:10px;
+}
+.welcome-eyebrow::before { content:''; width:18px; height:2px; background:var(--red); border-radius:2px; }
+.welcome-h1 { font-family:'Outfit',sans-serif; font-size:24px; font-weight:900; color:#fff; letter-spacing:-.4px; margin-bottom:6px; }
+.welcome-h1 em { font-style:normal; color:var(--red); }
+.welcome-sub { font-size:13.5px; color:rgba(255,255,255,.38); }
+
+.welcome-stats { display:flex; gap:10px; position:relative; z-index:1; }
+.stat-box {
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:12px; padding:14px 18px; text-align:center; min-width:86px;
+}
+.stat-n { font-family:'Outfit',sans-serif; font-weight:900; font-size:28px; color:#fff; line-height:1; }
+.stat-n.red { color:var(--red); }
+.stat-l { font-size:11px; color:rgba(255,255,255,.3); margin-top:5px; line-height:1.3; }
+
+
+/* ═══════════════════════════════════════
+   SECTION HEADERS
+═══════════════════════════════════════ */
+.section-block { margin-bottom:44px; }
+
+.sec-head {
+  display:flex; align-items:flex-end; justify-content:space-between;
+  padding-bottom:16px; margin-bottom:20px;
+  border-bottom:1px solid var(--border);
+  position:relative;
+}
+.sec-head::after {
+  content:''; position:absolute; bottom:-1px; left:0;
+  width:40px; height:2px; background:var(--red); border-radius:2px;
+}
+.sec-left { display:flex; align-items:center; gap:12px; }
+.sec-pill {
+  font-family:'Outfit',sans-serif; font-size:11px; font-weight:800;
+  background:var(--red); color:#fff; padding:3px 10px; border-radius:20px;
+  letter-spacing:.3px; flex-shrink:0;
+}
+.sec-title { font-family:'Outfit',sans-serif; font-size:17px; font-weight:800; color:var(--text-1); letter-spacing:-.2px; }
+.sec-sub { font-size:12.5px; color:var(--text-3); margin-top:2px; }
+.sec-count { font-size:12px; color:var(--text-3); font-weight:500; }
+
+/* dividers */
+.mid-divider {
+  display:flex; align-items:center; gap:12px; margin:0 0 38px;
+}
+.mid-divider::before,.mid-divider::after { content:''; flex:1; height:1px; background:var(--border); }
+.mid-divider span { font-size:11px; font-weight:700; color:var(--text-3); text-transform:uppercase; letter-spacing:1.2px; white-space:nowrap; }
+
+
+/* ═══════════════════════════════════════
+   TOOL CARDS
+═══════════════════════════════════════ */
+.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
+
+.tool-card {
+  background:var(--surface); border-radius:var(--r);
+  border:1px solid var(--border); box-shadow:var(--sh);
+  overflow:hidden; transition:box-shadow .2s, transform .2s;
+}
+.tool-card:hover { box-shadow:var(--sh-md); transform:translateY(-2px); }
+
+.tc-body { padding:20px 20px 16px; }
+.tc-body.sm { padding:16px 18px 12px; }
+
+.tc-icon {
+  width:42px; height:42px; border-radius:11px;
+  display:flex; align-items:center; justify-content:center; margin-bottom:13px;
+}
+.tc-icon.sm { width:34px; height:34px; border-radius:9px; margin-bottom:10px; }
+.tc-icon [data-lucide] { width:19px; height:19px; }
+.tc-icon.sm [data-lucide] { width:15px; height:15px; }
+
+/* icon colour sets */
+.i-red    { background:#fee2e2; } .i-red    [data-lucide] { color:var(--red); }
+.i-blue   { background:var(--blue-bg); }   .i-blue   [data-lucide] { color:var(--blue); }
+.i-green  { background:var(--green-bg); }  .i-green  [data-lucide] { color:var(--green); }
+.i-amber  { background:var(--amber-bg); }  .i-amber  [data-lucide] { color:var(--amber); }
+.i-purple { background:var(--purple-bg); } .i-purple [data-lucide] { color:var(--purple); }
+.i-teal   { background:var(--teal-bg); }   .i-teal   [data-lucide] { color:var(--teal); }
+.i-slate  { background:#f1f5f9; }           .i-slate  [data-lucide] { color:#475569; }
+
+.tc-name { font-family:'Outfit',sans-serif; font-weight:800; font-size:16px; color:var(--text-1); margin-bottom:4px; }
+.tc-name.sm { font-size:14px; }
+.tc-desc { font-size:13px; color:var(--text-2); line-height:1.55; }
+.tc-desc.sm { font-size:12.5px; }
+
+/* input zone */
+.tc-foot { padding:14px 20px 18px; border-top:1px solid var(--border); background:#f8f9fb; }
+.tc-foot.sm { padding:12px 18px 14px; }
+
+.tc-row { display:flex; gap:7px; margin-bottom:8px; }
+.tc-in {
+  flex:1; padding:9px 13px; border:1.5px solid var(--border); border-radius:8px;
+  font-size:13px; font-family:'DM Sans',sans-serif; background:#fff;
+  outline:none; color:var(--text-1); transition:border-color .15s;
+}
+.tc-in:focus { border-color:var(--red); box-shadow:0 0 0 3px rgba(237,28,36,.06); }
+.tc-in::placeholder { color:var(--text-3); }
+.tc-in.sm { padding:7px 11px; font-size:12.5px; }
+.tc-in.mb { margin-bottom:7px; }
+
+.go {
+  padding:9px 18px; background:var(--navy); color:#fff;
+  border:none; border-radius:8px; font-size:13px; font-weight:700;
+  cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .15s; white-space:nowrap;
+}
+.go:hover { background:var(--red); }
+.go.sm { padding:7px 14px; font-size:12px; }
+
+.ex-row { display:flex; align-items:center; gap:5px; flex-wrap:wrap; }
+.ex-lbl { font-size:11px; color:var(--text-3); font-weight:500; }
+.ex-chip {
+  font-size:11px; padding:2px 8px; border-radius:5px; cursor:pointer;
+  border:1px solid var(--blue-bd); background:var(--blue-bg); color:var(--blue);
+  font-weight:500; transition:all .15s;
+}
+.ex-chip:hover { background:var(--blue); color:#fff; }
+
+/* selector tabs */
+.sel-tabs { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:8px; }
+.sel-tab {
+  font-size:12px; font-weight:600; padding:5px 11px; border-radius:7px;
+  border:1px solid var(--border); background:#fff; color:var(--text-2);
+  cursor:pointer; transition:all .15s;
+}
+.sel-tab:hover { border-color:var(--navy); color:var(--navy); }
+.sel-tab.on { background:var(--navy); color:#fff; border-color:var(--navy); }
+
+/* result */
+.tc-result { margin-top:10px; padding:13px 15px; background:#fff; border:1px solid var(--border); border-radius:10px; display:none; }
+.tc-result.show { display:block; animation:fadeUp .2s ease both; }
+.ld-row { display:flex; align-items:center; gap:7px; font-size:12.5px; color:var(--text-3); }
+.dots span { display:inline-block; width:5px; height:5px; border-radius:50%; background:var(--red); margin:0 2px; animation:db .8s ease infinite; }
+.dots span:nth-child(2){animation-delay:.15s}.dots span:nth-child(3){animation-delay:.3s}
+@keyframes db{ 0%,100%{transform:translateY(0);opacity:.4} 50%{transform:translateY(-5px);opacity:1} }
+
+.r-title { font-family:'Outfit',sans-serif; font-weight:800; font-size:13.5px; color:var(--text-1); margin-bottom:8px; }
+.r-body { font-size:12.5px; color:var(--text-2); line-height:1.65; }
+.r-body strong { color:var(--text-1); font-weight:600; }
+.r-tag { display:inline-flex; font-size:11px; font-weight:600; padding:2px 8px; border-radius:20px; margin:0 3px 3px 0; }
+.r-link { display:inline-flex; align-items:center; gap:4px; margin-top:11px; font-size:12.5px; font-weight:700; color:var(--red); text-decoration:none; transition:gap .15s; }
+.r-link:hover { gap:7px; }
+.r-link [data-lucide] { width:12px; height:12px; }
+
+
+/* ═══════════════════════════════════════
+   PHASE 2 STRIP
+═══════════════════════════════════════ */
+.p2-strip {
+  margin-bottom:44px;
+  background:var(--surface); border:1.5px dashed var(--border-strong);
+  border-radius:var(--r); padding:18px 22px;
+  display:flex; align-items:center; gap:14px; opacity:.5;
+  position:relative; overflow:hidden;
+}
+.p2-strip::before {
+  content:''; position:absolute; inset:0;
+  background:repeating-linear-gradient(-45deg,transparent,transparent 6px,rgba(0,0,0,.012) 6px,rgba(0,0,0,.012) 12px);
+}
+.p2-icon { width:38px; height:38px; border-radius:9px; background:var(--bg); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.p2-icon [data-lucide] { width:16px; height:16px; color:var(--text-3); }
+.p2-txt { flex:1; position:relative; }
+.p2-name { font-family:'Outfit',sans-serif; font-weight:800; font-size:14px; margin-bottom:2px; }
+.p2-desc { font-size:12.5px; color:var(--text-2); }
+.p2-badge { font-size:10.5px; font-weight:800; background:var(--bg); border:1.5px solid var(--border-strong); color:var(--text-3); padding:4px 13px; border-radius:30px; text-transform:uppercase; letter-spacing:.8px; flex-shrink:0; position:relative; }
+
+
+/* ═══════════════════════════════════════
+   IMPLEMENTATIONS
+═══════════════════════════════════════ */
+.impl-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:13px; }
+
+.impl-card {
+  background:var(--surface); border-radius:var(--r); border:1px solid var(--border);
+  box-shadow:var(--sh); overflow:hidden; cursor:pointer; transition:all .2s; position:relative;
+}
+.impl-card:hover { box-shadow:var(--sh-md); transform:translateY(-3px); }
+.impl-card:hover .impl-bar { opacity:1; }
+.impl-bar { position:absolute; top:0; left:0; right:0; height:3px; opacity:0; transition:opacity .2s; }
+
+.impl-top { padding:16px 18px 13px; border-bottom:1px solid var(--border); }
+.impl-hdr { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:11px; }
+.impl-ico { width:36px; height:36px; border-radius:9px; display:flex; align-items:center; justify-content:center; }
+.impl-ico [data-lucide] { width:17px; height:17px; color:#fff; }
+.impl-count { text-align:right; }
+.impl-n { font-family:'Outfit',sans-serif; font-size:28px; font-weight:900; color:var(--text-1); line-height:1; }
+.impl-nl { font-size:10.5px; color:var(--text-3); }
+.impl-name { font-family:'Outfit',sans-serif; font-weight:800; font-size:14.5px; margin-bottom:2px; }
+.impl-sub { font-size:12px; color:var(--text-2); }
+
+.impl-body { padding:13px 18px 15px; }
+.impl-out { display:flex; align-items:flex-start; gap:6px; font-size:12.5px; color:var(--text-2); line-height:1.5; margin-bottom:10px; }
+.impl-out-arrow { color:var(--red); font-weight:800; flex-shrink:0; margin-top:1px; }
+.impl-tags { display:flex; flex-wrap:wrap; gap:5px; }
+.impl-tag { font-size:10.5px; padding:2px 8px; border-radius:5px; background:var(--bg); color:var(--text-2); border:1px solid var(--border); }
+
+
+/* ═══════════════════════════════════════
+   BOTTOM: CASE STUDIES + DSC TEAM
+═══════════════════════════════════════ */
+.bot-grid { display:grid; grid-template-columns:1fr 330px; gap:14px; }
+
+/* Case Studies */
+.hub { background:var(--surface); border-radius:var(--r); border:1px solid var(--border); box-shadow:var(--sh); overflow:hidden; }
+.hub-head { padding:16px 20px; border-bottom:1px solid var(--border); display:flex; align-items:flex-start; justify-content:space-between; }
+.hub-title { font-family:'Outfit',sans-serif; font-weight:800; font-size:15px; display:flex; align-items:center; gap:8px; margin-bottom:3px; }
+.hub-title [data-lucide] { width:15px; height:15px; color:var(--red); }
+.hub-sub { font-size:12px; color:var(--text-3); }
+.see-all { font-size:12.5px; font-weight:700; color:var(--red); cursor:pointer; margin-top:2px; }
+
+.filters { display:flex; gap:5px; padding:11px 20px; border-bottom:1px solid var(--border); background:#f8f9fb; flex-wrap:wrap; }
+.fil {
+  font-size:12px; font-weight:600; padding:4px 12px; border-radius:20px;
+  border:1px solid var(--border); background:#fff; color:var(--text-2); cursor:pointer; transition:all .15s;
+}
+.fil.on { background:var(--navy); color:#fff; border-color:var(--navy); }
+.fil:hover:not(.on) { border-color:var(--red); color:var(--red); }
+
+.hub-row { display:flex; align-items:center; gap:12px; padding:13px 20px; border-bottom:1px solid var(--border); cursor:pointer; transition:background .15s; }
+.hub-row:last-child { border-bottom:none; }
+.hub-row:hover { background:#fafbfc; }
+.hub-ico { width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.hub-ico [data-lucide] { width:14px; height:14px; color:#fff; }
+.hub-rc { flex:1; min-width:0; }
+.hub-rt { font-weight:600; font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.hub-rm { font-size:11.5px; color:var(--text-3); margin-top:2px; }
+.share-btn {
+  display:flex; align-items:center; gap:4px; font-size:11.5px; font-weight:700;
+  color:var(--red); cursor:pointer; padding:4px 10px; border-radius:6px;
+  border:1px solid #fecaca; background:#fff5f5; transition:all .15s; flex-shrink:0;
+}
+.share-btn:hover { background:var(--red); color:#fff; border-color:var(--red); }
+.share-btn [data-lucide] { width:11px; height:11px; }
+
+/* DSC Team */
+.dsc { background:var(--surface); border-radius:var(--r); border:1px solid var(--border); box-shadow:var(--sh); overflow:hidden; display:flex; flex-direction:column; }
+.dsc-head { padding:16px 20px; border-bottom:1px solid var(--border); }
+.dsc-title { font-family:'Outfit',sans-serif; font-weight:800; font-size:15px; display:flex; align-items:center; gap:8px; margin-bottom:4px; }
+.dsc-title [data-lucide] { width:15px; height:15px; color:var(--red); }
+.dsc-sub { font-size:12.5px; color:var(--text-2); }
+.resp-pill { display:inline-flex; align-items:center; gap:5px; margin-top:9px; background:var(--green-bg); color:var(--green); font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; border:1px solid var(--green-bd); }
+.resp-pill [data-lucide] { width:10px; height:10px; }
+
+.dsc-team { padding:14px 20px; border-bottom:1px solid var(--border); display:flex; flex-direction:column; gap:11px; }
+.member { display:flex; align-items:center; gap:10px; }
+.m-av { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Outfit',sans-serif; font-weight:800; font-size:11px; color:#fff; flex-shrink:0; position:relative; }
+.m-dot { position:absolute; bottom:-1px; right:-1px; width:9px; height:9px; border-radius:50%; border:2px solid #fff; }
+.m-dot.on { background:var(--green); } .m-dot.away { background:var(--amber); }
+.m-info { flex:1; }
+.m-name { font-weight:700; font-size:13px; }
+.m-role { font-size:11.5px; color:var(--text-3); }
+.ping-btn { font-size:11.5px; font-weight:700; color:var(--blue); cursor:pointer; padding:4px 10px; border:1px solid var(--blue-bd); border-radius:6px; background:var(--blue-bg); transition:all .15s; display:flex; align-items:center; gap:3px; }
+.ping-btn:hover { background:var(--blue); color:#fff; }
+.ping-btn [data-lucide] { width:11px; height:11px; }
+
+.dsc-form { padding:16px 20px; flex:1; }
+.dsc-lbl { font-size:11px; font-weight:700; color:var(--text-3); text-transform:uppercase; letter-spacing:.5px; margin-bottom:6px; }
+.dsc-ta { width:100%; height:78px; padding:10px 13px; border:1.5px solid var(--border); border-radius:9px; font-size:13px; font-family:'DM Sans',sans-serif; resize:none; outline:none; color:var(--text-1); transition:border-color .15s; }
+.dsc-ta:focus { border-color:var(--red); box-shadow:0 0 0 3px rgba(237,28,36,.06); }
+.dsc-ta::placeholder { color:var(--text-3); }
+.dsc-send { width:100%; margin-top:9px; padding:11px; background:var(--navy); color:#fff; border:none; border-radius:9px; font-size:13px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; display:flex; align-items:center; justify-content:center; gap:7px; transition:all .15s; }
+.dsc-send:hover { background:var(--red); }
+.dsc-send [data-lucide] { width:14px; height:14px; }
+
+/* ANIMATIONS */
+@keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+.a1{animation:fadeUp .3s ease .04s both}
+.a2{animation:fadeUp .3s ease .08s both}
+.a3{animation:fadeUp .3s ease .12s both}
+.a4{animation:fadeUp .3s ease .16s both}
+.a5{animation:fadeUp .3s ease .20s both}
+.a6{animation:fadeUp .3s ease .24s both}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- ═══════════ SIDEBAR ═══════════ -->
+<aside class="sidebar">
+
+  <div class="sb-logo">
+    <div class="sb-logo-icon">
+      <!-- Real Dataskate mark — white + red on navy -->
+      <svg viewBox="156 275 78 66" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#ed1c24" d="m195.02,287.72v-12.49c21.94,0,38.48,10.29,38.48,23.93s-16.55,23.93-38.48,23.93v-12.49c15.86,0,25.99-6.77,25.99-11.44s-10.13-11.44-25.99-11.44Z"/>
+        <path fill="#ffffff" d="m195.02,327.75v12.49c-21.94,0-38.48-10.29-38.48-23.93s16.55-23.93,38.48-23.93v12.49c-15.86,0-25.99,6.77-25.99,11.44s10.13,11.44,25.99,11.44Z"/>
+      </svg>
+    </div>
+    <div class="sb-logo-text">
+      <div class="name">data<span>skate</span></div>
+      <div class="tag">AE Hub</div>
+    </div>
+  </div>
+
+  <div class="sb-nav">
+
+    <div class="sb-group">
+      <div class="sb-group-label">Research</div>
+      <div class="sb-item active"><i data-lucide="layout-grid"></i> All Tools</div>
+      <div class="sb-item"><i data-lucide="file-search"></i> CRD Tool</div>
+      <div class="sb-item"><i data-lucide="user-search"></i> Contact Finder</div>
+    </div>
+
+    <div class="sb-group">
+      <div class="sb-group-label">Meeting Support</div>
+      <div class="sb-item"><i data-lucide="package"></i> Meeting Prep Pack</div>
+      <div class="sb-item"><i data-lucide="mic"></i> Discovery Prep</div>
+      <div class="sb-item"><i data-lucide="shield"></i> Battle Cards</div>
+    </div>
+
+    <div class="sb-group">
+      <div class="sb-group-label">Deal Support</div>
+      <div class="sb-item"><i data-lucide="trending-up"></i> ROI Builder</div>
+      <div class="sb-item"><i data-lucide="calculator"></i> License Estimator</div>
+      <div class="sb-item"><i data-lucide="clipboard-list"></i> Scope Guide</div>
+    </div>
+
+    <div class="sb-group">
+      <div class="sb-group-label">Knowledge</div>
+      <div class="sb-item"><i data-lucide="bar-chart-2"></i> Implementations</div>
+      <div class="sb-item"><i data-lucide="book-open"></i> Case Studies</div>
+    </div>
+
+    <div class="sb-group">
+      <div class="sb-group-label">People</div>
+      <div class="sb-item"><i data-lucide="message-circle"></i> DSC Team</div>
+    </div>
+
+    <div class="sb-group">
+      <div class="sb-group-label">Phase 2</div>
+      <div class="sb-item muted"><i data-lucide="send"></i> Outreach Support</div>
+    </div>
+
+  </div>
+
+  <div class="sb-user">
+    <div class="sb-user-card">
+      <div class="sb-av">SC</div>
+      <div>
+        <div class="sb-uname">Sarah Chen</div>
+        <div class="sb-urole">MuleSoft SMB AE · SFO</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+
+<!-- ═══════════ MAIN ═══════════════ -->
+<main class="main">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-logo">
+      <!-- Inline logo — no external file needed, works when hosted anywhere -->
+      <div style="display:flex;align-items:center;gap:9px;">
+        <svg viewBox="156 275 78 66" xmlns="http://www.w3.org/2000/svg" style="width:22px;height:19px;flex-shrink:0">
+          <path fill="#ed1c24" d="m195.02,287.72v-12.49c21.94,0,38.48,10.29,38.48,23.93s-16.55,23.93-38.48,23.93v-12.49c15.86,0,25.99-6.77,25.99-11.44s-10.13-11.44-25.99-11.44Z"/>
+          <path fill="#231f20" d="m195.02,327.75v12.49c-21.94,0-38.48-10.29-38.48-23.93s16.55-23.93,38.48-23.93v12.49c-15.86,0-25.99,6.77-25.99,11.44s10.13,11.44,25.99,11.44Z"/>
+        </svg>
+        <span style="font-family:'Outfit',sans-serif;font-weight:800;font-size:17px;color:#231f20;letter-spacing:-.3px;line-height:1">data<span style="color:#ed1c24">skate</span></span>
+      </div>
+    </div>
+    <div class="topbar-sep"></div>
+    <div class="topbar-label">AE Hub</div>
+    <div class="topbar-right">
+      <div class="online-pill"><div class="pulse"></div> DSC team online</div>
+      <div class="icon-btn"><i data-lucide="bell"></i><div class="notif-dot"></div></div>
+      <div class="icon-btn"><i data-lucide="settings"></i></div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ── WELCOME ──────────────────────────── -->
+    <div class="welcome a1">
+      <div class="welcome-left">
+        <div class="welcome-eyebrow">Dataskate Sales Hub</div>
+        <div class="welcome-h1">Hi Sarah — <em>let's win some deals.</em></div>
+        <div class="welcome-sub">8 tools to research faster, prepare smarter, and close with confidence.</div>
+      </div>
+      <div class="welcome-stats">
+        <div class="stat-box"><div class="stat-n red" data-target="14">0</div><div class="stat-l">MuleSoft Implementations</div></div>
+        <div class="stat-box"><div class="stat-n red" data-target="6">0</div><div class="stat-l">Industries Covered</div></div>
+        <div class="stat-box"><div class="stat-n">2h</div><div class="stat-l">Team Response Time</div></div>
+      </div>
+    </div>
+
+
+    <!-- ── 01 RESEARCH ─────────────────────── -->
+    <div class="section-block a1">
+      <div class="sec-head">
+        <div class="sec-left">
+          <div class="sec-pill">01 — Research</div>
+          <div>
+            <div class="sec-title">Know your prospect inside out</div>
+            <div class="sec-sub">Company intelligence + decision maker contacts — before you make contact</div>
+          </div>
+        </div>
+        <div class="sec-count">2 tools</div>
+      </div>
+
+      <div class="grid-2">
+
+        <!-- CRD -->
+        <div class="tool-card">
+          <div class="tc-body">
+            <div class="tc-icon i-red"><i data-lucide="file-search"></i></div>
+            <div class="tc-name">Customer Research Docket</div>
+            <div class="tc-desc">Enter a prospect's domain — get a full intelligence pack: company overview, tech stack, MuleSoft use cases, and who to approach first.</div>
+          </div>
+          <div class="tc-foot">
+            <div class="tc-row">
+              <input class="tc-in" id="crd-i" placeholder="e.g. walmart.com · jpmorgan.com"/>
+              <button class="go" id="crd-go">Research →</button>
+            </div>
+            <div class="ex-row">
+              <span class="ex-lbl">Try:</span>
+              <span class="ex-chip" onclick="fire('crd-i','crd-go','walmart.com')">walmart.com</span>
+              <span class="ex-chip" onclick="fire('crd-i','crd-go','jpmorgan.com')">jpmorgan.com</span>
+              <span class="ex-chip" onclick="fire('crd-i','crd-go','delta.com')">delta.com</span>
+            </div>
+            <div class="tc-result" id="crd-r">
+              <div class="ld-row" id="crd-l"><span>Researching</span><div class="dots"><span></span><span></span><span></span></div></div>
+              <div id="crd-o" style="display:none">
+                <div class="r-title">Walmart Inc. — Research Snapshot</div>
+                <div class="r-body">
+                  <strong>Industry:</strong> Retail &amp; eCommerce · $573B revenue · 2.1M employees<br/>
+                  <strong>Tech stack:</strong> Azure, Kafka, SAP — confirmed MuleSoft user<br/>
+                  <strong>Best opportunity:</strong> Real-time inventory sync across 4,700 stores<br/>
+                  <strong>Talk to:</strong> VP Enterprise Integration · Chief Digital Officer<br/><br/>
+                  <span class="r-tag" style="background:#fee2e2;color:var(--red)">Supply Chain</span>
+                  <span class="r-tag" style="background:var(--blue-bg);color:var(--blue)">API-Led</span>
+                  <span class="r-tag" style="background:var(--amber-bg);color:var(--amber)">Legacy Modernisation</span>
+                </div>
+                <a href="ae-account-crd.html" class="r-link">View full CRD <i data-lucide="arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONTACT FINDER -->
+        <div class="tool-card">
+          <div class="tc-body">
+            <div class="tc-icon i-purple"><i data-lucide="user-search"></i></div>
+            <div class="tc-name">Contact Finder</div>
+            <div class="tc-desc">Enter a name + company or paste a LinkedIn URL — get the decision maker's verified work email and direct phone, ready to use.</div>
+          </div>
+          <div class="tc-foot">
+            <div class="tc-row">
+              <input class="tc-in" id="cf-i" placeholder="e.g. Mark Stevens, Accenture · or LinkedIn URL"/>
+              <button class="go" id="cf-go">Find →</button>
+            </div>
+            <div class="ex-row">
+              <span class="ex-lbl">Or paste:</span>
+              <span class="ex-chip" onclick="fire('cf-i','cf-go','linkedin.com/in/markstevens')">LinkedIn URL</span>
+            </div>
+            <div class="tc-result" id="cf-r">
+              <div class="ld-row" id="cf-l"><span>Finding contact</span><div class="dots"><span></span><span></span><span></span></div></div>
+              <div id="cf-o" style="display:none">
+                <div class="r-title">Mark Stevens · VP Integration · Accenture</div>
+                <div class="r-body">
+                  <strong>Work email:</strong> mark.stevens@accenture.com<br/>
+                  <strong>Direct:</strong> +1 (312) 555-0147<br/>
+                  <strong>Location:</strong> Chicago, IL — Accenture Tower<br/>
+                  <strong>Confidence:</strong> <span style="color:var(--green);font-weight:700;">High — verified</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- ── 02 MEETING SUPPORT ───────────────── -->
+    <div class="section-block a2">
+      <div class="sec-head">
+        <div class="sec-left">
+          <div class="sec-pill">02 — Meeting Support</div>
+          <div>
+            <div class="sec-title">Walk in prepared, every time</div>
+            <div class="sec-sub">Meeting pack, discovery questions, and competitive talking points</div>
+          </div>
+        </div>
+        <div class="sec-count">3 tools</div>
+      </div>
+
+      <div class="grid-3">
+
+        <!-- MEETING PREP PACK -->
+        <div class="tool-card">
+          <div class="tc-body sm">
+            <div class="tc-icon sm i-blue"><i data-lucide="package"></i></div>
+            <div class="tc-name sm">Meeting Prep Pack</div>
+            <div class="tc-desc sm">Company context + the right angle + the right case study — one pack, before your meeting.</div>
+          </div>
+          <div class="tc-foot sm">
+            <div class="tc-row">
+              <input class="tc-in sm" id="mp-i" placeholder="Company, e.g. Accenture"/>
+              <button class="go sm" id="mp-go">Prep →</button>
+            </div>
+            <div class="tc-result" id="mp-r">
+              <div class="ld-row" id="mp-l"><span>Building</span><div class="dots"><span></span><span></span><span></span></div></div>
+              <div id="mp-o" style="display:none">
+                <div class="r-body">
+                  <strong>Lead with:</strong> API governance at scale<br/>
+                  <strong>Key ask:</strong> "How are BUs handling integration today?"<br/>
+                  <strong>Share:</strong> Big 4 — 12 BU API governance case study
+                </div>
+                <a href="ae-meeting-brief.html" class="r-link">Full brief <i data-lucide="arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DISCOVERY PREP -->
+        <div class="tool-card">
+          <div class="tc-body sm">
+            <div class="tc-icon sm i-teal"><i data-lucide="mic"></i></div>
+            <div class="tc-name sm">Discovery Prep</div>
+            <div class="tc-desc sm">The smartest discovery questions for any prospect — tailored to their industry and context.</div>
+          </div>
+          <div class="tc-foot sm">
+            <div class="tc-row">
+              <input class="tc-in sm" id="dp-i" placeholder="Domain, e.g. homedepot.com"/>
+              <button class="go sm" id="dp-go">Go →</button>
+            </div>
+            <div class="tc-result" id="dp-r">
+              <div class="ld-row" id="dp-l"><span>Building</span><div class="dots"><span></span><span></span><span></span></div></div>
+              <div id="dp-o" style="display:none">
+                <div class="r-body">
+                  <strong>Angle:</strong> Retail — omnichannel &amp; inventory<br/>
+                  · "How are store and online inventories connected?"<br/>
+                  · "When an order fails, where does breakdown happen?"<br/>
+                  · "What does your integration team look like?"
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BATTLE CARDS -->
+        <div class="tool-card">
+          <div class="tc-body sm">
+            <div class="tc-icon sm i-amber"><i data-lucide="shield"></i></div>
+            <div class="tc-name sm">Competitive Battle Cards</div>
+            <div class="tc-desc sm">Client comparing MuleSoft to a competitor? Pick the competitor — talking points instantly.</div>
+          </div>
+          <div class="tc-foot sm">
+            <div class="sel-tabs" id="bc-tabs">
+              <div class="sel-tab" data-bc="boomi">vs. Boomi</div>
+              <div class="sel-tab" data-bc="azure">vs. Azure</div>
+              <div class="sel-tab" data-bc="informatica">vs. Informatica</div>
+              <div class="sel-tab" data-bc="jitterbit">vs. Jitterbit</div>
+            </div>
+            <div class="tc-result" id="bc-r">
+              <div class="r-title" id="bc-t"></div>
+              <div class="r-body" id="bc-b"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- ── 03 DEAL SUPPORT ──────────────────── -->
+    <div class="section-block a3">
+      <div class="sec-head">
+        <div class="sec-left">
+          <div class="sec-pill">03 — Deal Support</div>
+          <div>
+            <div class="sec-title">Tools to help you close</div>
+            <div class="sec-sub">ROI justification, licensing clarity, and real delivery timelines from Dataskate</div>
+          </div>
+        </div>
+        <div class="sec-count">3 tools</div>
+      </div>
+
+      <div class="grid-3">
+
+        <!-- ROI BUILDER -->
+        <div class="tool-card">
+          <div class="tc-body sm">
+            <div class="tc-icon sm i-green"><i data-lucide="trending-up"></i></div>
+            <div class="tc-name sm">ROI / Business Case Builder</div>
+            <div class="tc-desc sm">Help the client justify the investment internally — ROI talking points matched to their use case.</div>
+          </div>
+          <div class="tc-foot sm">
+            <div class="tc-row">
+              <input class="tc-in sm" id="roi-i" placeholder="e.g. connect SAP to Salesforce"/>
+              <button class="go sm" id="roi-go">Build →</button>
+            </div>
+            <div class="tc-result" id="roi-r">
+              <div class="ld-row" id="roi-l"><span>Calculating</span><div class="dots"><span></span><span></span><span></span></div></div>
+              <div id="roi-o" style="display:none">
+                <div class="r-body">
+                  <strong>Time saved:</strong> ~1,200 engineer hrs/yr<br/>
+                  <strong>Error reduction:</strong> 85% fewer month-end mismatches<br/>
+                  <strong>Speed:</strong> Order-to-invoice: 4 days → same day<br/>
+                  <strong>Payback:</strong> 8–14 months at mid-market scale
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LICENSE ESTIMATOR -->
+        <div class="tool-card">
+          <div class="tc-body sm">
+            <div class="tc-icon sm i-red"><i data-lucide="calculator"></i></div>
+            <div class="tc-name sm">License Estimator</div>
+            <div class="tc-desc sm">Give clients a realistic MuleSoft licence cost range — no surprises on either side.</div>
+          </div>
+          <div class="tc-foot sm">
+            <select class="tc-in sm mb" id="lic-type">
+              <option value="">Select use case type…</option>
+              <option>Core banking / financial services</option>
+              <option>Retail / eCommerce platform</option>
+              <option>Healthcare / FHIR integration</option>
+              <option>Supply chain / ERP connect</option>
+              <option>SaaS platform / multi-tenant API</option>
+            </select>
+            <div class="tc-row">
+              <input class="tc-in sm" id="lic-size" placeholder="No. of integrations (approx)"/>
+              <button class="go sm" id="lic-go">Estimate →</button>
+            </div>
+            <div class="tc-result" id="lic-r">
+              <div class="ld-row" id="lic-l"><span>Estimating</span><div class="dots"><span></span><span></span><span></span></div></div>
+              <div id="lic-o" style="display:none">
+                <div class="r-body">
+                  <strong>Range:</strong> $80K – $180K / year<br/>
+                  <strong>Tier:</strong> Gold (recommended)<br/>
+                  <strong>Includes:</strong> Anypoint Platform, API Manager, Runtime Fabric<br/>
+                  <span style="font-size:11px;color:var(--text-3);">* Indicative — contact SE for formal sizing</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SCOPE GUIDE -->
+        <div class="tool-card">
+          <div class="tc-body sm">
+            <div class="tc-icon sm i-slate"><i data-lucide="clipboard-list"></i></div>
+            <div class="tc-name sm">Dataskate Scope Guide</div>
+            <div class="tc-desc sm">When clients ask "how long?" — confident timelines and team sizes from real Dataskate deliveries.</div>
+          </div>
+          <div class="tc-foot sm">
+            <div class="sel-tabs" id="sg-tabs">
+              <div class="sel-tab" data-sg="core">Core Banking</div>
+              <div class="sel-tab" data-sg="retail">Retail</div>
+              <div class="sel-tab" data-sg="health">Healthcare</div>
+              <div class="sel-tab" data-sg="erp">ERP / SAP</div>
+            </div>
+            <div class="tc-result" id="sg-r">
+              <div class="r-body" id="sg-b"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- ── PHASE 2 ────────────────────────── -->
+    <div class="p2-strip a4">
+      <div class="p2-icon"><i data-lucide="send"></i></div>
+      <div class="p2-txt">
+        <div class="p2-name">Outreach Support — coming in Phase 2</div>
+        <div class="p2-desc">DSC will run outreach campaigns on your accounts and deliver booked meetings straight to your dashboard.</div>
+      </div>
+      <div class="p2-badge">Phase 2</div>
+    </div>
+
+
+    <!-- ── DIVIDER ───────────────────────── -->
+    <div class="mid-divider a4"><span>Dataskate credibility proof</span></div>
+
+
+    <!-- ── IMPLEMENTATIONS ───────────────── -->
+    <div class="section-block a5">
+      <div class="sec-head">
+        <div class="sec-left">
+          <div class="sec-pill">14 Implementations</div>
+          <div>
+            <div class="sec-title">Dataskate by Industry</div>
+            <div class="sec-sub">Real delivery across 6 sectors — use these to build credibility with clients</div>
+          </div>
+        </div>
+        <span class="see-all">View all →</span>
+      </div>
+
+      <div class="impl-grid">
+
+        <div class="impl-card">
+          <div class="impl-bar" style="background:linear-gradient(90deg,#e11d48,#fb7185)"></div>
+          <div class="impl-top">
+            <div class="impl-hdr">
+              <div class="impl-ico" style="background:#e11d48"><i data-lucide="shopping-bag"></i></div>
+              <div class="impl-count"><div class="impl-n">4</div><div class="impl-nl">implementations</div></div>
+            </div>
+            <div class="impl-name">Retail &amp; eCommerce</div>
+            <div class="impl-sub">Inventory · Orders · Omnichannel</div>
+          </div>
+          <div class="impl-body">
+            <div class="impl-out"><span class="impl-out-arrow">→</span> Real-time stock sync across 500+ stores — 60% fewer discrepancies</div>
+            <div class="impl-tags"><span class="impl-tag">Supply Chain</span><span class="impl-tag">API-Led</span><span class="impl-tag">Salesforce</span></div>
+          </div>
+        </div>
+
+        <div class="impl-card">
+          <div class="impl-bar" style="background:linear-gradient(90deg,#0f4c81,#3b82f6)"></div>
+          <div class="impl-top">
+            <div class="impl-hdr">
+              <div class="impl-ico" style="background:#0f4c81"><i data-lucide="landmark"></i></div>
+              <div class="impl-count"><div class="impl-n">3</div><div class="impl-nl">implementations</div></div>
+            </div>
+            <div class="impl-name">Financial Services</div>
+            <div class="impl-sub">Core banking · Payments · Open banking</div>
+          </div>
+          <div class="impl-body">
+            <div class="impl-out"><span class="impl-out-arrow">→</span> Core banking API modernisation — 8 legacy systems in 10 weeks</div>
+            <div class="impl-tags"><span class="impl-tag">Core Banking</span><span class="impl-tag">Open Banking</span><span class="impl-tag">Compliance</span></div>
+          </div>
+        </div>
+
+        <div class="impl-card">
+          <div class="impl-bar" style="background:linear-gradient(90deg,#0d9488,#2dd4bf)"></div>
+          <div class="impl-top">
+            <div class="impl-hdr">
+              <div class="impl-ico" style="background:#0d9488"><i data-lucide="heart-pulse"></i></div>
+              <div class="impl-count"><div class="impl-n">2</div><div class="impl-nl">implementations</div></div>
+            </div>
+            <div class="impl-name">Healthcare</div>
+            <div class="impl-sub">HL7 FHIR · EHR · Patient data</div>
+          </div>
+          <div class="impl-body">
+            <div class="impl-out"><span class="impl-out-arrow">→</span> FHIR integration across 200+ hospitals — real-time patient data</div>
+            <div class="impl-tags"><span class="impl-tag">FHIR</span><span class="impl-tag">Epic / Cerner</span><span class="impl-tag">Real-time</span></div>
+          </div>
+        </div>
+
+        <div class="impl-card">
+          <div class="impl-bar" style="background:linear-gradient(90deg,#7c3aed,#a78bfa)"></div>
+          <div class="impl-top">
+            <div class="impl-hdr">
+              <div class="impl-ico" style="background:#7c3aed"><i data-lucide="factory"></i></div>
+              <div class="impl-count"><div class="impl-n">2</div><div class="impl-nl">implementations</div></div>
+            </div>
+            <div class="impl-name">Manufacturing</div>
+            <div class="impl-sub">Supply chain · ERP · IoT data</div>
+          </div>
+          <div class="impl-body">
+            <div class="impl-out"><span class="impl-out-arrow">→</span> SAP + MuleSoft — 40% faster order-to-delivery cycle</div>
+            <div class="impl-tags"><span class="impl-tag">SAP</span><span class="impl-tag">IoT</span><span class="impl-tag">Supply Chain</span></div>
+          </div>
+        </div>
+
+        <div class="impl-card">
+          <div class="impl-bar" style="background:linear-gradient(90deg,#1d4ed8,#60a5fa)"></div>
+          <div class="impl-top">
+            <div class="impl-hdr">
+              <div class="impl-ico" style="background:#1d4ed8"><i data-lucide="cpu"></i></div>
+              <div class="impl-count"><div class="impl-n">2</div><div class="impl-nl">implementations</div></div>
+            </div>
+            <div class="impl-name">Technology &amp; SaaS</div>
+            <div class="impl-sub">Multi-tenant APIs · Platform integration</div>
+          </div>
+          <div class="impl-body">
+            <div class="impl-out"><span class="impl-out-arrow">→</span> Multi-tenant API platform in 8 weeks — 50+ enterprise clients</div>
+            <div class="impl-tags"><span class="impl-tag">API Management</span><span class="impl-tag">Multi-tenant</span><span class="impl-tag">AWS</span></div>
+          </div>
+        </div>
+
+        <div class="impl-card">
+          <div class="impl-bar" style="background:linear-gradient(90deg,#b45309,#fbbf24)"></div>
+          <div class="impl-top">
+            <div class="impl-hdr">
+              <div class="impl-ico" style="background:#b45309"><i data-lucide="briefcase"></i></div>
+              <div class="impl-count"><div class="impl-n">1</div><div class="impl-nl">implementation</div></div>
+            </div>
+            <div class="impl-name">Professional Services</div>
+            <div class="impl-sub">Consulting · API governance · Multi-BU</div>
+          </div>
+          <div class="impl-body">
+            <div class="impl-out"><span class="impl-out-arrow">→</span> API governance across 12 BUs for a Big 4 firm — 40% faster delivery</div>
+            <div class="impl-tags"><span class="impl-tag">API Governance</span><span class="impl-tag">Multi-BU</span><span class="impl-tag">Big 4</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- ── DIVIDER ───────────────────────── -->
+    <div class="mid-divider a5"><span>Resources &amp; team access</span></div>
+
+
+    <!-- ── CASE STUDIES + DSC TEAM ──────── -->
+    <div class="bot-grid a6">
+
+      <div class="hub">
+        <div class="hub-head">
+          <div>
+            <div class="hub-title"><i data-lucide="book-open"></i> Case Studies</div>
+            <div class="hub-sub">Share directly with clients — one click, ready to send</div>
+          </div>
+          <span class="see-all">All 8 →</span>
+        </div>
+        <div class="filters">
+          <div class="fil on">All</div>
+          <div class="fil">Retail</div>
+          <div class="fil">Finance</div>
+          <div class="fil">Healthcare</div>
+          <div class="fil">Manufacturing</div>
+        </div>
+        <div>
+          <div class="hub-row"><div class="hub-ico" style="background:#e11d48"><i data-lucide="shopping-bag"></i></div><div class="hub-rc"><div class="hub-rt">Real-Time Inventory Sync Across 500 Stores</div><div class="hub-rm">Retail · 5 min read · 2025</div></div><div class="share-btn"><i data-lucide="share-2"></i> Share</div></div>
+          <div class="hub-row"><div class="hub-ico" style="background:#0f4c81"><i data-lucide="landmark"></i></div><div class="hub-rc"><div class="hub-rt">Core Banking API Modernisation — 8 Weeks</div><div class="hub-rm">Finance · 6 min read · 2026</div></div><div class="share-btn"><i data-lucide="share-2"></i> Share</div></div>
+          <div class="hub-row"><div class="hub-ico" style="background:#6d28d9"><i data-lucide="layers"></i></div><div class="hub-rc"><div class="hub-rt">API Governance Across 12 BUs — Big 4 Firm</div><div class="hub-rm">Professional Services · 5 min · 2026</div></div><div class="share-btn"><i data-lucide="share-2"></i> Share</div></div>
+          <div class="hub-row"><div class="hub-ico" style="background:#0d9488"><i data-lucide="heart-pulse"></i></div><div class="hub-rc"><div class="hub-rt">HL7 FHIR Integration — 200+ Hospital Network</div><div class="hub-rm">Healthcare · 7 min read · 2026</div></div><div class="share-btn"><i data-lucide="share-2"></i> Share</div></div>
+          <div class="hub-row"><div class="hub-ico" style="background:#7c3aed"><i data-lucide="factory"></i></div><div class="hub-rc"><div class="hub-rt">SAP + MuleSoft Integration — 40% Faster Delivery</div><div class="hub-rm">Manufacturing · 4 min read · 2025</div></div><div class="share-btn"><i data-lucide="share-2"></i> Share</div></div>
+        </div>
+      </div>
+
+      <div class="dsc">
+        <div class="dsc-head">
+          <div class="dsc-title"><i data-lucide="message-circle"></i> Reach the DSC Team</div>
+          <div class="dsc-sub">Real people, not a helpdesk. Need help on a deal?</div>
+          <div class="resp-pill"><i data-lucide="clock"></i> We respond within 2 hours</div>
+        </div>
+        <div class="dsc-team">
+          <div class="member">
+            <div class="m-av" style="background:var(--red)">RY<div class="m-dot on"></div></div>
+            <div class="m-info"><div class="m-name">Ryan</div><div class="m-role">Field Agent · San Francisco</div></div>
+            <div class="ping-btn"><i data-lucide="message-square"></i> Ping</div>
+          </div>
+          <div class="member">
+            <div class="m-av" style="background:#7c3aed">VI<div class="m-dot on"></div></div>
+            <div class="m-info"><div class="m-name">Vivek</div><div class="m-role">RevOps Lead · Offshore</div></div>
+            <div class="ping-btn"><i data-lucide="message-square"></i> Ping</div>
+          </div>
+          <div class="member">
+            <div class="m-av" style="background:#0d9488">KA<div class="m-dot away"></div></div>
+            <div class="m-info"><div class="m-name">Karthik</div><div class="m-role">AI Automation · Offshore</div></div>
+            <div class="ping-btn"><i data-lucide="message-square"></i> Ping</div>
+          </div>
+        </div>
+        <div class="dsc-form">
+          <div class="dsc-lbl">What do you need?</div>
+          <textarea class="dsc-ta" id="dt-msg" placeholder="e.g. Retail prospect asking about supply chain — can you pull a CRD and the best case study?"></textarea>
+          <button class="dsc-send" id="dt-send"><i data-lucide="send"></i> Send to DSC Team</button>
+        </div>
+      </div>
+
+    </div>
+
+  </div><!-- /content -->
+</main>
+</div><!-- /shell -->
+
+
+<!-- ═══════════ DEMO SWITCHER ════════ -->
+<div style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(19,25,43,.97);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.1);border-radius:40px;padding:7px 16px;display:flex;align-items:center;gap:6px;z-index:999;box-shadow:0 8px 32px rgba(0,0,0,.45);font-family:'DM Sans',sans-serif;">
+  <span style="font-size:10px;font-weight:700;color:rgba(255,255,255,.2);letter-spacing:1.2px;text-transform:uppercase;padding-right:4px;">DSC Demo</span>
+  <div style="width:1px;height:14px;background:rgba(255,255,255,.1);margin-right:4px;"></div>
+  <a href="index.html"           style="font-size:12.5px;font-weight:500;color:rgba(255,255,255,.4);text-decoration:none;padding:5px 12px;border-radius:20px;transition:all .15s;" onmouseover="this.style.color='#fff';this.style.background='rgba(255,255,255,.1)'" onmouseout="this.style.color='rgba(255,255,255,.4)';this.style.background=''">Home</a>
+  <a href="admin-dashboard.html" style="font-size:12.5px;font-weight:500;color:rgba(255,255,255,.4);text-decoration:none;padding:5px 12px;border-radius:20px;transition:all .15s;" onmouseover="this.style.color='#ff6b70';this.style.background='rgba(237,28,36,.15)'" onmouseout="this.style.color='rgba(255,255,255,.4)';this.style.background=''">Admin</a>
+  <a href="staff-interface.html" style="font-size:12.5px;font-weight:500;color:rgba(255,255,255,.4);text-decoration:none;padding:5px 12px;border-radius:20px;transition:all .15s;" onmouseover="this.style.color='#fbbf24';this.style.background='rgba(217,119,6,.15)'" onmouseout="this.style.color='rgba(255,255,255,.4)';this.style.background=''">Staff</a>
+  <a href="ae-interface.html"    style="font-size:12.5px;font-weight:700;color:#60a5fa;text-decoration:none;padding:5px 14px;border-radius:20px;background:rgba(29,78,216,.25);">AE View</a>
+</div>
+
+
+<script>
+lucide.createIcons();
+
+/* Counters */
+function count(el,t,d=900){
+  let s=null;
+  const f=ts=>{if(!s)s=ts;const p=Math.min((ts-s)/d,1),e=1-Math.pow(1-p,3);el.textContent=Math.floor(e*t);if(p<1)requestAnimationFrame(f);else el.textContent=t;};
+  requestAnimationFrame(f);
+}
+window.addEventListener('load',()=>setTimeout(()=>document.querySelectorAll('[data-target]').forEach(el=>count(el,+el.dataset.target)),400));
+
+/* Tool runner */
+function run(rId,lId,oId,d=1800){
+  const r=document.getElementById(rId),l=document.getElementById(lId),o=document.getElementById(oId);
+  r.classList.add('show');if(l){l.style.display='flex';o.style.display='none';}lucide.createIcons();
+  setTimeout(()=>{if(l)l.style.display='none';o.style.display='block';lucide.createIcons();},d);
+}
+function fire(i,g,v){document.getElementById(i).value=v;document.getElementById(g).click();}
+
+/* Wire buttons */
+[
+  {g:'crd-go',i:'crd-i',r:'crd-r',l:'crd-l',o:'crd-o'},
+  {g:'cf-go', i:'cf-i', r:'cf-r', l:'cf-l', o:'cf-o'},
+  {g:'mp-go', i:'mp-i', r:'mp-r', l:'mp-l', o:'mp-o'},
+  {g:'dp-go', i:'dp-i', r:'dp-r', l:'dp-l', o:'dp-o'},
+  {g:'roi-go',i:'roi-i',r:'roi-r',l:'roi-l',o:'roi-o'},
+  {g:'lic-go',i:'lic-size',r:'lic-r',l:'lic-l',o:'lic-o'},
+].forEach(t=>{
+  const b=document.getElementById(t.g);
+  if(b)b.onclick=()=>{const ip=document.getElementById(t.i);if(ip&&!ip.value.trim())return;run(t.r,t.l,t.o);};
+});
+document.querySelectorAll('.tc-in').forEach(ip=>{
+  ip.addEventListener('keydown',e=>{if(e.key==='Enter'){const b=ip.closest('.tool-card')?.querySelector('.go');if(b)b.click();}});
+});
+
+/* Battle cards */
+const BC={
+  boomi:{t:'MuleSoft vs. Dell Boomi',b:'<strong>Advantages:</strong><br/>· Enterprise API management depth Boomi can\'t match<br/>· Native Salesforce ecosystem integration<br/>· Larger SI/partner community<br/><br/><strong>On price:</strong> "TCO over 3 years favours MuleSoft — developer productivity + maintenance."'},
+  azure:{t:'MuleSoft vs. Azure Integration',b:'<strong>Advantages:</strong><br/>· Platform-agnostic — AWS, GCP, Azure, on-prem equally<br/>· Purpose-built API lifecycle management<br/>· No cloud vendor lock-in<br/><br/><strong>If Azure-first:</strong> "MuleSoft and Azure work together — we have live hybrid examples."'},
+  informatica:{t:'MuleSoft vs. Informatica',b:'<strong>Advantages:</strong><br/>· API-led connectivity vs ETL-first approach<br/>· Better for real-time, event-driven use cases<br/>· Modern developer experience<br/><br/><strong>On governance:</strong> "MuleSoft + Informatica often co-exist — different integration layers."'},
+  jitterbit:{t:'MuleSoft vs. Jitterbit',b:'<strong>Advantages:</strong><br/>· Enterprise scale and carrier-grade reliability<br/>· Full API management lifecycle<br/>· Global Salesforce SI ecosystem<br/><br/><strong>On simplicity:</strong> "MuleSoft scales with you — most Jitterbit customers re-platform at growth stage."'}
+};
+document.querySelectorAll('[data-bc]').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('[data-bc]').forEach(t=>t.classList.remove('on'));
+    tab.classList.add('on');
+    const d=BC[tab.dataset.bc];
+    document.getElementById('bc-t').textContent=d.t;
+    document.getElementById('bc-b').innerHTML=d.b;
+    document.getElementById('bc-r').classList.add('show');
+  });
+});
+
+/* Scope guide */
+const SG={
+  core:'<strong>Timeline:</strong> 10–14 weeks<br/><strong>Team:</strong> 2 engineers + 1 solution architect<br/><strong>Stages:</strong> Discovery → Design → Build → UAT → Go-live<br/><strong>Cost range:</strong> $180K – $320K',
+  retail:'<strong>Timeline:</strong> 6–10 weeks<br/><strong>Team:</strong> 2 engineers + 1 project lead<br/><strong>Stages:</strong> Discovery → Design → Build → UAT → Go-live<br/><strong>Cost range:</strong> $90K – $180K',
+  health:'<strong>Timeline:</strong> 12–16 weeks (compliance adds time)<br/><strong>Team:</strong> 2 engineers + FHIR specialist + compliance lead<br/><strong>Stages:</strong> Assessment → Design → Build → UAT + compliance<br/><strong>Cost range:</strong> $220K – $400K',
+  erp:'<strong>Timeline:</strong> 8–12 weeks<br/><strong>Team:</strong> 2 engineers + SAP connector specialist<br/><strong>Stages:</strong> System mapping → Design → Build → UAT<br/><strong>Cost range:</strong> $120K – $240K'
+};
+document.querySelectorAll('[data-sg]').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('[data-sg]').forEach(t=>t.classList.remove('on'));
+    tab.classList.add('on');
+    document.getElementById('sg-b').innerHTML=SG[tab.dataset.sg];
+    document.getElementById('sg-r').classList.add('show');
+  });
+});
+
+/* DSC send */
+document.getElementById('dt-send').addEventListener('click',function(){
+  if(!document.getElementById('dt-msg').value.trim()){document.getElementById('dt-msg').focus();return;}
+  this.innerHTML='<i data-lucide="check-circle"></i> Sent — reply within 2 hours';
+  this.style.background='var(--green)';this.disabled=true;
+  document.getElementById('dt-msg').value='';
+  lucide.createIcons();
+  setTimeout(()=>{this.innerHTML='<i data-lucide="send"></i> Send to DSC Team';this.style.background='';this.disabled=false;lucide.createIcons();},4000);
+});
+
+/* Ping */
+document.querySelectorAll('.ping-btn').forEach(b=>{
+  b.addEventListener('click',function(){
+    const o=this.innerHTML;this.textContent='Pinged ✓';
+    this.style.cssText='background:var(--green);color:#fff;border-color:var(--green);display:flex;align-items:center;gap:4px;font-weight:700;font-size:11.5px;';
+    setTimeout(()=>{this.innerHTML=o;this.style.cssText='';lucide.createIcons();},3000);
+  });
+});
+
+/* Filters */
+document.querySelectorAll('.fil').forEach(f=>{
+  f.addEventListener('click',()=>{document.querySelectorAll('.fil').forEach(x=>x.classList.remove('on'));f.classList.add('on');});
+});
+
+/* Nav */
+document.querySelectorAll('.sb-item:not(.muted)').forEach(item=>{
+  item.addEventListener('click',()=>{document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));item.classList.add('active');});
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DSC — Staff Command Center · Ryan (SFO)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet"/>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --brand-red:   #ed1c24;
+  --brand-dark:  #231f20;
+  --brand-dark2: #2e2a2b;
+  --bg:          #f4f5f7;
+  --surface:     #ffffff;
+  --border:      #e8e9ec;
+  --text-1:      #1a1a1a;
+  --text-2:      #6b7280;
+  --text-3:      #9ca3af;
+  --green:       #16a34a;
+  --green-bg:    #dcfce7;
+  --amber:       #d97706;
+  --amber-bg:    #fef3c7;
+  --red-bg:      #fee2e2;
+  --blue:        #2563eb;
+  --blue-bg:     #dbeafe;
+  --purple:      #7c3aed;
+  --purple-bg:   #ede9fe;
+  --teal:        #0d9488;
+  --teal-bg:     #ccfbf1;
+  --sidebar-w:   230px;
+  --header-h:    60px;
+  --r:           12px;
+  --r-sm:        8px;
+  --shadow:      0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:   0 4px 16px rgba(0,0,0,.09);
+}
+
+html,body { height:100%; font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text-1); font-size:14px; }
+.shell { display:flex; height:100vh; overflow:hidden; }
+
+/* ── SIDEBAR ─────────────────────────────────────── */
+.sidebar {
+  width:var(--sidebar-w); min-width:var(--sidebar-w);
+  background:var(--brand-dark);
+  display:flex; flex-direction:column;
+  height:100vh; position:fixed; left:0; top:0; z-index:100;
+}
+.sidebar-logo {
+  padding:18px 20px 16px;
+  border-bottom:1px solid rgba(255,255,255,.07);
+  display:flex; align-items:center; gap:10px;
+}
+.logo-mark {
+  width:34px; height:34px; background:var(--brand-red);
+  border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+.logo-wordmark { font-family:'Outfit',sans-serif; font-weight:700; font-size:15px; color:#fff; }
+.logo-wordmark span { color:var(--brand-red); }
+.logo-tag { font-size:10px; color:rgba(255,255,255,.3); letter-spacing:.8px; text-transform:uppercase; margin-top:1px; }
+
+.nav-section { padding:12px 12px 4px; }
+.nav-label { font-size:10px; font-weight:600; color:rgba(255,255,255,.22); text-transform:uppercase; letter-spacing:1px; padding:0 8px; margin-bottom:4px; }
+.nav-item {
+  display:flex; align-items:center; gap:10px;
+  padding:9px 10px; border-radius:6px; cursor:pointer;
+  color:rgba(255,255,255,.5); font-size:13px; font-weight:400;
+  transition:all .15s; margin-bottom:1px; position:relative;
+}
+.nav-item:hover { background:rgba(255,255,255,.06); color:rgba(255,255,255,.85); }
+.nav-item.active { background:rgba(237,28,36,.15); color:#fff; font-weight:500; }
+.nav-item.active::before {
+  content:''; position:absolute; left:0; top:50%; transform:translateY(-50%);
+  width:3px; height:20px; background:var(--brand-red); border-radius:0 3px 3px 0;
+}
+.nav-item [data-lucide] { width:15px; height:15px; flex-shrink:0; }
+.nav-pill {
+  margin-left:auto; background:var(--brand-red); color:#fff;
+  font-size:10px; font-weight:700; padding:1px 6px; border-radius:20px;
+}
+.nav-pill.amber { background:var(--amber); }
+.nav-pill.green { background:var(--green); }
+
+/* Team presence strip */
+.team-presence {
+  margin:10px 12px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:8px; padding:10px 12px;
+}
+.presence-label { font-size:10px; color:rgba(255,255,255,.25); text-transform:uppercase; letter-spacing:.8px; margin-bottom:8px; }
+.presence-row { display:flex; align-items:center; gap:7px; margin-bottom:6px; }
+.presence-av {
+  width:24px; height:24px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:9px; font-weight:700; color:#fff; flex-shrink:0; position:relative;
+}
+.online-dot {
+  position:absolute; bottom:-1px; right:-1px;
+  width:8px; height:8px; border-radius:50%; border:1.5px solid var(--brand-dark);
+}
+.online-dot.green  { background:var(--green); }
+.online-dot.amber  { background:var(--amber); }
+.online-dot.grey   { background:#555; }
+.presence-info { flex:1; min-width:0; }
+.presence-name { font-size:11px; color:rgba(255,255,255,.65); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.presence-role { font-size:10px; color:rgba(255,255,255,.28); }
+
+.sidebar-bottom {
+  margin-top:auto; padding:12px;
+  border-top:1px solid rgba(255,255,255,.07);
+}
+.user-row {
+  display:flex; align-items:center; gap:10px;
+  padding:8px 10px; border-radius:6px; cursor:pointer; transition:background .15s;
+}
+.user-row:hover { background:rgba(255,255,255,.06); }
+.user-av {
+  width:32px; height:32px; background:var(--brand-red);
+  border-radius:50%; display:flex; align-items:center; justify-content:center;
+  font-family:'Outfit',sans-serif; font-weight:700; font-size:12px; color:#fff; flex-shrink:0;
+}
+.user-name { font-size:13px; font-weight:500; color:#fff; }
+.user-role { font-size:11px; color:rgba(255,255,255,.3); }
+
+/* ── MAIN ────────────────────────────────────────── */
+.main { margin-left:var(--sidebar-w); flex:1; display:flex; flex-direction:column; height:100vh; overflow:hidden; }
+
+/* ── HEADER ──────────────────────────────────────── */
+.header {
+  height:var(--header-h); background:var(--surface);
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:center; padding:0 24px; gap:14px; flex-shrink:0;
+}
+.header-title { font-family:'Outfit',sans-serif; font-weight:700; font-size:16px; }
+.header-right { margin-left:auto; display:flex; align-items:center; gap:10px; }
+.icon-btn {
+  width:36px; height:36px; border-radius:8px; border:1px solid var(--border);
+  background:var(--surface); display:flex; align-items:center; justify-content:center;
+  cursor:pointer; transition:all .15s; color:var(--text-2); position:relative;
+}
+.icon-btn:hover { background:var(--bg); }
+.icon-btn [data-lucide] { width:16px; height:16px; }
+.notif-dot { position:absolute; top:7px; right:7px; width:7px; height:7px; background:var(--brand-red); border-radius:50%; border:2px solid #fff; }
+.header-date { font-size:12.5px; color:var(--text-2); }
+.btn-red {
+  display:flex; align-items:center; gap:6px; padding:7px 14px;
+  background:var(--brand-red); color:#fff; border:none; border-radius:var(--r-sm);
+  font-size:13px; font-weight:500; cursor:pointer; font-family:'DM Sans',sans-serif;
+  transition:all .15s;
+}
+.btn-red:hover { background:#c8161d; }
+.btn-red [data-lucide] { width:14px; height:14px; }
+
+/* ── CONTENT ─────────────────────────────────────── */
+.content { flex:1; overflow-y:auto; padding:22px 24px; display:flex; flex-direction:column; gap:18px; }
+.content::-webkit-scrollbar { width:5px; }
+.content::-webkit-scrollbar-thumb { background:var(--border); border-radius:10px; }
+
+/* ── ANIMATIONS ──────────────────────────────────── */
+@keyframes fadeUp { from{opacity:0;transform:translateY(12px);} to{opacity:1;transform:translateY(0);} }
+
+/* ── COMMAND STRIP ───────────────────────────────── */
+.command-strip {
+  background:linear-gradient(135deg, var(--brand-dark) 0%, #3d3536 60%, #2a1f20 100%);
+  border-radius:var(--r); padding:20px 26px;
+  display:grid; grid-template-columns:1fr auto; align-items:center; gap:24px;
+  position:relative; overflow:hidden;
+  animation:fadeUp .35s ease both;
+}
+.command-strip::before {
+  content:''; position:absolute; right:-40px; top:-40px;
+  width:200px; height:200px; background:var(--brand-red);
+  border-radius:50%; opacity:.07;
+}
+.command-left { position:relative; z-index:1; }
+.command-greeting { font-family:'Outfit',sans-serif; font-size:19px; font-weight:700; color:#fff; margin-bottom:5px; }
+.command-greeting span { color:#ff6b70; }
+.command-sub { font-size:13px; color:rgba(255,255,255,.5); display:flex; align-items:center; gap:14px; }
+.command-sub-chip {
+  display:inline-flex; align-items:center; gap:5px;
+  background:rgba(255,255,255,.07); padding:4px 10px; border-radius:20px;
+  font-size:12px; color:rgba(255,255,255,.6);
+}
+.command-sub-chip [data-lucide] { width:11px; height:11px; }
+.command-kpis { display:flex; gap:20px; position:relative; z-index:1; }
+.command-kpi { text-align:center; }
+.command-kpi-num { font-family:'Outfit',sans-serif; font-size:26px; font-weight:800; color:#fff; line-height:1; }
+.command-kpi-num.red   { color:#ff6b70; }
+.command-kpi-num.green { color:#4ade80; }
+.command-kpi-num.amber { color:#fbbf24; }
+.command-kpi-num.blue  { color:#60a5fa; }
+.command-kpi-label { font-size:11px; color:rgba(255,255,255,.38); margin-top:3px; }
+.kpi-divider { width:1px; background:rgba(255,255,255,.1); align-self:stretch; }
+
+/* ── ALERT BANNER ────────────────────────────────── */
+.alert-banner {
+  background:linear-gradient(135deg, #fef3c7, #fffbeb);
+  border:1px solid #fcd34d; border-radius:var(--r-sm); padding:12px 16px;
+  display:flex; align-items:center; gap:12px;
+  animation:fadeUp .35s ease .05s both;
+}
+.alert-icon { width:34px; height:34px; background:#fbbf24; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.alert-icon [data-lucide] { width:17px; height:17px; color:#fff; }
+.alert-text { flex:1; }
+.alert-title { font-weight:600; font-size:13.5px; color:#92400e; }
+.alert-desc  { font-size:12.5px; color:#b45309; margin-top:1px; }
+.alert-cta {
+  padding:7px 14px; background:#d97706; color:#fff; border:none; border-radius:6px;
+  font-size:12.5px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif;
+  white-space:nowrap;
+}
+
+/* ── TWO-COL GRID ────────────────────────────────── */
+.two-col { display:grid; grid-template-columns:1fr 360px; gap:16px; animation:fadeUp .35s ease .1s both; }
+.three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; }
+
+/* ── CARD BASE ───────────────────────────────────── */
+.card { background:var(--surface); border-radius:var(--r); border:1px solid var(--border); box-shadow:var(--shadow); }
+.card-header { display:flex; align-items:center; justify-content:space-between; padding:14px 18px; border-bottom:1px solid var(--border); }
+.card-title { font-family:'Outfit',sans-serif; font-size:14px; font-weight:700; display:flex; align-items:center; gap:8px; }
+.card-title [data-lucide] { width:15px; height:15px; color:var(--brand-red); }
+.card-body { padding:16px 18px; }
+.view-all { font-size:12px; font-weight:600; color:var(--brand-red); cursor:pointer; }
+
+/* ── AE PORTFOLIO TABLE ──────────────────────────── */
+.ae-table { width:100%; border-collapse:collapse; }
+.ae-table th {
+  font-size:11px; font-weight:600; color:var(--text-3); text-transform:uppercase;
+  letter-spacing:.6px; padding:8px 12px; text-align:left; background:var(--bg);
+}
+.ae-table td { padding:10px 12px; border-top:1px solid var(--border); vertical-align:middle; }
+.ae-table tr:hover td { background:#fafafa; }
+.ae-av {
+  width:30px; height:30px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Outfit',sans-serif; font-weight:700; font-size:11px; color:#fff;
+}
+.ae-name-cell { display:flex; align-items:center; gap:9px; }
+.ae-name { font-weight:600; font-size:13px; }
+.ae-co   { font-size:11.5px; color:var(--text-3); }
+.status-pill {
+  display:inline-flex; align-items:center; gap:4px;
+  padding:3px 9px; border-radius:20px; font-size:11px; font-weight:600;
+}
+.sp-active  { background:var(--green-bg);  color:var(--green); }
+.sp-visited { background:var(--blue-bg);   color:var(--blue); }
+.sp-pending { background:var(--amber-bg);  color:var(--amber); }
+.sp-new     { background:var(--bg);        color:var(--text-3); border:1px solid var(--border); }
+.signal-dot { width:5px; height:5px; border-radius:50%; background:currentColor; }
+.progress-mini { width:70px; height:5px; background:var(--bg); border-radius:10px; overflow:hidden; display:inline-block; }
+.progress-mini-fill { height:100%; border-radius:10px; background:var(--brand-red); }
+.action-row { display:flex; align-items:center; gap:6px; }
+.tbl-btn {
+  padding:4px 10px; border-radius:5px; font-size:11.5px; font-weight:500; cursor:pointer;
+  border:1px solid var(--border); background:var(--surface); color:var(--text-2);
+  font-family:'DM Sans',sans-serif; transition:all .15s;
+}
+.tbl-btn:hover { border-color:var(--brand-red); color:var(--brand-red); }
+.tbl-btn.red { background:var(--brand-red); color:#fff; border-color:var(--brand-red); }
+
+/* ── TODAY'S SCHEDULE ────────────────────────────── */
+.today-items { display:flex; flex-direction:column; gap:0; }
+.today-item {
+  display:flex; gap:12px; padding:12px 0;
+  border-bottom:1px solid var(--border); cursor:pointer; transition:background .15s;
+}
+.today-item:last-child { border-bottom:none; }
+.today-item:hover { background:#fafafa; margin:0 -18px; padding:12px 18px; }
+.today-time {
+  font-family:'Outfit',sans-serif; font-size:11px; font-weight:700; color:var(--brand-red);
+  width:44px; flex-shrink:0; padding-top:2px;
+}
+.today-icon {
+  width:30px; height:30px; border-radius:8px;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+.today-icon [data-lucide] { width:14px; height:14px; }
+.today-content { flex:1; min-width:0; }
+.today-title { font-weight:600; font-size:13px; }
+.today-meta  { font-size:11.5px; color:var(--text-3); margin-top:2px; }
+
+/* ── CAMPAIGN TABLE ──────────────────────────────── */
+.campaign-section { animation:fadeUp .35s ease .15s both; }
+.campaign-list { display:flex; flex-direction:column; gap:0; }
+.campaign-row {
+  display:grid; grid-template-columns:1.8fr 1fr .8fr .8fr .8fr 1fr 100px;
+  align-items:center; padding:11px 18px; border-bottom:1px solid var(--border);
+  transition:background .15s; cursor:pointer; gap:10px;
+}
+.campaign-row:last-child { border-bottom:none; }
+.campaign-row:hover { background:#fafafa; }
+.campaign-row.header {
+  background:var(--bg); border-radius:0;
+  padding:8px 18px; cursor:default;
+}
+.campaign-row.header:hover { background:var(--bg); }
+.col-label { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.5px; color:var(--text-3); }
+.campaign-name { font-weight:600; font-size:13px; }
+.campaign-ae   { font-size:12px; color:var(--text-2); margin-top:1px; }
+.heat-pill {
+  display:inline-flex; align-items:center; gap:4px;
+  padding:3px 9px; border-radius:20px; font-size:11px; font-weight:600;
+}
+.heat-live    { background:var(--green-bg);  color:var(--green); }
+.heat-warm    { background:var(--amber-bg);  color:var(--amber); }
+.heat-paused  { background:var(--bg);        color:var(--text-3); border:1px solid var(--border); }
+.heat-ready   { background:var(--blue-bg);   color:var(--blue); }
+.stat-num { font-family:'Outfit',sans-serif; font-weight:700; font-size:14px; }
+.stat-sub { font-size:11px; color:var(--text-3); }
+
+/* ── PROSPECT INBOX ──────────────────────────────── */
+.inbox-section { animation:fadeUp .35s ease .2s both; }
+.inbox-tabs { display:flex; gap:4px; padding:14px 18px 0; border-bottom:1px solid var(--border); }
+.itab {
+  padding:7px 14px; font-size:13px; font-weight:500; cursor:pointer;
+  color:var(--text-3); border-bottom:2px solid transparent; margin-bottom:-1px;
+  transition:all .15s;
+}
+.itab.active { color:var(--brand-red); border-bottom-color:var(--brand-red); }
+.inbox-list { display:flex; flex-direction:column; }
+.inbox-row {
+  display:flex; align-items:center; gap:14px;
+  padding:13px 18px; border-bottom:1px solid var(--border); cursor:pointer;
+  transition:background .15s;
+}
+.inbox-row:hover { background:#fafafa; }
+.inbox-row:last-child { border-bottom:none; }
+.inbox-av {
+  width:36px; height:36px; border-radius:9px; display:flex; align-items:center;
+  justify-content:center; font-family:'Outfit',sans-serif; font-weight:800; font-size:13px; color:#fff; flex-shrink:0;
+}
+.inbox-content { flex:1; min-width:0; }
+.inbox-from { font-weight:600; font-size:13.5px; }
+.inbox-desc { font-size:12.5px; color:var(--text-2); margin-top:2px; }
+.inbox-meta { text-align:right; flex-shrink:0; }
+.inbox-time { font-size:11.5px; color:var(--text-3); }
+.inbox-count { font-size:11px; font-weight:700; background:var(--brand-red); color:#fff; padding:1px 7px; border-radius:20px; margin-top:4px; display:inline-block; }
+.sla-badge {
+  display:inline-flex; align-items:center; gap:4px;
+  padding:3px 8px; border-radius:20px; font-size:11px; font-weight:600;
+  margin-top:4px;
+}
+.sla-ok      { background:var(--green-bg); color:var(--green); }
+.sla-warning { background:var(--amber-bg); color:var(--amber); }
+.sla-breach  { background:var(--red-bg);   color:var(--brand-red); }
+
+/* ── TEAM GRID ───────────────────────────────────── */
+.team-section { animation:fadeUp .35s ease .25s both; }
+.team-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:12px; }
+.team-card {
+  background:var(--surface); border-radius:var(--r); border:1px solid var(--border);
+  box-shadow:var(--shadow); overflow:hidden;
+}
+.team-card-header {
+  padding:12px 16px; font-family:'Outfit',sans-serif; font-size:13.5px; font-weight:700;
+  display:flex; align-items:center; gap:8px; border-bottom:1px solid var(--border);
+}
+.team-card-header [data-lucide] { width:15px; height:15px; }
+.team-card-header.onsite { color:var(--brand-red); }
+.team-card-header.offshore { color:var(--blue); }
+.team-member {
+  display:flex; align-items:center; gap:10px;
+  padding:10px 16px; border-bottom:1px solid var(--border);
+}
+.team-member:last-child { border-bottom:none; }
+.member-av {
+  width:32px; height:32px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Outfit',sans-serif; font-weight:700; font-size:11px; color:#fff; flex-shrink:0;
+  position:relative;
+}
+.member-info { flex:1; }
+.member-name { font-weight:600; font-size:13px; }
+.member-role { font-size:11.5px; color:var(--text-3); }
+.member-city {
+  font-size:11px; font-weight:600; display:flex; align-items:center; gap:3px;
+}
+.member-city [data-lucide] { width:10px; height:10px; }
+.member-status {
+  display:inline-flex; align-items:center; gap:4px;
+  padding:2px 8px; border-radius:20px; font-size:10.5px; font-weight:600;
+}
+.ms-active   { background:var(--green-bg);  color:var(--green); }
+.ms-tbh      { background:var(--amber-bg);  color:var(--amber); }
+.ms-urgent   { background:var(--red-bg);    color:var(--brand-red); }
+.ms-offshore { background:var(--blue-bg);   color:var(--blue); }
+
+/* ── VISIT PLANNER ───────────────────────────────── */
+.visit-section { animation:fadeUp .35s ease .3s both; }
+.visit-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:12px; }
+.visit-card {
+  background:var(--surface); border-radius:var(--r); border:1px solid var(--border);
+  box-shadow:var(--shadow); overflow:hidden; cursor:pointer; transition:all .2s;
+}
+.visit-card:hover { transform:translateY(-2px); box-shadow:var(--shadow-md); }
+.visit-card-date {
+  padding:12px 14px; background:var(--brand-dark); text-align:center;
+}
+.visit-month { font-size:10px; font-weight:700; text-transform:uppercase; color:rgba(255,255,255,.4); letter-spacing:.6px; }
+.visit-day   { font-family:'Outfit',sans-serif; font-size:28px; font-weight:800; color:#fff; line-height:1; }
+.visit-dow   { font-size:11px; color:rgba(255,255,255,.5); margin-top:2px; }
+.visit-card-body { padding:12px 14px; }
+.visit-ae   { font-weight:700; font-size:13.5px; }
+.visit-co   { font-size:12px; color:var(--text-3); margin-bottom:8px; }
+.visit-tags { display:flex; flex-wrap:wrap; gap:4px; }
+.vtag {
+  font-size:10.5px; padding:2px 7px; border-radius:4px; font-weight:500;
+  background:var(--bg); color:var(--text-2); border:1px solid var(--border);
+}
+.vtag.done { background:var(--green-bg); color:var(--green); border-color:transparent; }
+.vtag.todo { background:var(--amber-bg); color:var(--amber); border-color:transparent; }
+.visit-card-footer {
+  padding:8px 14px; border-top:1px solid var(--border); background:var(--bg);
+  display:flex; align-items:center; justify-content:space-between;
+}
+.visit-status { font-size:11.5px; font-weight:600; display:flex; align-items:center; gap:4px; }
+.visit-status [data-lucide] { width:12px; height:12px; }
+.visit-btn {
+  font-size:11.5px; font-weight:600; color:var(--brand-red); cursor:pointer;
+  display:flex; align-items:center; gap:3px;
+}
+
+/* ── SECTION HEADER ──────────────────────────────── */
+.section-header { display:flex; align-items:center; justify-content:space-between; }
+.section-title {
+  font-family:'Outfit',sans-serif; font-size:15px; font-weight:700;
+  display:flex; align-items:center; gap:8px;
+}
+.section-title [data-lucide] { width:16px; height:16px; color:var(--brand-red); }
+.btn-outline {
+  display:flex; align-items:center; gap:5px; padding:6px 12px;
+  border:1px solid var(--border); border-radius:var(--r-sm);
+  font-size:12.5px; color:var(--text-2); cursor:pointer; background:var(--surface);
+  font-family:'DM Sans',sans-serif; transition:all .15s;
+}
+.btn-outline:hover { border-color:var(--brand-red); color:var(--brand-red); }
+.btn-outline [data-lucide] { width:13px; height:13px; }
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- ── SIDEBAR ──────────────────────────────────── -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="white" stroke-width="2"/><path d="M12 7v5.5l3.5 2" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+    </div>
+    <div>
+      <div class="logo-wordmark">data<span>skate</span></div>
+      <div class="logo-tag">Staff Command</div>
+    </div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Overview</div>
+    <div class="nav-item active"><i data-lucide="layout-dashboard"></i> Command Center</div>
+    <div class="nav-item"><i data-lucide="users"></i> Team Hub</div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Field Operations</div>
+    <div class="nav-item"><i data-lucide="briefcase"></i> My AE Portfolio <span class="nav-pill">8</span></div>
+    <div class="nav-item"><i data-lucide="calendar"></i> Visit Planner</div>
+    <div class="nav-item"><i data-lucide="calendar-check"></i> Meeting Pipeline <span class="nav-pill green">4</span></div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Outreach / RevOps</div>
+    <div class="nav-item"><i data-lucide="inbox"></i> Prospect Inbox <span class="nav-pill amber">2</span></div>
+    <div class="nav-item"><i data-lucide="send"></i> Campaign Manager</div>
+    <div class="nav-item"><i data-lucide="flame"></i> Hot Prospects</div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Content</div>
+    <div class="nav-item"><i data-lucide="file-plus"></i> CRD Builder</div>
+    <div class="nav-item"><i data-lucide="book-open"></i> Knowledge Hub</div>
+    <div class="nav-item"><i data-lucide="image"></i> Content Studio</div>
+  </div>
+
+  <!-- Team presence -->
+  <div class="team-presence">
+    <div class="presence-label">Team Online</div>
+    <div class="presence-row">
+      <div class="presence-av" style="background:#ed1c24">RY
+        <div class="online-dot green"></div>
+      </div>
+      <div class="presence-info">
+        <div class="presence-name">Ryan (You)</div>
+        <div class="presence-role">Field Agent · SFO</div>
+      </div>
+    </div>
+    <div class="presence-row">
+      <div class="presence-av" style="background:#7c3aed">VI
+        <div class="online-dot green"></div>
+      </div>
+      <div class="presence-info">
+        <div class="presence-name">Vivek</div>
+        <div class="presence-role">Outreach/RevOps Lead</div>
+      </div>
+    </div>
+    <div class="presence-row">
+      <div class="presence-av" style="background:#0d9488">KA
+        <div class="online-dot green"></div>
+      </div>
+      <div class="presence-info">
+        <div class="presence-name">Karthik</div>
+        <div class="presence-role">AI Automation Lead</div>
+      </div>
+    </div>
+    <div class="presence-row">
+      <div class="presence-av" style="background:#2563eb">PR
+        <div class="online-dot amber"></div>
+      </div>
+      <div class="presence-info">
+        <div class="presence-name">Priya</div>
+        <div class="presence-role">Content Manager</div>
+      </div>
+    </div>
+    <div class="presence-row">
+      <div class="presence-av" style="background:#555">SA
+        <div class="online-dot grey"></div>
+      </div>
+      <div class="presence-info">
+        <div class="presence-name">Sam</div>
+        <div class="presence-role">Outreach Exec</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar-bottom">
+    <div class="user-row">
+      <div class="user-av">RY</div>
+      <div>
+        <div class="user-name">Ryan</div>
+        <div class="user-role">Field Agent · SFO</div>
+      </div>
+      <i data-lucide="chevron-up" style="width:14px;height:14px;color:rgba(255,255,255,.25);margin-left:auto;"></i>
+    </div>
+  </div>
+</aside>
+
+<!-- ── MAIN ──────────────────────────────────────── -->
+<div class="main">
+  <header class="header">
+    <div class="header-title">DSC Command Center</div>
+    <div class="header-right">
+      <div class="header-date">Friday, June 19, 2026</div>
+      <div class="icon-btn"><i data-lucide="message-square"></i></div>
+      <div class="icon-btn">
+        <i data-lucide="bell"></i>
+        <div class="notif-dot"></div>
+      </div>
+      <button class="btn-red"><i data-lucide="plus"></i> Log AE Visit</button>
+    </div>
+  </header>
+
+  <div class="content">
+
+    <!-- COMMAND STRIP -->
+    <div class="command-strip">
+      <div class="command-left">
+        <div class="command-greeting">Good morning, <span>Ryan.</span> Let's move the needle today. 🎯</div>
+        <div class="command-sub">
+          <span class="command-sub-chip"><i data-lucide="map-pin"></i> SFO Territory</span>
+          <span class="command-sub-chip"><i data-lucide="clock"></i> Week 3 of July push</span>
+          <span class="command-sub-chip" style="color:rgba(255,255,255,.5)">Offshore team: 3 of 5 online</span>
+        </div>
+      </div>
+      <div class="command-kpis">
+        <div class="command-kpi">
+          <div class="command-kpi-num red" data-target="8">0</div>
+          <div class="command-kpi-label">AEs in Portfolio</div>
+        </div>
+        <div class="kpi-divider"></div>
+        <div class="command-kpi">
+          <div class="command-kpi-num amber" data-target="3">0</div>
+          <div class="command-kpi-label">Visits This Week</div>
+        </div>
+        <div class="kpi-divider"></div>
+        <div class="command-kpi">
+          <div class="command-kpi-num green" data-target="4">0</div>
+          <div class="command-kpi-label">Meetings Booked</div>
+        </div>
+        <div class="kpi-divider"></div>
+        <div class="command-kpi">
+          <div class="command-kpi-num blue" data-target="12">0</div>
+          <div class="command-kpi-label">Campaigns Live</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ALERT -->
+    <div class="alert-banner">
+      <div class="alert-icon"><i data-lucide="clock"></i></div>
+      <div class="alert-text">
+        <div class="alert-title">Action Required — Prospect list from Sarah Chen received 4 hours ago</div>
+        <div class="alert-desc">18 prospects · SFO accounts · SLA target: 72 hours · Upload to Instantly to start campaign</div>
+      </div>
+      <button class="alert-cta">Upload to Campaign →</button>
+    </div>
+
+    <!-- AE PORTFOLIO + TODAY'S SCHEDULE -->
+    <div class="two-col">
+      <!-- AE Portfolio -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i data-lucide="briefcase"></i> My AE Portfolio — SFO Territory</div>
+          <span class="view-all">View all 8 →</span>
+        </div>
+        <table class="ae-table">
+          <thead>
+            <tr>
+              <th>AE</th>
+              <th>Status</th>
+              <th>Last Visit</th>
+              <th>Campaigns</th>
+              <th>Mtgs</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="ae-name-cell">
+                  <div class="ae-av" style="background:#6366f1">SC</div>
+                  <div><div class="ae-name">Sarah Chen</div><div class="ae-co">Salesforce · SFO</div></div>
+                </div>
+              </td>
+              <td><span class="status-pill sp-active"><span class="signal-dot"></span>Active Partner</span></td>
+              <td style="font-size:12.5px;color:var(--text-2)">Jun 17</td>
+              <td><div class="progress-mini"><div class="progress-mini-fill" style="width:85%"></div></div></td>
+              <td><span class="stat-num" style="font-size:14px;">2</span></td>
+              <td class="action-row">
+                <div class="tbl-btn">View</div>
+                <a href="ae-meeting-brief.html" class="tbl-btn red" style="text-decoration:none;">Brief</a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="ae-name-cell">
+                  <div class="ae-av" style="background:#0f4c81">MK</div>
+                  <div><div class="ae-name">Mike Kim</div><div class="ae-co">Apple Inc · Cupertino</div></div>
+                </div>
+              </td>
+              <td><span class="status-pill sp-visited"><span class="signal-dot"></span>Visited</span></td>
+              <td style="font-size:12.5px;color:var(--text-2)">Jun 14</td>
+              <td><div class="progress-mini"><div class="progress-mini-fill" style="width:60%"></div></div></td>
+              <td><span class="stat-num" style="font-size:14px;">1</span></td>
+              <td class="action-row">
+                <div class="tbl-btn">View</div>
+                <div class="tbl-btn">Log</div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="ae-name-cell">
+                  <div class="ae-av" style="background:#d97706">JR</div>
+                  <div><div class="ae-name">Jake Ross</div><div class="ae-co">Visa Inc · Foster City</div></div>
+                </div>
+              </td>
+              <td><span class="status-pill sp-pending"><span class="signal-dot"></span>Pending Visit</span></td>
+              <td style="font-size:12.5px;color:var(--text-2)">Jun 10</td>
+              <td><div class="progress-mini"><div class="progress-mini-fill" style="width:40%"></div></div></td>
+              <td><span class="stat-num" style="font-size:14px;">0</span></td>
+              <td class="action-row">
+                <div class="tbl-btn">View</div>
+                <div class="tbl-btn">Plan</div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="ae-name-cell">
+                  <div class="ae-av" style="background:#16a34a">AL</div>
+                  <div><div class="ae-name">Alex Lee</div><div class="ae-co">Wells Fargo · SFO</div></div>
+                </div>
+              </td>
+              <td><span class="status-pill sp-pending"><span class="signal-dot"></span>Pending Visit</span></td>
+              <td style="font-size:12.5px;color:var(--text-2)">Jun 8</td>
+              <td><div class="progress-mini"><div class="progress-mini-fill" style="width:25%"></div></div></td>
+              <td><span class="stat-num" style="font-size:14px;">0</span></td>
+              <td class="action-row">
+                <div class="tbl-btn">View</div>
+                <div class="tbl-btn">Plan</div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="ae-name-cell">
+                  <div class="ae-av" style="background:#7c3aed">TN</div>
+                  <div><div class="ae-name">Tanya Nair</div><div class="ae-co">Gap Inc · SFO</div></div>
+                </div>
+              </td>
+              <td><span class="status-pill sp-new"><span class="signal-dot"></span>Not Contacted</span></td>
+              <td style="font-size:12.5px;color:var(--text-3)">—</td>
+              <td><div class="progress-mini"><div class="progress-mini-fill" style="width:0%"></div></div></td>
+              <td><span class="stat-num" style="font-size:14px;">0</span></td>
+              <td class="action-row">
+                <div class="tbl-btn">Prep</div>
+                <div class="tbl-btn">Plan</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Today's Schedule -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i data-lucide="calendar"></i> Today's Schedule</div>
+          <span class="view-all">Full week →</span>
+        </div>
+        <div class="card-body" style="padding:0 18px;">
+          <div class="today-items">
+            <div class="today-item">
+              <div class="today-time">9:00</div>
+              <div class="today-icon" style="background:var(--blue-bg);"><i data-lucide="users" style="color:var(--blue);"></i></div>
+              <div class="today-content">
+                <div class="today-title">DSC Team Sync — Offshore + Onsite</div>
+                <div class="today-meta">Vivek, Karthik, Priya · Google Meet · 30 min</div>
+              </div>
+            </div>
+            <div class="today-item">
+              <div class="today-time">11:30</div>
+              <div class="today-icon" style="background:var(--red-bg);"><i data-lucide="building-2" style="color:var(--brand-red);"></i></div>
+              <div class="today-content">
+                <div class="today-title">AE Visit — Sarah Chen (Salesforce HQ)</div>
+                <div class="today-meta">Dashboard pre-loaded · CRD ready · Briefs printed</div>
+              </div>
+            </div>
+            <div class="today-item">
+              <div class="today-time">2:00</div>
+              <div class="today-icon" style="background:var(--green-bg);"><i data-lucide="calendar-check" style="color:var(--green);"></i></div>
+              <div class="today-content">
+                <div class="today-title">Meeting Handoff — Accenture (Sarah Chen)</div>
+                <div class="today-meta">Brief finalized · Forward to Sarah before 3pm</div>
+              </div>
+            </div>
+            <div class="today-item">
+              <div class="today-time">3:30</div>
+              <div class="today-icon" style="background:var(--amber-bg);"><i data-lucide="file-search" style="color:var(--amber);"></i></div>
+              <div class="today-content">
+                <div class="today-title">CRD Build — Visa Inc (for Jake Ross visit)</div>
+                <div class="today-meta">Karthik running enrichment · Expected by 4pm</div>
+              </div>
+            </div>
+            <div class="today-item">
+              <div class="today-time">5:00</div>
+              <div class="today-icon" style="background:var(--purple-bg);"><i data-lucide="bar-chart-2" style="color:var(--purple);"></i></div>
+              <div class="today-content">
+                <div class="today-title">Weekly Performance Review — Davis</div>
+                <div class="today-meta">Campaigns, visits, meetings · Report ready</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CAMPAIGN MANAGER -->
+    <div class="campaign-section">
+      <div class="section-header">
+        <div class="section-title"><i data-lucide="send"></i> Campaign Manager — Live Outreach</div>
+        <div style="display:flex;gap:8px;">
+          <div class="btn-outline"><i data-lucide="filter"></i> Filter</div>
+          <button class="btn-red" style="padding:6px 12px;font-size:12.5px;"><i data-lucide="plus"></i> New Campaign</button>
+        </div>
+      </div>
+      <div class="card" style="margin-top:12px;">
+        <div class="campaign-list">
+          <div class="campaign-row header">
+            <div class="col-label">Campaign / AE</div>
+            <div class="col-label">Status</div>
+            <div class="col-label">Sent</div>
+            <div class="col-label">Opens</div>
+            <div class="col-label">Replies</div>
+            <div class="col-label">Owner</div>
+            <div class="col-label"></div>
+          </div>
+          <div class="campaign-row">
+            <div>
+              <div class="campaign-name">Accenture Outreach — Wave 2</div>
+              <div class="campaign-ae">Sarah Chen · SFO · Track A</div>
+            </div>
+            <span class="heat-pill heat-live">● Live</span>
+            <div><div class="stat-num">124</div><div class="stat-sub">emails</div></div>
+            <div><div class="stat-num">38%</div><div class="stat-sub">open rate</div></div>
+            <div><div class="stat-num" style="color:var(--green)">6</div><div class="stat-sub">replies</div></div>
+            <div style="font-size:12px;color:var(--text-2)">Vivek + Sam</div>
+            <div class="action-row">
+              <div class="tbl-btn">View</div>
+              <div class="tbl-btn red">Pause</div>
+            </div>
+          </div>
+          <div class="campaign-row">
+            <div>
+              <div class="campaign-name">Delta Airlines — Decision Maker Seq</div>
+              <div class="campaign-ae">Sarah Chen · SFO · Track A</div>
+            </div>
+            <span class="heat-pill heat-warm">● Warm</span>
+            <div><div class="stat-num">87</div><div class="stat-sub">emails</div></div>
+            <div><div class="stat-num">44%</div><div class="stat-sub">open rate</div></div>
+            <div><div class="stat-num" style="color:var(--green)">3</div><div class="stat-sub">replies</div></div>
+            <div style="font-size:12px;color:var(--text-2)">Sam</div>
+            <div class="action-row">
+              <div class="tbl-btn">View</div>
+              <div class="tbl-btn">Boost</div>
+            </div>
+          </div>
+          <div class="campaign-row">
+            <div>
+              <div class="campaign-name">JPMorgan Chase — CFO Office Seq</div>
+              <div class="campaign-ae">Sarah Chen · SFO · Track A</div>
+            </div>
+            <span class="heat-pill heat-live">● Live</span>
+            <div><div class="stat-num">62</div><div class="stat-sub">emails</div></div>
+            <div><div class="stat-num">29%</div><div class="stat-sub">open rate</div></div>
+            <div><div class="stat-num">1</div><div class="stat-sub">reply</div></div>
+            <div style="font-size:12px;color:var(--text-2)">Vivek</div>
+            <div class="action-row">
+              <div class="tbl-btn">View</div>
+            </div>
+          </div>
+          <div class="campaign-row">
+            <div>
+              <div class="campaign-name">American Airlines — Track B Push</div>
+              <div class="campaign-ae">Dataskate Generated · Track B</div>
+            </div>
+            <span class="heat-pill heat-warm">● Warm</span>
+            <div><div class="stat-num">201</div><div class="stat-sub">emails</div></div>
+            <div><div class="stat-num">31%</div><div class="stat-sub">open rate</div></div>
+            <div><div class="stat-num" style="color:var(--green)">7</div><div class="stat-sub">replies</div></div>
+            <div style="font-size:12px;color:var(--text-2)">Karthik (AI)</div>
+            <div class="action-row">
+              <div class="tbl-btn">View</div>
+              <div class="tbl-btn red">Assign AE</div>
+            </div>
+          </div>
+          <div class="campaign-row">
+            <div>
+              <div class="campaign-name">Visa Inc — LinkedIn Outreach</div>
+              <div class="campaign-ae">Jake Ross · SFO · Track A</div>
+            </div>
+            <span class="heat-pill heat-ready">● Ready</span>
+            <div><div class="stat-num">0</div><div class="stat-sub">emails</div></div>
+            <div><div class="stat-num">—</div><div class="stat-sub"></div></div>
+            <div><div class="stat-num">—</div><div class="stat-sub"></div></div>
+            <div style="font-size:12px;color:var(--text-2)">Awaiting launch</div>
+            <div class="action-row">
+              <div class="tbl-btn red">Launch</div>
+            </div>
+          </div>
+          <div class="campaign-row">
+            <div>
+              <div class="campaign-name">Wells Fargo — Digital Banking Pitch</div>
+              <div class="campaign-ae">Alex Lee · SFO · Track A</div>
+            </div>
+            <span class="heat-pill heat-paused">● Paused</span>
+            <div><div class="stat-num">45</div><div class="stat-sub">emails</div></div>
+            <div><div class="stat-num">18%</div><div class="stat-sub">open rate</div></div>
+            <div><div class="stat-num">0</div><div class="stat-sub">replies</div></div>
+            <div style="font-size:12px;color:var(--text-2)">Sam</div>
+            <div class="action-row">
+              <div class="tbl-btn">View</div>
+              <div class="tbl-btn">Resume</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROSPECT INBOX + TEAM GRID -->
+    <div class="two-col">
+      <!-- Prospect Inbox -->
+      <div class="inbox-section card">
+        <div class="card-header">
+          <div class="card-title"><i data-lucide="inbox"></i> Prospect List Inbox</div>
+          <span class="view-all">SLA Board →</span>
+        </div>
+        <div class="inbox-tabs">
+          <div class="itab active">Received (2)</div>
+          <div class="itab">Uploaded (5)</div>
+          <div class="itab">Live (8)</div>
+        </div>
+        <div class="inbox-list">
+          <div class="inbox-row">
+            <div class="inbox-av" style="background:#6366f1">SC</div>
+            <div class="inbox-content">
+              <div class="inbox-from">Sarah Chen — Salesforce AE, SFO</div>
+              <div class="inbox-desc">18 prospects · Mix of retail + finance · Tier 1 accounts</div>
+              <div style="margin-top:4px;display:flex;gap:6px;align-items:center;">
+                <span class="sla-badge sla-warning"><i data-lucide="clock" style="width:10px;height:10px;"></i> 4 hrs ago · 68 hrs remain</span>
+              </div>
+            </div>
+            <div class="inbox-meta">
+              <div class="inbox-time">Today 9:14 AM</div>
+              <div class="inbox-count">18 leads</div>
+            </div>
+          </div>
+          <div class="inbox-row">
+            <div class="inbox-av" style="background:#d97706">JR</div>
+            <div class="inbox-content">
+              <div class="inbox-from">Jake Ross — Visa AE, Foster City</div>
+              <div class="inbox-desc">9 prospects · Fintech + payments sector focus</div>
+              <div style="margin-top:4px;display:flex;gap:6px;align-items:center;">
+                <span class="sla-badge sla-ok"><i data-lucide="check-circle" style="width:10px;height:10px;"></i> Received 2 hrs ago · Well within SLA</span>
+              </div>
+            </div>
+            <div class="inbox-meta">
+              <div class="inbox-time">Today 11:22 AM</div>
+              <div class="inbox-count">9 leads</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Team Grid -->
+      <div class="card" style="overflow:hidden;">
+        <div class="card-header">
+          <div class="card-title"><i data-lucide="users"></i> DSC Team</div>
+          <span class="view-all">Full org →</span>
+        </div>
+        <!-- Onsite -->
+        <div class="team-card-header onsite" style="background:#fff8f8;padding:9px 18px;border-bottom:1px solid var(--border);font-size:12.5px;font-weight:700;display:flex;gap:7px;align-items:center;">
+          <i data-lucide="map-pin" style="width:13px;height:13px;color:var(--brand-red);"></i>
+          US Onsite Sales Team
+        </div>
+        <div class="team-member">
+          <div class="member-av" style="background:#555">TH<div class="online-dot grey" style="position:absolute;bottom:-1px;right:-1px;width:8px;height:8px;border-radius:50%;border:1.5px solid #fff;background:#555;"></div></div>
+          <div class="member-info">
+            <div class="member-name">US Sales Head / Lead</div>
+            <div class="member-role">Manages Ryan, Chicago, Atlanta agents</div>
+          </div>
+          <span class="member-status ms-tbh">To be Hired</span>
+        </div>
+        <div class="team-member">
+          <div class="member-av" style="background:#ed1c24;position:relative;">RY<div style="position:absolute;bottom:-1px;right:-1px;width:8px;height:8px;border-radius:50%;border:1.5px solid #fff;background:#16a34a;"></div></div>
+          <div class="member-info">
+            <div class="member-name">Ryan</div>
+            <div class="member-role" style="display:flex;align-items:center;gap:4px;"><i data-lucide="map-pin" style="width:10px;height:10px;"></i> Field Agent · SFO (You)</div>
+          </div>
+          <span class="member-status ms-active">● Active</span>
+        </div>
+        <div class="team-member">
+          <div class="member-av" style="background:#1a1a1a;position:relative;">CH<div style="position:absolute;bottom:-1px;right:-1px;width:8px;height:8px;border-radius:50%;border:1.5px solid #fff;background:var(--brand-red);"></div></div>
+          <div class="member-info">
+            <div class="member-name">Field Agent — Chicago</div>
+            <div class="member-role" style="display:flex;align-items:center;gap:4px;"><i data-lucide="map-pin" style="width:10px;height:10px;"></i> Chicago Downtown</div>
+          </div>
+          <span class="member-status ms-urgent">Hire Urgently</span>
+        </div>
+        <div class="team-member" style="border-bottom:1px solid var(--border);">
+          <div class="member-av" style="background:#555;position:relative;">AT<div style="position:absolute;bottom:-1px;right:-1px;width:8px;height:8px;border-radius:50%;border:1.5px solid #fff;background:#555;"></div></div>
+          <div class="member-info">
+            <div class="member-name">Field Agent — Atlanta</div>
+            <div class="member-role" style="display:flex;align-items:center;gap:4px;"><i data-lucide="map-pin" style="width:10px;height:10px;"></i> Atlanta</div>
+          </div>
+          <span class="member-status ms-tbh">To be Hired</span>
+        </div>
+        <!-- Offshore -->
+        <div class="team-card-header" style="background:#eff6ff;padding:9px 18px;border-bottom:1px solid var(--border);font-size:12.5px;font-weight:700;display:flex;gap:7px;align-items:center;color:var(--blue);">
+          <i data-lucide="globe" style="width:13px;height:13px;"></i>
+          DSC Offshore Team
+        </div>
+        <div class="team-member">
+          <div class="member-av" style="background:#0d9488;position:relative;">KA<div style="position:absolute;bottom:-1px;right:-1px;width:8px;height:8px;border-radius:50%;border:1.5px solid #fff;background:#16a34a;"></div></div>
+          <div class="member-info">
+            <div class="member-name">Karthik</div>
+            <div class="member-role">AI Automation Lead</div>
+          </div>
+          <span class="member-status ms-offshore">● Online</span>
+        </div>
+        <div class="team-member">
+          <div class="member-av" style="background:#7c3aed;position:relative;">VI<div style="position:absolute;bottom:-1px;right:-1px;width:8px;height:8px;border-radius:50%;border:1.5px solid #fff;background:#16a34a;"></div></div>
+          <div class="member-info">
+            <div class="member-name">Vivek + 2 Outreach Execs</div>
+            <div class="member-role">Outreach / RevOps Lead</div>
+          </div>
+          <span class="member-status ms-offshore">● Online</span>
+        </div>
+        <div class="team-member">
+          <div class="member-av" style="background:#2563eb;position:relative;">PR<div style="position:absolute;bottom:-1px;right:-1px;width:8px;height:8px;border-radius:50%;border:1.5px solid #fff;background:var(--amber);"></div></div>
+          <div class="member-info">
+            <div class="member-name">Priya + Content Exec + Creative</div>
+            <div class="member-role">Content Manager</div>
+          </div>
+          <span class="member-status" style="background:var(--amber-bg);color:var(--amber);">Away</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- VISIT PLANNER -->
+    <div class="visit-section">
+      <div class="section-header">
+        <div class="section-title"><i data-lucide="calendar"></i> Visit Planner — Upcoming AE Visits</div>
+        <div style="display:flex;gap:8px;">
+          <div class="btn-outline"><i data-lucide="calendar-plus"></i> Schedule Visit</div>
+        </div>
+      </div>
+      <div class="visit-grid">
+        <div class="visit-card">
+          <div class="visit-card-date">
+            <div class="visit-month">JUN</div>
+            <div class="visit-day">19</div>
+            <div class="visit-dow">Today · 11:30 AM</div>
+          </div>
+          <div class="visit-card-body">
+            <div class="visit-ae">Sarah Chen</div>
+            <div class="visit-co">Salesforce HQ · Salesforce Tower</div>
+            <div class="visit-tags">
+              <span class="vtag done">✓ Dashboard ready</span>
+              <span class="vtag done">✓ CRD built</span>
+              <span class="vtag done">✓ Brief printed</span>
+            </div>
+          </div>
+          <div class="visit-card-footer">
+            <div class="visit-status" style="color:var(--green);"><i data-lucide="check-circle"></i> All prep done</div>
+            <div class="visit-btn"><i data-lucide="log-in"></i> Log Visit</div>
+          </div>
+        </div>
+        <div class="visit-card">
+          <div class="visit-card-date" style="background:#0f4c81;">
+            <div class="visit-month">JUN</div>
+            <div class="visit-day">21</div>
+            <div class="visit-dow">Monday · 2:00 PM</div>
+          </div>
+          <div class="visit-card-body">
+            <div class="visit-ae">Jake Ross</div>
+            <div class="visit-co">Visa Inc · Foster City</div>
+            <div class="visit-tags">
+              <span class="vtag done">✓ Dashboard ready</span>
+              <span class="vtag todo">⟳ CRD in progress</span>
+              <span class="vtag todo">⟳ Brief pending</span>
+            </div>
+          </div>
+          <div class="visit-card-footer">
+            <div class="visit-status" style="color:var(--amber);"><i data-lucide="clock"></i> 2 items pending</div>
+            <div class="visit-btn"><i data-lucide="eye"></i> View Prep</div>
+          </div>
+        </div>
+        <div class="visit-card">
+          <div class="visit-card-date" style="background:#16a34a;">
+            <div class="visit-month">JUN</div>
+            <div class="visit-day">24</div>
+            <div class="visit-dow">Thursday · 10:00 AM</div>
+          </div>
+          <div class="visit-card-body">
+            <div class="visit-ae">Alex Lee</div>
+            <div class="visit-co">Wells Fargo · SFO Downtown</div>
+            <div class="visit-tags">
+              <span class="vtag todo">⟳ Dashboard pending</span>
+              <span class="vtag todo">⟳ CRD not started</span>
+              <span class="vtag todo">⟳ Brief pending</span>
+            </div>
+          </div>
+          <div class="visit-card-footer">
+            <div class="visit-status" style="color:var(--brand-red);"><i data-lucide="alert-triangle"></i> Prep not started</div>
+            <div class="visit-btn"><i data-lucide="zap"></i> Start Prep</div>
+          </div>
+        </div>
+        <div class="visit-card" style="border:2px dashed var(--border);background:transparent;box-shadow:none;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px;cursor:pointer;transition:all .2s;">
+          <div style="width:38px;height:38px;border-radius:10px;background:var(--bg);display:flex;align-items:center;justify-content:center;margin-bottom:10px;">
+            <i data-lucide="plus" style="width:18px;height:18px;color:var(--text-3);"></i>
+          </div>
+          <div style="font-weight:600;font-size:13.5px;color:var(--text-2)">Schedule Next Visit</div>
+          <div style="font-size:12px;color:var(--text-3);margin-top:4px;text-align:center;">Pick an AE from your portfolio and plan your visit</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+</div><!-- /shell -->
+
+<!-- DEMO SWITCHER -->
+<div style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#231f20;border:1px solid rgba(255,255,255,.12);border-radius:30px;padding:8px 14px;display:flex;align-items:center;gap:10px;z-index:999;box-shadow:0 8px 32px rgba(0,0,0,.4);">
+  <span style="font-size:11px;color:rgba(255,255,255,.35);letter-spacing:.5px;">DSC DEMO</span>
+  <div style="width:1px;height:14px;background:rgba(255,255,255,.1);"></div>
+  <a href="index.html" style="font-size:12px;color:rgba(255,255,255,.5);text-decoration:none;padding:4px 8px;border-radius:6px;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">Home</a>
+  <a href="admin-dashboard.html" style="font-size:12px;color:rgba(255,255,255,.5);text-decoration:none;padding:4px 8px;border-radius:6px;" onmouseover="this.style.background='rgba(237,28,36,.2)';this.style.color='#ff6b70'" onmouseout="this.style.background='';this.style.color='rgba(255,255,255,.5)'">Admin</a>
+  <a href="staff-interface.html" style="font-size:12px;font-weight:600;color:#fbbf24;text-decoration:none;padding:4px 8px;border-radius:6px;background:rgba(217,119,6,.2);">Staff</a>
+  <a href="ae-interface.html" style="font-size:12px;color:rgba(255,255,255,.5);text-decoration:none;padding:4px 8px;border-radius:6px;" onmouseover="this.style.background='rgba(37,99,235,.2)';this.style.color='#60a5fa'" onmouseout="this.style.background='';this.style.color='rgba(255,255,255,.5)'">AE View</a>
+</div>
+
+<script>
+lucide.createIcons();
+
+// Counter animation
+function animateCounter(el, target, duration = 900) {
+  let start = null;
+  const step = (ts) => {
+    if (!start) start = ts;
+    const p = Math.min((ts - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.floor(ease * target);
+    if (p < 1) requestAnimationFrame(step);
+    else el.textContent = target;
+  };
+  requestAnimationFrame(step);
+}
+
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.querySelectorAll('[data-target]').forEach(el => {
+      animateCounter(el, parseInt(el.dataset.target));
+    });
+  }, 300);
+});
+
+// Nav items
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', () => {
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    item.classList.add('active');
+  });
+});
+
+// Tab switching (inbox)
+document.querySelectorAll('.itab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.itab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+  });
+});
+
+// Alert CTA
+document.querySelector('.alert-cta').addEventListener('click', function() {
+  this.textContent = 'Uploading… ✓';
+  this.style.background = '#16a34a';
+  setTimeout(() => {
+    this.closest('.alert-banner').style.opacity = '0';
+    this.closest('.alert-banner').style.transform = 'translateY(-8px)';
+    this.closest('.alert-banner').style.transition = 'all .3s ease';
+  }, 1200);
+});
+
+// Campaign rows hover
+document.querySelectorAll('.campaign-row:not(.header)').forEach(row => {
+  row.addEventListener('click', () => {
+    row.style.background = '#fff5f5';
+    setTimeout(() => row.style.background = '', 600);
+  });
+});
+
+// Add to schedule empty card
+document.querySelector('.visit-grid > .visit-card:last-child').addEventListener('click', function() {
+  this.style.borderColor = 'var(--brand-red)';
+  setTimeout(() => this.style.borderColor = '', 800);
+});
+</script>
+</body>
+</html>

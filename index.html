@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DSC Wireframes — Dataskate</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--red:#ed1c24;--navy:#13192b;--bg:#eef0f4;--border:#e2e6ec}
+html,body{min-height:100vh;font-family:'DM Sans',sans-serif;background:var(--navy);color:#fff;}
+
+.page{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 24px;position:relative;overflow:hidden;}
+.page::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.045) 1px,transparent 1px);background-size:24px 24px;pointer-events:none;}
+
+/* logo */
+.logo{display:flex;align-items:center;gap:12px;margin-bottom:48px;position:relative;}
+.logo-mark svg{width:36px;height:30px;}
+.logo-name{font-family:'Outfit',sans-serif;font-weight:900;font-size:26px;letter-spacing:-.4px;}
+.logo-name span{color:var(--red);}
+.logo-tag{font-size:11px;font-weight:600;color:rgba(255,255,255,.25);letter-spacing:1.4px;text-transform:uppercase;margin-top:5px;}
+
+/* headline */
+.headline{text-align:center;margin-bottom:48px;position:relative;}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--red);margin-bottom:14px;display:flex;align-items:center;justify-content:center;gap:8px;}
+.eyebrow::before,.eyebrow::after{content:'';width:24px;height:2px;background:var(--red);border-radius:2px;}
+h1{font-family:'Outfit',sans-serif;font-size:36px;font-weight:900;letter-spacing:-.6px;line-height:1.15;margin-bottom:12px;}
+h1 em{font-style:normal;color:var(--red);}
+.sub{font-size:15px;color:rgba(255,255,255,.4);max-width:480px;margin:0 auto;line-height:1.6;}
+
+/* cards */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:860px;width:100%;position:relative;}
+@media(max-width:640px){.cards{grid-template-columns:1fr;}}
+
+.card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:24px;text-decoration:none;color:#fff;transition:all .2s;display:flex;flex-direction:column;gap:14px;cursor:pointer;}
+.card:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.16);transform:translateY(-3px);}
+.card-ico{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.card-ico [data-lucide]{width:20px;height:20px;color:#fff;}
+.card-label{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:2px;}
+.card-title{font-family:'Outfit',sans-serif;font-weight:800;font-size:17px;margin-bottom:4px;}
+.card-desc{font-size:13px;color:rgba(255,255,255,.4);line-height:1.5;}
+.card-foot{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:rgba(255,255,255,.35);margin-top:auto;padding-top:12px;border-top:1px solid rgba(255,255,255,.07);}
+.card-foot [data-lucide]{width:13px;height:13px;}
+.card:hover .card-foot{color:rgba(255,255,255,.7);}
+
+/* version badge */
+.version{position:absolute;top:24px;right:24px;display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);padding:6px 14px;border-radius:20px;font-size:12px;color:rgba(255,255,255,.4);}
+.v-dot{width:6px;height:6px;border-radius:50%;background:var(--red);}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="version"><div class="v-dot"></div> Phase 1 Wireframe</div>
+
+  <div class="logo">
+    <svg viewBox="156 275 78 66" xmlns="http://www.w3.org/2000/svg" style="width:36px;height:30px">
+      <path fill="#ed1c24" d="m195.02,287.72v-12.49c21.94,0,38.48,10.29,38.48,23.93s-16.55,23.93-38.48,23.93v-12.49c15.86,0,25.99-6.77,25.99-11.44s-10.13-11.44-25.99-11.44Z"/>
+      <path fill="#ffffff" d="m195.02,327.75v12.49c-21.94,0-38.48-10.29-38.48-23.93s16.55-23.93,38.48-23.93v12.49c-15.86,0-25.99,6.77-25.99,11.44s10.13,11.44,25.99,11.44Z"/>
+    </svg>
+    <div>
+      <div class="logo-name">data<span>skate</span></div>
+      <div class="logo-tag">Sales Center Platform</div>
+    </div>
+  </div>
+
+  <div class="headline">
+    <div class="eyebrow">DSC Platform</div>
+    <h1>The <em>command centre</em><br/>for AE engagement.</h1>
+    <p class="sub">Select a role below to explore the wireframe. Built for Dataskate's field team and MuleSoft AEs.</p>
+  </div>
+
+  <div class="cards">
+
+    <a href="UI-Builds/ae-interface.html" class="card">
+      <div>
+        <div class="card-ico" style="background:#ed1c24"><i data-lucide="zap"></i></div>
+      </div>
+      <div>
+        <div class="card-label">MuleSoft AE</div>
+        <div class="card-title">AE Hub</div>
+        <div class="card-desc">8 sales tools — research, meeting prep, battle cards, ROI builder, scope guide and more.</div>
+      </div>
+      <div class="card-foot"><i data-lucide="arrow-right"></i> View AE Interface</div>
+    </a>
+
+    <a href="UI-Builds/staff-interface.html" class="card">
+      <div>
+        <div class="card-ico" style="background:#7c3aed"><i data-lucide="users"></i></div>
+      </div>
+      <div>
+        <div class="card-label">DSC Team</div>
+        <div class="card-title">Staff Command</div>
+        <div class="card-desc">Ryan + offshore team view — AE portfolio, campaigns, prospect inbox, visit planner.</div>
+      </div>
+      <div class="card-foot"><i data-lucide="arrow-right"></i> View Staff Interface</div>
+    </a>
+
+    <a href="UI-Builds/admin-dashboard.html" class="card">
+      <div>
+        <div class="card-ico" style="background:#0f4c81"><i data-lucide="layout-dashboard"></i></div>
+      </div>
+      <div>
+        <div class="card-label">Admin · Davis</div>
+        <div class="card-title">Admin Dashboard</div>
+        <div class="card-desc">Platform overview — AE directory, pipeline metrics, team performance, settings.</div>
+      </div>
+      <div class="card-foot"><i data-lucide="arrow-right"></i> View Admin Dashboard</div>
+    </a>
+
+  </div>
+
+</div>
+<script>lucide.createIcons();</script>
+</body>
+</html>

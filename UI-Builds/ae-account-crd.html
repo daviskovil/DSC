@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DSC — Customer Research Docket · JPMorgan Chase</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet"/>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --red: #ed1c24; --dark: #231f20;
+  --bg: #f4f5f7; --surface: #fff; --border: #e8e9ec;
+  --text-1: #1a1a1a; --text-2: #6b7280; --text-3: #9ca3af;
+  --green: #16a34a; --green-bg: #dcfce7;
+  --amber: #d97706; --amber-bg: #fef3c7;
+  --blue: #2563eb; --blue-bg: #dbeafe;
+  --purple: #7c3aed; --purple-bg: #ede9fe;
+  --teal: #0d9488; --teal-bg: #ccfbf1;
+}
+html, body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text-1); font-size: 14px; min-height: 100vh; }
+
+/* ── TOPBAR ──────────────────────────────────────── */
+.topbar {
+  background: #0f2d52; padding: 0 28px; height: 54px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 50;
+}
+.topbar-left { display: flex; align-items: center; gap: 16px; }
+.back-link { display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,.5); font-size: 13px; cursor: pointer; text-decoration: none; transition: color .15s; }
+.back-link:hover { color: #fff; }
+.back-link [data-lucide] { width: 14px; height: 14px; }
+.topbar-divider { width: 1px; height: 18px; background: rgba(255,255,255,.1); }
+.topbar-title { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 14px; color: #fff; }
+.crd-badge { background: rgba(37,99,235,.3); border: 1px solid rgba(37,99,235,.4); color: #93c5fd; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; letter-spacing: .3px; }
+.topbar-right { display: flex; align-items: center; gap: 8px; }
+.btn-ghost { display: flex; align-items: center; gap: 5px; padding: 7px 13px; border: 1px solid rgba(255,255,255,.15); border-radius: 8px; background: transparent; color: rgba(255,255,255,.6); font-size: 12.5px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .15s; }
+.btn-ghost:hover { background: rgba(255,255,255,.08); color: #fff; }
+.btn-ghost [data-lucide] { width: 13px; height: 13px; }
+.btn-blue { display: flex; align-items: center; gap: 5px; padding: 7px 14px; background: var(--blue); color: #fff; border: none; border-radius: 8px; font-size: 12.5px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+.btn-blue [data-lucide] { width: 13px; height: 13px; }
+
+/* ── LAYOUT ──────────────────────────────────────── */
+.page { max-width: 980px; margin: 0 auto; padding: 28px 24px 80px; }
+
+/* ── CRD HEADER ──────────────────────────────────── */
+.crd-header {
+  background: linear-gradient(135deg, #0f2d52 0%, #1e4080 60%, #0f2d52 100%);
+  border-radius: 16px; padding: 26px 30px; margin-bottom: 20px;
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 20px;
+  position: relative; overflow: hidden;
+  animation: fadeUp .4s ease both;
+}
+.crd-header::before { content:''; position:absolute; right:-30px; top:-30px; width:160px; height:160px; background:rgba(37,99,235,.15); border-radius:50%; }
+.crd-left { position: relative; z-index: 1; }
+.crd-doc-type { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255,255,255,.4); margin-bottom: 10px; }
+.crd-doc-type [data-lucide] { width: 11px; height: 11px; }
+.crd-company-logo { width: 48px; height: 48px; background: #fff; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
+.crd-company-logo span { font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 16px; color: #0f2d52; }
+.crd-company-name { font-family: 'Outfit', sans-serif; font-size: 26px; font-weight: 800; color: #fff; margin-bottom: 4px; }
+.crd-tagline { font-size: 13.5px; color: rgba(255,255,255,.5); }
+.crd-right { display: flex; flex-direction: column; gap: 8px; position: relative; z-index: 1; flex-shrink: 0; }
+.crd-signal {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12);
+  border-radius: 10px; padding: 10px 14px; min-width: 160px;
+}
+.crd-signal-icon { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+.crd-signal-icon [data-lucide] { width: 15px; height: 15px; }
+.crd-signal-label { font-size: 11px; color: rgba(255,255,255,.35); }
+.crd-signal-value { font-weight: 700; font-size: 13px; color: #fff; }
+
+/* ── TWO-COL ─────────────────────────────────────── */
+.layout { display: grid; grid-template-columns: 1fr 300px; gap: 14px; align-items: start; }
+
+/* ── CARD ────────────────────────────────────────── */
+.card { background: var(--surface); border-radius: 14px; border: 1px solid var(--border); margin-bottom: 14px; overflow: hidden; animation: fadeUp .4s ease both; }
+.card:nth-child(2) { animation-delay: .05s; }
+.card:nth-child(3) { animation-delay: .10s; }
+.card:nth-child(4) { animation-delay: .15s; }
+.card-header { display: flex; align-items: center; gap: 10px; padding: 13px 18px; border-bottom: 1px solid var(--border); }
+.card-icon { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.card-icon [data-lucide] { width: 14px; height: 14px; }
+.card-icon.blue   { background: var(--blue-bg);   } .card-icon.blue   [data-lucide] { color: var(--blue); }
+.card-icon.green  { background: var(--green-bg);  } .card-icon.green  [data-lucide] { color: var(--green); }
+.card-icon.amber  { background: var(--amber-bg);  } .card-icon.amber  [data-lucide] { color: var(--amber); }
+.card-icon.red    { background: #fee2e2;           } .card-icon.red    [data-lucide] { color: var(--red); }
+.card-icon.purple { background: var(--purple-bg); } .card-icon.purple [data-lucide] { color: var(--purple); }
+.card-icon.teal   { background: var(--teal-bg);   } .card-icon.teal   [data-lucide] { color: var(--teal); }
+.card-title { font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 700; }
+.card-tag { margin-left: auto; font-size: 11px; color: var(--text-3); background: var(--bg); padding: 2px 9px; border-radius: 20px; border: 1px solid var(--border); }
+.card-body { padding: 16px 18px; }
+
+/* ── OVERVIEW STATS ──────────────────────────────── */
+.stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.stat-box { background: var(--bg); border-radius: 8px; padding: 12px 14px; }
+.stat-box-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; color: var(--text-3); margin-bottom: 4px; }
+.stat-box-value { font-weight: 600; font-size: 14px; color: var(--text-1); }
+.stat-box-sub { font-size: 12px; color: var(--text-2); margin-top: 1px; }
+
+/* ── TECH STACK ──────────────────────────────────── */
+.tech-tags { display: flex; flex-wrap: wrap; gap: 7px; }
+.tech-tag {
+  display: flex; align-items: center; gap: 5px;
+  padding: 5px 11px; border-radius: 6px; font-size: 12.5px; font-weight: 500;
+  border: 1px solid var(--border); background: var(--surface);
+}
+.tech-dot { width: 7px; height: 7px; border-radius: 50%; }
+.tech-tag.confirmed .tech-dot { background: var(--green); }
+.tech-tag.likely    .tech-dot { background: var(--amber); }
+.tech-tag.unknown   .tech-dot { background: var(--text-3); }
+
+/* ── DECISION MAKERS ─────────────────────────────── */
+.dm-card { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
+.dm-card:last-child { border-bottom: none; padding-bottom: 0; }
+.dm-av { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 12px; color: #fff; flex-shrink: 0; }
+.dm-name { font-weight: 700; font-size: 13.5px; margin-bottom: 2px; }
+.dm-title { font-size: 12.5px; color: var(--text-2); margin-bottom: 5px; }
+.dm-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+.dm-chip { font-size: 11px; padding: 2px 7px; border-radius: 4px; background: var(--bg); color: var(--text-2); border: 1px solid var(--border); }
+.dm-status { margin-left: auto; flex-shrink: 0; }
+.dm-status-pill { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 600; white-space: nowrap; }
+.dms-hot    { background: var(--green-bg); color: var(--green); }
+.dms-warm   { background: var(--amber-bg); color: var(--amber); }
+.dms-cold   { background: #fee2e2; color: var(--red); }
+.dms-unknown{ background: var(--bg); color: var(--text-3); border: 1px solid var(--border); }
+
+/* ── USE CASES ───────────────────────────────────── */
+.use-case { display: flex; gap: 12px; padding: 12px 14px; background: var(--bg); border-radius: 10px; margin-bottom: 8px; }
+.use-case:last-child { margin-bottom: 0; }
+.uc-icon { width: 32px; height: 32px; border-radius: 8px; background: var(--blue); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.uc-icon [data-lucide] { width: 15px; height: 15px; color: #fff; }
+.uc-title { font-weight: 700; font-size: 13.5px; margin-bottom: 3px; }
+.uc-desc { font-size: 12.5px; color: var(--text-2); line-height: 1.45; }
+.uc-fit { margin-top: 5px; font-size: 11.5px; font-weight: 600; display: flex; align-items: center; gap: 4px; color: var(--blue); }
+.uc-fit [data-lucide] { width: 12px; height: 12px; }
+
+/* ── PITCH ANGLES ────────────────────────────────── */
+.pitch-angle { display: flex; gap: 10px; padding: 11px 0; border-bottom: 1px solid var(--border); }
+.pitch-angle:last-child { border-bottom: none; }
+.pa-bullet { width: 6px; height: 6px; border-radius: 50%; background: var(--red); flex-shrink: 0; margin-top: 6px; }
+.pa-text { font-size: 13.5px; color: var(--text-1); line-height: 1.5; }
+.pa-text strong { color: var(--red); }
+
+/* ── SIDEBAR ─────────────────────────────────────── */
+.sidebar-card { background: var(--surface); border-radius: 14px; border: 1px solid var(--border); margin-bottom: 14px; overflow: hidden; animation: fadeUp .4s ease .1s both; }
+.sidebar-header { padding: 12px 16px; border-bottom: 1px solid var(--border); font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 13.5px; display: flex; align-items: center; gap: 7px; }
+.sidebar-header [data-lucide] { width: 14px; height: 14px; color: var(--red); }
+.sidebar-body { padding: 14px 16px; }
+
+.news-item { padding: 10px 0; border-bottom: 1px solid var(--border); }
+.news-item:last-child { border-bottom: none; }
+.news-date { font-size: 10.5px; color: var(--text-3); margin-bottom: 3px; }
+.news-headline { font-size: 13px; font-weight: 600; color: var(--text-1); line-height: 1.35; margin-bottom: 4px; }
+.news-tag { display: inline-block; font-size: 10.5px; font-weight: 600; padding: 2px 7px; border-radius: 4px; }
+.news-tag.opp    { background: var(--green-bg);  color: var(--green); }
+.news-tag.watch  { background: var(--amber-bg);  color: var(--amber); }
+.news-tag.risk   { background: #fee2e2;           color: var(--red); }
+
+.score-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.score-row:last-child { border-bottom: none; }
+.score-label { font-size: 13px; color: var(--text-2); }
+.score-val { font-weight: 700; font-size: 13.5px; }
+.score-val.good { color: var(--green); }
+.score-val.ok   { color: var(--amber); }
+.score-val.bad  { color: var(--red); }
+
+.action-btn { display: flex; align-items: center; gap: 6px; width: 100%; padding: 9px 12px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid var(--border); background: var(--surface); color: var(--text-2); margin-bottom: 7px; font-family: 'DM Sans', sans-serif; transition: all .15s; }
+.action-btn:last-child { margin-bottom: 0; }
+.action-btn:hover { border-color: var(--red); color: var(--red); }
+.action-btn.primary { background: var(--red); color: #fff; border-color: var(--red); }
+.action-btn.primary:hover { background: #c8161d; }
+.action-btn [data-lucide] { width: 14px; height: 14px; }
+
+/* ── ANIMATIONS ──────────────────────────────────── */
+@keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <a href="ae-interface.html" class="back-link"><i data-lucide="arrow-left"></i> AE Dashboard</a>
+    <div class="topbar-divider"></div>
+    <div class="topbar-title">Customer Research Docket</div>
+    <div class="crd-badge">CRD — Dataskate Research</div>
+  </div>
+  <div class="topbar-right">
+    <button class="btn-ghost" onclick="window.print()"><i data-lucide="printer"></i> Print</button>
+    <button class="btn-ghost"><i data-lucide="refresh-cw"></i> Refresh Data</button>
+    <button class="btn-blue"><i data-lucide="calendar"></i> Book Discovery Call</button>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- CRD HEADER -->
+  <div class="crd-header">
+    <div class="crd-left">
+      <div class="crd-doc-type"><i data-lucide="file-search"></i> Customer Research Docket · Auto-generated Jun 20, 2026</div>
+      <div class="crd-company-logo"><span>JP</span></div>
+      <div class="crd-company-name">JPMorgan Chase</div>
+      <div class="crd-tagline">Financial Services · Enterprise Banking · New York, NY</div>
+    </div>
+    <div class="crd-right">
+      <div class="crd-signal">
+        <div class="crd-signal-icon" style="background:rgba(217,119,6,.2)"><i data-lucide="thermometer" style="color:#fbbf24"></i></div>
+        <div>
+          <div class="crd-signal-label">Pipeline Signal</div>
+          <div class="crd-signal-value" style="color:#fbbf24">Warm — Engaged</div>
+        </div>
+      </div>
+      <div class="crd-signal">
+        <div class="crd-signal-icon" style="background:rgba(22,163,74,.2)"><i data-lucide="target" style="color:#4ade80"></i></div>
+        <div>
+          <div class="crd-signal-label">MuleSoft Fit</div>
+          <div class="crd-signal-value" style="color:#4ade80">Excellent</div>
+        </div>
+      </div>
+      <div class="crd-signal">
+        <div class="crd-signal-icon" style="background:rgba(96,165,250,.2)"><i data-lucide="users" style="color:#60a5fa"></i></div>
+        <div>
+          <div class="crd-signal-label">Decision Makers Found</div>
+          <div class="crd-signal-value">4 contacts</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="layout">
+    <!-- MAIN COLUMN -->
+    <div>
+      <!-- Company Overview -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon blue"><i data-lucide="building-2"></i></div>
+          <div class="card-title">Company Overview</div>
+        </div>
+        <div class="card-body">
+          <div class="stat-grid">
+            <div class="stat-box">
+              <div class="stat-box-label">Industry</div>
+              <div class="stat-box-value">Financial Services</div>
+              <div class="stat-box-sub">Retail + Investment Banking</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-box-label">Size</div>
+              <div class="stat-box-value">290,000 employees</div>
+              <div class="stat-box-sub">$158B revenue · Fortune #24</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-box-label">HQ</div>
+              <div class="stat-box-value">New York, NY</div>
+              <div class="stat-box-sub">Global offices: 60+ countries</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-box-label">IT Budget (est.)</div>
+              <div class="stat-box-value">$14B annually</div>
+              <div class="stat-box-sub">One of largest tech spenders in FS</div>
+            </div>
+          </div>
+          <div style="background:var(--bg);border-radius:10px;padding:14px 16px;">
+            <div style="font-weight:600;font-size:13.5px;margin-bottom:6px;">About</div>
+            <div style="font-size:13.5px;color:var(--text-2);line-height:1.6;">JPMorgan Chase is the largest US bank by assets. They are undergoing a $12B digital banking transformation initiative focused on real-time payments, open banking APIs, and cloud-native infrastructure. Their technology leadership has publicly committed to MuleSoft as their integration standard across consumer banking divisions.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tech Stack -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon teal"><i data-lucide="cpu"></i></div>
+          <div class="card-title">Known Technology Stack</div>
+          <div class="card-tag">Research confidence: High</div>
+        </div>
+        <div class="card-body">
+          <div style="margin-bottom:10px;">
+            <div style="font-size:11.5px;font-weight:600;color:var(--text-3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px;">Confirmed (public sources)</div>
+            <div class="tech-tags">
+              <div class="tech-tag confirmed"><div class="tech-dot"></div>MuleSoft Anypoint</div>
+              <div class="tech-tag confirmed"><div class="tech-dot"></div>Salesforce CRM</div>
+              <div class="tech-tag confirmed"><div class="tech-dot"></div>AWS (primary cloud)</div>
+              <div class="tech-tag confirmed"><div class="tech-dot"></div>Kafka (event streaming)</div>
+              <div class="tech-tag confirmed"><div class="tech-dot"></div>Snowflake</div>
+              <div class="tech-tag confirmed"><div class="tech-dot"></div>Java / Spring Boot</div>
+            </div>
+          </div>
+          <div style="margin-bottom:10px;">
+            <div style="font-size:11.5px;font-weight:600;color:var(--text-3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px;">Likely (inferred)</div>
+            <div class="tech-tags">
+              <div class="tech-tag likely"><div class="tech-dot"></div>IBM MQ (legacy)</div>
+              <div class="tech-tag likely"><div class="tech-dot"></div>Oracle DB</div>
+              <div class="tech-tag likely"><div class="tech-dot"></div>Apigee (partial)</div>
+            </div>
+          </div>
+          <div style="background:#fff8f8;border:1px solid #fecaca;border-radius:8px;padding:10px 14px;font-size:12.5px;color:#991b1b;">
+            <strong>💡 Key insight:</strong> JPMorgan is actively migrating from IBM MQ to event-driven architecture using Kafka. MuleSoft is the bridge layer connecting legacy mainframes to new cloud services. This is a major implementation opportunity.
+          </div>
+        </div>
+      </div>
+
+      <!-- Decision Makers -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon purple"><i data-lucide="users"></i></div>
+          <div class="card-title">Decision Makers to Reach</div>
+          <div class="card-tag">4 contacts found</div>
+        </div>
+        <div class="card-body">
+          <div class="dm-card">
+            <div class="dm-av" style="background:#2563eb">RT</div>
+            <div>
+              <div class="dm-name">Robert Thompson</div>
+              <div class="dm-title">Chief Integration Officer · JPMorgan Chase</div>
+              <div class="dm-chips">
+                <div class="dm-chip">Decision maker</div>
+                <div class="dm-chip">3 emails opened</div>
+                <div class="dm-chip">LinkedIn active</div>
+              </div>
+            </div>
+            <div class="dm-status"><span class="dm-status-pill dms-warm">⟡ Warm</span></div>
+          </div>
+          <div class="dm-card">
+            <div class="dm-av" style="background:#7c3aed">PM</div>
+            <div>
+              <div class="dm-name">Priya Mehta</div>
+              <div class="dm-title">VP Enterprise Architecture · Digital Banking Division</div>
+              <div class="dm-chips">
+                <div class="dm-chip">Technical decision maker</div>
+                <div class="dm-chip">1 reply received</div>
+              </div>
+            </div>
+            <div class="dm-status"><span class="dm-status-pill dms-hot">● Hot</span></div>
+          </div>
+          <div class="dm-card">
+            <div class="dm-av" style="background:#0d9488">DL</div>
+            <div>
+              <div class="dm-name">David Lin</div>
+              <div class="dm-title">Director of Integration Services · Consumer Banking</div>
+              <div class="dm-chips">
+                <div class="dm-chip">Budget owner</div>
+                <div class="dm-chip">Not yet reached</div>
+              </div>
+            </div>
+            <div class="dm-status"><span class="dm-status-pill dms-cold">◌ Cold</span></div>
+          </div>
+          <div class="dm-card">
+            <div class="dm-av" style="background:#d97706">SC</div>
+            <div>
+              <div class="dm-name">Sarah Collins</div>
+              <div class="dm-title">Sr. Manager, API Platform Engineering</div>
+              <div class="dm-chips">
+                <div class="dm-chip">Technical influencer</div>
+                <div class="dm-chip">LinkedIn connect sent</div>
+              </div>
+            </div>
+            <div class="dm-status"><span class="dm-status-pill dms-warm">⟡ Warm</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MuleSoft Use Cases -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon green"><i data-lucide="zap"></i></div>
+          <div class="card-title">Likely MuleSoft Use Cases</div>
+          <div class="card-tag">Dataskate analysis</div>
+        </div>
+        <div class="card-body">
+          <div class="use-case">
+            <div class="uc-icon" style="background:#2563eb"><i data-lucide="refresh-cw"></i></div>
+            <div>
+              <div class="uc-title">Core Banking API Modernization</div>
+              <div class="uc-desc">Connecting legacy mainframe banking systems to modern cloud-native applications via MuleSoft API-led connectivity. Classic SI implementation work.</div>
+              <div class="uc-fit"><i data-lucide="trending-up"></i> Very high potential · $2M–$5M implementation</div>
+            </div>
+          </div>
+          <div class="use-case">
+            <div class="uc-icon" style="background:#7c3aed"><i data-lucide="git-branch"></i></div>
+            <div>
+              <div class="uc-title">Open Banking API Gateway</div>
+              <div class="uc-desc">Building compliant open banking APIs using MuleSoft API Manager for PSD2/Open Banking regulatory requirements across EU operations.</div>
+              <div class="uc-fit"><i data-lucide="trending-up"></i> High potential · Regulatory deadline driver</div>
+            </div>
+          </div>
+          <div class="use-case">
+            <div class="uc-icon" style="background:#0d9488"><i data-lucide="activity"></i></div>
+            <div>
+              <div class="uc-title">Real-Time Payment Processing Integration</div>
+              <div class="uc-desc">Integrating Kafka event streams with Salesforce and downstream reporting systems using MuleSoft as the orchestration layer.</div>
+              <div class="uc-fit"><i data-lucide="trending-up"></i> Medium potential · Technical POC recommended</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pitch Angles -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon red"><i data-lucide="target"></i></div>
+          <div class="card-title">Pitch Angles for Sarah Chen</div>
+          <div class="card-tag">Tailored for this AE</div>
+        </div>
+        <div class="card-body">
+          <div class="pitch-angle">
+            <div class="pa-bullet"></div>
+            <div class="pa-text">Open with the <strong>regulatory angle</strong> — JPMorgan has a hard Open Banking compliance deadline. MuleSoft + Dataskate can compress their implementation timeline significantly vs building in-house.</div>
+          </div>
+          <div class="pitch-angle">
+            <div class="pa-bullet"></div>
+            <div class="pa-text"><strong>Reference Priya Mehta's reply</strong> — she mentioned interest in "API gateway best practices." This is the entry point. Offer a free 30-min architecture review with no commitment.</div>
+          </div>
+          <div class="pitch-angle">
+            <div class="pa-bullet"></div>
+            <div class="pa-text">Lead with the <strong>mainframe modernization</strong> case study — JPMorgan's core challenge is exactly what Dataskate solved for a major US bank. The proof is there.</div>
+          </div>
+          <div class="pitch-angle">
+            <div class="pa-bullet"></div>
+            <div class="pa-text"><strong>Avoid</strong> leading with price or license discussions upfront. Robert Thompson is budget-conscious. Focus on speed, risk reduction, and delivery certainty first.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div>
+      <!-- Fit Score -->
+      <div class="sidebar-card">
+        <div class="sidebar-header"><i data-lucide="bar-chart-2"></i> Dataskate Fit Score</div>
+        <div class="sidebar-body">
+          <div style="text-align:center;padding:16px 0 10px;">
+            <div style="font-family:'Outfit',sans-serif;font-size:52px;font-weight:900;color:var(--blue);line-height:1;">87</div>
+            <div style="font-size:12px;color:var(--text-3);margin-top:4px;">out of 100 — Excellent fit</div>
+          </div>
+          <div class="score-row">
+            <div class="score-label">MuleSoft usage</div>
+            <div class="score-val good">Confirmed</div>
+          </div>
+          <div class="score-row">
+            <div class="score-label">Budget capacity</div>
+            <div class="score-val good">Very high</div>
+          </div>
+          <div class="score-row">
+            <div class="score-label">Engagement level</div>
+            <div class="score-val ok">Warm</div>
+          </div>
+          <div class="score-row">
+            <div class="score-label">Implementation need</div>
+            <div class="score-val good">Active</div>
+          </div>
+          <div class="score-row">
+            <div class="score-label">Decision timeline</div>
+            <div class="score-val ok">Q3 2026</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent News -->
+      <div class="sidebar-card">
+        <div class="sidebar-header"><i data-lucide="newspaper"></i> Recent News</div>
+        <div class="sidebar-body">
+          <div class="news-item">
+            <div class="news-date">Jun 14, 2026</div>
+            <div class="news-headline">JPMorgan announces $2B investment in cloud-native banking infrastructure</div>
+            <div><span class="news-tag opp">Opportunity</span></div>
+          </div>
+          <div class="news-item">
+            <div class="news-date">Jun 8, 2026</div>
+            <div class="news-headline">JPMorgan CIO says "API-first strategy is non-negotiable for 2026"</div>
+            <div><span class="news-tag opp">Opportunity</span></div>
+          </div>
+          <div class="news-item">
+            <div class="news-date">May 29, 2026</div>
+            <div class="news-headline">RFP issued for MuleSoft integration services — $8M scope</div>
+            <div><span class="news-tag opp">Opportunity</span></div>
+          </div>
+          <div class="news-item">
+            <div class="news-date">May 18, 2026</div>
+            <div class="news-headline">Competitor SI wins smaller integration contract ($1.2M)</div>
+            <div><span class="news-tag watch">Watch</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="sidebar-card">
+        <div class="sidebar-header"><i data-lucide="zap"></i> Quick Actions</div>
+        <div class="sidebar-body">
+          <button class="action-btn primary"><i data-lucide="calendar"></i> Book Discovery Call</button>
+          <button class="action-btn"><i data-lucide="send"></i> Add to Campaign</button>
+          <button class="action-btn"><i data-lucide="file-text"></i> Generate Meeting Brief</button>
+          <button class="action-btn"><i data-lucide="printer"></i> Print CRD</button>
+          <button class="action-btn"><i data-lucide="refresh-cw"></i> Refresh Research</button>
+        </div>
+      </div>
+
+      <!-- Outreach Status -->
+      <div class="sidebar-card">
+        <div class="sidebar-header"><i data-lucide="send"></i> Outreach Status</div>
+        <div class="sidebar-body">
+          <div class="score-row">
+            <div class="score-label">Emails sent</div>
+            <div class="score-val">62</div>
+          </div>
+          <div class="score-row">
+            <div class="score-label">Open rate</div>
+            <div class="score-val ok">29%</div>
+          </div>
+          <div class="score-row">
+            <div class="score-label">Replies</div>
+            <div class="score-val good">1 reply</div>
+          </div>
+          <div class="score-row">
+            <div class="score-label">LinkedIn</div>
+            <div class="score-val ok">2 connects</div>
+          </div>
+          <div class="score-row">
+            <div class="score-label">Campaign</div>
+            <div class="score-val good">Live</div>
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:var(--text-3);background:var(--bg);border-radius:8px;padding:10px;">Campaign managed by Vivek — outreach running via Instantly. Last touch: Jun 19.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DEMO SWITCHER -->
+<div style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#231f20;border:1px solid rgba(255,255,255,.12);border-radius:30px;padding:8px 14px;display:flex;align-items:center;gap:10px;z-index:999;box-shadow:0 8px 32px rgba(0,0,0,.4);">
+  <span style="font-size:11px;color:rgba(255,255,255,.35);letter-spacing:.5px;">DSC DEMO</span>
+  <div style="width:1px;height:14px;background:rgba(255,255,255,.1);"></div>
+  <a href="index.html" style="font-size:12px;color:rgba(255,255,255,.5);text-decoration:none;padding:4px 8px;border-radius:6px;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">Home</a>
+  <a href="admin-dashboard.html" style="font-size:12px;color:rgba(255,255,255,.5);text-decoration:none;padding:4px 8px;border-radius:6px;" onmouseover="this.style.background='rgba(237,28,36,.2)';this.style.color='#ff6b70'" onmouseout="this.style.background='';this.style.color='rgba(255,255,255,.5)'">Admin</a>
+  <a href="staff-interface.html" style="font-size:12px;color:rgba(255,255,255,.5);text-decoration:none;padding:4px 8px;border-radius:6px;" onmouseover="this.style.background='rgba(217,119,6,.2)';this.style.color='#fbbf24'" onmouseout="this.style.background='';this.style.color='rgba(255,255,255,.5)'">Staff</a>
+  <a href="ae-interface.html" style="font-size:12px;color:rgba(255,255,255,.5);text-decoration:none;padding:4px 8px;border-radius:6px;" onmouseover="this.style.background='rgba(37,99,235,.2)';this.style.color='#60a5fa'" onmouseout="this.style.background='';this.style.color='rgba(255,255,255,.5)'">AE View</a>
+</div>
+
+<script>lucide.createIcons();</script>
+</body>
+</html>
