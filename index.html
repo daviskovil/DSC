@@ -4,361 +4,413 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>dataskate</title>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;700;800;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;400;600;700;800;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
 :root{
   --navy:#13192b;
-  --navy-2:#1c2538;
-  --navy-3:#222d42;
   --red:#ed1c24;
-  --border:rgba(255,255,255,.08);
-  --muted:rgba(255,255,255,.38);
+  --panel-w:300px;
+  --bg:#f4f6fa;
+  --white:#ffffff;
+  --border:#e2e6ee;
+  --muted:#8d96a8;
+  --text:#1b2236;
 }
 
 html,body{
   height:100%;
   font-family:'DM Sans',sans-serif;
-  background:var(--navy);
-  color:#fff;
+  background:var(--bg);
+  color:var(--text);
   overflow:hidden;
 }
 
-/* dot-grid atmosphere */
-body::before{
-  content:'';
-  position:fixed;
-  inset:0;
-  background-image:radial-gradient(circle,rgba(255,255,255,.04) 1px,transparent 1px);
-  background-size:26px 26px;
-  pointer-events:none;
-  z-index:0;
-}
-
-/* subtle red glow behind clock */
-body::after{
-  content:'';
-  position:fixed;
-  top:30%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  width:600px;
-  height:300px;
-  background:radial-gradient(ellipse,rgba(237,28,36,.06) 0%,transparent 70%);
-  pointer-events:none;
-  z-index:0;
-}
-
-.page{
-  position:relative;
-  z-index:1;
+/* ── LAYOUT ──────────────────────────────────── */
+.layout{
+  display:grid;
+  grid-template-columns:var(--panel-w) 1fr;
   height:100vh;
+}
+
+/* ── LEFT PANEL ──────────────────────────────── */
+.panel{
+  background:var(--navy);
   display:flex;
   flex-direction:column;
-  padding:28px 40px 36px;
+  padding:30px 28px 32px;
+  position:relative;
+  overflow:hidden;
 }
 
-/* ── topbar ── */
-.topbar{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  flex-shrink:0;
+.panel::after{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:3px;
+  background:var(--red);
+  pointer-events:none;
 }
 
-.logo{
+.panel-logo{
   display:flex;
   align-items:center;
   gap:9px;
   text-decoration:none;
+  flex-shrink:0;
+  position:relative;
+  z-index:1;
 }
 
 .logo-name{
   font-family:'Outfit',sans-serif;
-  font-weight:900;
+  font-weight:800;
   font-size:17px;
   letter-spacing:-.3px;
   color:#fff;
 }
-.logo-name span{color:var(--red);}
+.logo-name em{font-style:normal;color:var(--red);}
 
-.date-pill{
-  font-size:11.5px;
-  font-weight:500;
-  color:var(--muted);
-  background:rgba(255,255,255,.04);
-  border:1px solid var(--border);
-  padding:5px 14px;
-  border-radius:20px;
-  letter-spacing:.2px;
-  font-family:'DM Sans',sans-serif;
-}
-
-/* ── hero / clock ── */
-.hero{
+.panel-mid{
   flex:1;
   display:flex;
   flex-direction:column;
-  align-items:center;
   justify-content:center;
-  text-align:center;
-  padding-bottom:12px;
+  position:relative;
+  z-index:1;
 }
 
-.clock-wrap{
-  line-height:1;
-  margin-bottom:14px;
-}
-
-.clock-time{
+.clock{
   font-family:'Outfit',sans-serif;
-  font-weight:200;
-  font-size:clamp(80px,13vw,148px);
-  letter-spacing:-.05em;
+  font-weight:100;
+  font-size:clamp(64px,7vw,92px);
+  line-height:1;
+  letter-spacing:-.04em;
   color:#fff;
-  display:inline;
+  margin-bottom:8px;
 }
 
 .clock-period{
+  display:block;
   font-family:'Outfit',sans-serif;
-  font-weight:400;
-  font-size:clamp(20px,2.8vw,36px);
-  color:var(--muted);
-  letter-spacing:0;
-  margin-left:6px;
-  vertical-align:super;
-  display:inline;
+  font-weight:600;
+  font-size:10px;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--red);
+  margin-bottom:22px;
 }
 
 .greeting{
-  font-family:'DM Sans',sans-serif;
-  font-size:clamp(13px,1.5vw,16px);
-  font-weight:500;
-  color:var(--muted);
-  letter-spacing:.1px;
+  font-size:13px;
+  line-height:1.6;
+  color:rgba(255,255,255,.38);
 }
-.greeting strong{color:#fff;font-weight:600;}
+.greeting strong{
+  color:rgba(255,255,255,.75);
+  font-weight:600;
+}
 
-/* ── destination cards ── */
-.cards{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:10px;
-  max-width:860px;
-  width:100%;
-  margin:0 auto;
+.panel-foot{
   flex-shrink:0;
+  position:relative;
+  z-index:1;
 }
 
-.card{
+.date-line{
+  font-size:10.5px;
+  font-weight:500;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.18);
+}
+
+/* ── RIGHT CONTENT ───────────────────────────── */
+.content{
   display:flex;
   flex-direction:column;
+  justify-content:center;
+  padding:40px 44px;
+  overflow-y:auto;
+}
+
+/* ── CARDS GRID ──────────────────────────────── */
+.cards{
+  display:grid;
+  grid-template-columns:1fr 1fr;
   gap:12px;
-  padding:18px 18px 16px;
-  background:var(--navy-2);
+  max-width:780px;
+  margin:0 auto;
+  width:100%;
+}
+
+.card--wide{grid-column:1/-1;}
+
+/* ── CARD BASE ───────────────────────────────── */
+.card{
+  background:var(--white);
   border:1px solid var(--border);
   border-radius:14px;
+  padding:20px 22px;
   text-decoration:none;
-  color:#fff;
+  color:var(--text);
+  display:flex;
+  gap:14px;
+  align-items:flex-start;
   position:relative;
-  overflow:hidden;
-  transition:background .18s,border-color .18s,transform .18s;
+  transition:box-shadow .18s, border-color .18s, transform .16s;
 }
 
 .card:hover{
-  background:var(--navy-3);
-  border-color:rgba(255,255,255,.14);
+  border-color:#c5cbd8;
+  box-shadow:0 6px 24px rgba(19,25,43,.08);
   transform:translateY(-2px);
 }
 
-/* action board — primary card */
-.card.primary{
-  border-color:rgba(237,28,36,.28);
-  background:rgba(237,28,36,.05);
+/* Primary card: red left accent */
+.card--primary{
+  border:1px solid rgba(237,28,36,.2);
+  border-left-width:3px;
+  border-left-color:var(--red);
+  background:rgba(237,28,36,.018);
 }
-.card.primary:hover{
-  border-color:rgba(237,28,36,.5);
-  background:rgba(237,28,36,.09);
-}
-
-/* top accent line on primary */
-.card.primary::before{
-  content:'';
-  position:absolute;
-  top:0;left:0;right:0;
-  height:2px;
-  background:var(--red);
-  border-radius:2px 2px 0 0;
+.card--primary:hover{
+  border-color:rgba(237,28,36,.38);
+  border-left-color:var(--red);
+  box-shadow:0 6px 28px rgba(237,28,36,.09);
 }
 
+/* ── CARD PARTS ──────────────────────────────── */
 .card-ico{
-  width:36px;height:36px;
-  border-radius:9px;
-  display:flex;align-items:center;justify-content:center;
+  width:42px;
+  height:42px;
+  border-radius:11px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   flex-shrink:0;
 }
-.card-ico [data-lucide]{width:16px;height:16px;}
+.card-ico [data-lucide]{width:18px;height:18px;}
+
+.card-body{
+  flex:1;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+}
 
 .card-label{
   font-size:10px;
   font-weight:700;
-  letter-spacing:.9px;
+  letter-spacing:.1em;
   text-transform:uppercase;
   color:var(--muted);
-  margin-bottom:2px;
+  margin-bottom:3px;
 }
 
 .card-name{
   font-family:'Outfit',sans-serif;
   font-weight:700;
-  font-size:14.5px;
-  letter-spacing:-.15px;
+  font-size:15px;
+  letter-spacing:-.2px;
+  color:var(--navy);
+  line-height:1.2;
+  margin-bottom:5px;
+}
+.card--wide .card-name{font-size:16.5px;}
+
+.card-desc{
+  font-size:12.5px;
+  color:var(--muted);
+  line-height:1.45;
 }
 
 .card-url{
   font-size:10.5px;
-  color:var(--muted);
-  font-family:'DM Sans',sans-serif;
   font-weight:500;
-  margin-top:auto;
+  color:#bec5d1;
+  margin-top:12px;
   padding-top:10px;
   border-top:1px solid var(--border);
 }
+.card--wide .card-url{
+  border-top:none;
+  padding-top:0;
+  margin-top:7px;
+}
 
-/* arrow badge top-right */
+/* arrow badge */
 .card-arrow{
   position:absolute;
-  top:14px;right:14px;
+  top:16px;right:16px;
+  color:#c5cbd8;
   opacity:0;
-  transition:opacity .18s,transform .18s;
+  transform:translate(-2px,2px);
+  transition:opacity .15s, transform .15s;
 }
-.card-arrow [data-lucide]{width:13px;height:13px;color:var(--muted);}
-.card:hover .card-arrow{opacity:1;transform:translate(1px,-1px);}
+.card-arrow [data-lucide]{width:13px;height:13px;}
+.card:hover .card-arrow{opacity:1;transform:translate(0,0);}
 
-/* ── responsive ── */
-@media(max-width:720px){
+/* ── ANIMATIONS ──────────────────────────────── */
+@keyframes panelIn{
+  from{opacity:0;transform:translateX(-10px);}
+  to{opacity:1;transform:translateX(0);}
+}
+@keyframes cardIn{
+  from{opacity:0;transform:translateY(10px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+.panel{animation:panelIn .38s ease both;}
+.card{animation:cardIn .32s ease both;}
+.card:nth-child(1){animation-delay:.1s;}
+.card:nth-child(2){animation-delay:.16s;}
+.card:nth-child(3){animation-delay:.21s;}
+.card:nth-child(4){animation-delay:.26s;}
+.card:nth-child(5){animation-delay:.31s;}
+
+/* ── RESPONSIVE ──────────────────────────────── */
+@media(max-width:800px){
   html,body{overflow:auto;}
-  .page{height:auto;min-height:100vh;}
-  .cards{grid-template-columns:repeat(2,1fr);}
-  .hero{padding:48px 0 40px;}
-}
-@media(max-width:420px){
+  .layout{
+    grid-template-columns:1fr;
+    height:auto;
+  }
+  .panel{min-height:auto;padding:28px 24px;}
+  .panel-mid{padding:36px 0 28px;}
+  .clock{font-size:72px;}
+  .content{
+    padding:28px 20px 40px;
+    justify-content:flex-start;
+  }
   .cards{grid-template-columns:1fr;}
-  .page{padding:20px 20px 28px;}
+  .card--wide{grid-column:auto;}
 }
 
-/* reduced motion */
 @media(prefers-reduced-motion:reduce){
-  .card{transition:none;}
-  .card-arrow{transition:none;}
+  .panel,.card{animation:none;}
+  .card,.card-arrow{transition:none;}
 }
 </style>
 </head>
 <body>
-<div class="page">
+<div class="layout">
 
-  <!-- topbar -->
-  <div class="topbar">
-    <div class="logo">
+  <!-- LEFT: Identity Panel -->
+  <aside class="panel">
+    <a href="/" class="panel-logo">
       <svg viewBox="156 275 78 66" xmlns="http://www.w3.org/2000/svg" style="width:26px;height:22px">
         <path fill="#ed1c24" d="m195.02,287.72v-12.49c21.94,0,38.48,10.29,38.48,23.93s-16.55,23.93-38.48,23.93v-12.49c15.86,0,25.99-6.77,25.99-11.44s-10.13-11.44-25.99-11.44Z"/>
         <path fill="#ffffff" d="m195.02,327.75v12.49c-21.94,0-38.48-10.29-38.48-23.93s16.55-23.93,38.48-23.93v12.49c-15.86,0-25.99,6.77-25.99,11.44s10.13,11.44,25.99,11.44Z"/>
       </svg>
-      <div class="logo-name">data<span>skate</span></div>
+      <span class="logo-name">data<em>skate</em></span>
+    </a>
+
+    <div class="panel-mid">
+      <div class="clock" id="clock">—</div>
+      <span class="clock-period" id="period"></span>
+      <div class="greeting" id="greeting">Good morning, <strong>Davis</strong></div>
     </div>
-    <div class="date-pill" id="date-pill"></div>
-  </div>
 
-  <!-- clock hero -->
-  <div class="hero">
-    <div class="clock-wrap">
-      <span class="clock-time" id="clock-time">—</span><span class="clock-period" id="clock-period"></span>
+    <div class="panel-foot">
+      <div class="date-line" id="date"></div>
     </div>
-    <div class="greeting" id="greeting">Good morning, <strong>Davis</strong></div>
-  </div>
+  </aside>
 
-  <!-- destinations -->
-  <div class="cards">
+  <!-- RIGHT: Navigation -->
+  <main class="content">
+    <div class="cards">
 
-    <a href="https://dsc.dataskate.online/board" class="card primary">
-      <div class="card-ico" style="background:rgba(237,28,36,.14)">
-        <i data-lucide="clipboard-list" style="color:#ed1c24"></i>
-      </div>
-      <div>
-        <div class="card-label">Primary</div>
-        <div class="card-name">Action Board</div>
-      </div>
-      <div class="card-url">dsc.dataskate.online/board</div>
-      <div class="card-arrow"><i data-lucide="arrow-up-right"></i></div>
-    </a>
+      <a href="https://dsc.dataskate.online/board" class="card card--primary card--wide">
+        <div class="card-ico" style="background:rgba(237,28,36,.1)">
+          <i data-lucide="clipboard-list" style="color:#ed1c24"></i>
+        </div>
+        <div class="card-body">
+          <div class="card-label">Primary</div>
+          <div class="card-name">Action Board</div>
+          <div class="card-desc">Tasks, pipeline follow-ups, and daily priorities</div>
+          <div class="card-url">dsc.dataskate.online/board</div>
+        </div>
+        <div class="card-arrow"><i data-lucide="arrow-up-right"></i></div>
+      </a>
 
-    <a href="https://dsc.dataskate.online/dashboard" class="card">
-      <div class="card-ico" style="background:rgba(124,58,237,.15)">
-        <i data-lucide="bar-chart-2" style="color:#9d7bea"></i>
-      </div>
-      <div>
-        <div class="card-label">Analytics</div>
-        <div class="card-name">DSC Dashboard</div>
-      </div>
-      <div class="card-url">dsc.dataskate.online/dashboard</div>
-      <div class="card-arrow"><i data-lucide="arrow-up-right"></i></div>
-    </a>
+      <a href="https://dsc.dataskate.online/dashboard" class="card">
+        <div class="card-ico" style="background:#eeebfe">
+          <i data-lucide="bar-chart-2" style="color:#6c46d6"></i>
+        </div>
+        <div class="card-body">
+          <div class="card-label">Analytics</div>
+          <div class="card-name">DSC Dashboard</div>
+          <div class="card-desc">Pipeline metrics and team performance</div>
+          <div class="card-url">dsc.dataskate.online/dashboard</div>
+        </div>
+        <div class="card-arrow"><i data-lucide="arrow-up-right"></i></div>
+      </a>
 
-    <a href="https://dsc.dataskate.online" class="card">
-      <div class="card-ico" style="background:rgba(30,100,180,.2)">
-        <i data-lucide="layers" style="color:#5ba3db"></i>
-      </div>
-      <div>
-        <div class="card-label">Platform</div>
-        <div class="card-name">DSC Platform</div>
-      </div>
-      <div class="card-url">dsc.dataskate.online</div>
-      <div class="card-arrow"><i data-lucide="arrow-up-right"></i></div>
-    </a>
+      <a href="https://dsc.dataskate.online" class="card">
+        <div class="card-ico" style="background:#e5f1fc">
+          <i data-lucide="layers" style="color:#1a6db8"></i>
+        </div>
+        <div class="card-body">
+          <div class="card-label">Platform</div>
+          <div class="card-name">DSC Platform</div>
+          <div class="card-desc">Full workspace and deal tools</div>
+          <div class="card-url">dsc.dataskate.online</div>
+        </div>
+        <div class="card-arrow"><i data-lucide="arrow-up-right"></i></div>
+      </a>
 
-    <a href="https://wireframe.dataskate.online" class="card">
-      <div class="card-ico" style="background:rgba(255,255,255,.06)">
-        <i data-lucide="layout-template" style="color:rgba(255,255,255,.45)"></i>
-      </div>
-      <div>
-        <div class="card-label">Design</div>
-        <div class="card-name">AE Hub Wireframe</div>
-      </div>
-      <div class="card-url">wireframe.dataskate.online</div>
-      <div class="card-arrow"><i data-lucide="arrow-up-right"></i></div>
-    </a>
+      <a href="https://wireframe.dataskate.online" class="card">
+        <div class="card-ico" style="background:#e6f5ee">
+          <i data-lucide="layout-template" style="color:#1a7a40"></i>
+        </div>
+        <div class="card-body">
+          <div class="card-label">Design</div>
+          <div class="card-name">AE Hub Wireframe</div>
+          <div class="card-desc">Phase 1 — AE, Staff and Admin views</div>
+          <div class="card-url">wireframe.dataskate.online</div>
+        </div>
+        <div class="card-arrow"><i data-lucide="arrow-up-right"></i></div>
+      </a>
 
-  </div>
+      <a href="/KT" class="card">
+        <div class="card-ico" style="background:#fef3e2">
+          <i data-lucide="book-open" style="color:#c96e00"></i>
+        </div>
+        <div class="card-body">
+          <div class="card-label">Knowledge</div>
+          <div class="card-name">KT Guide</div>
+          <div class="card-desc">MuleSoft scoping and pricing reference</div>
+          <div class="card-url">dataskate.online/KT</div>
+        </div>
+        <div class="card-arrow"><i data-lucide="arrow-up-right"></i></div>
+      </a>
+
+    </div>
+  </main>
 
 </div>
 
 <script>
 lucide.createIcons();
-
 function pad(n){return n<10?'0'+n:''+n;}
-
-const DAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-
+const D=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 function tick(){
   const now=new Date();
   const h24=now.getHours();
   const m=now.getMinutes();
-  const period=h24>=12?'PM':'AM';
+  const ampm=h24>=12?'PM':'AM';
   const h12=h24%12||12;
-
-  document.getElementById('clock-time').textContent=h12+':'+pad(m);
-  document.getElementById('clock-period').textContent=period;
-
-  const g=h24<12?'Good morning':h24<17?'Good afternoon':'Good evening';
-  document.getElementById('greeting').innerHTML=g+', <strong>Davis</strong>';
-
-  document.getElementById('date-pill').textContent=
-    DAYS[now.getDay()]+', '+now.getDate()+' '+MONTHS[now.getMonth()]+' '+now.getFullYear();
+  document.getElementById('clock').textContent=h12+':'+pad(m);
+  document.getElementById('period').textContent=ampm;
+  document.getElementById('greeting').innerHTML=
+    (h24<12?'Good morning':h24<17?'Good afternoon':'Good evening')+', <strong>Davis</strong>';
+  document.getElementById('date').textContent=
+    D[now.getDay()]+' · '+now.getDate()+' '+M[now.getMonth()]+' '+now.getFullYear();
 }
-
 tick();
 setInterval(tick,1000);
 </script>
