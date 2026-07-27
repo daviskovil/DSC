@@ -1,8 +1,8 @@
 {
   "redirects": [
     {
-      "source": "/",
-      "destination": "/wireframe.html",
+      "source": "/(.*)",
+      "destination": "https://dataskate.online/wireframe/$1",
       "has": [{ "type": "host", "value": "wireframe.dataskate.online" }],
       "permanent": false
     }
