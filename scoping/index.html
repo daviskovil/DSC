@@ -407,6 +407,44 @@ html,body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text
 .cl-text{font-size:13px;color:var(--text);line-height:1.55;flex:1;}
 .cl-item.checked .cl-text{color:var(--muted);text-decoration:line-through;text-decoration-color:rgba(107,114,128,.35);}
 
+/* ── DOCUMENT READER (Source Doc tab) ───────── */
+.doc-layout{display:grid;grid-template-columns:196px 1fr;gap:20px;align-items:start;}
+.doc-toc{
+  position:sticky;top:110px;
+  background:var(--white);border:1px solid var(--border);border-radius:12px;padding:16px;
+}
+.doc-toc-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+.doc-toc-link{display:block;font-size:12px;color:var(--sub);padding:5px 8px;border-radius:6px;text-decoration:none;line-height:1.35;margin-bottom:2px;transition:background .12s,color .12s;}
+.doc-toc-link:hover{background:var(--bg);color:var(--navy);}
+.doc-reader{
+  background:var(--white);border:1px solid var(--border);border-radius:12px;
+  padding:40px 48px;
+  height:calc(100vh - 178px);
+  overflow-y:auto;
+}
+.doc-cover{text-align:center;padding-bottom:32px;border-bottom:2px solid var(--border);margin-bottom:32px;}
+.doc-cover-label{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--red);margin-bottom:12px;}
+.doc-cover-title{font-family:'Outfit',sans-serif;font-weight:800;font-size:28px;letter-spacing:-.5px;color:var(--navy);line-height:1.2;margin-bottom:10px;}
+.doc-cover-sub{font-size:13px;color:var(--muted);}
+.doc-h1{font-family:'Outfit',sans-serif;font-weight:800;font-size:18px;color:var(--navy);margin:36px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--border);}
+.doc-h1:first-of-type{margin-top:0;}
+.doc-h2{font-family:'Outfit',sans-serif;font-weight:700;font-size:14px;color:#1a55a3;margin:22px 0 8px;}
+.doc-p{font-size:13.5px;color:var(--text);line-height:1.72;margin-bottom:12px;}
+.doc-callout{background:#eef5ff;border:1px solid #c2d8fa;border-radius:8px;padding:12px 16px;margin:14px 0;font-size:13px;color:#1a3560;line-height:1.65;}
+.doc-callout strong{font-weight:700;}
+.doc-ol,.doc-ul{padding-left:22px;margin-bottom:14px;}
+.doc-ol li,.doc-ul li{font-size:13.5px;color:var(--text);line-height:1.65;margin-bottom:7px;}
+.doc-ul{list-style:disc;}
+.doc-ul li strong{font-weight:700;}
+.doc-table-wrap{border:1px solid var(--border);border-radius:10px;overflow:hidden;overflow-x:auto;margin-bottom:16px;}
+.doc-table{width:100%;border-collapse:collapse;font-size:13px;}
+.doc-table thead tr{background:var(--navy);}
+.doc-table th{padding:9px 14px;text-align:left;font-family:'Outfit',sans-serif;font-weight:700;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.8);}
+.doc-table tbody tr:nth-child(even){background:#f8fafd;}
+.doc-table td{padding:9px 14px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.55;}
+.doc-table tbody tr:last-child td{border-bottom:none;}
+.doc-sep{border:none;border-top:1px dashed var(--border);margin:32px 0;}
+
 /* ── RESPONSIVE ──────────────────────────────── */
 @media(max-width:640px){
   .content{padding:20px 14px 52px;}
@@ -419,6 +457,60 @@ html,body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text
 @media(prefers-reduced-motion:reduce){
   .live-dot{animation:none;}
   .step:not(:last-child)::after{display:none;}
+}
+
+/* ── ORIGINAL KT DOC ─────────────────────────── */
+.kt-doc-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+  align-items:start;
+}
+.kt-pane{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:28px 30px;
+  height:calc(100vh - 164px);
+  overflow-y:auto;
+}
+.kt-pane::-webkit-scrollbar{width:6px;}
+.kt-pane::-webkit-scrollbar-track{background:transparent;}
+.kt-pane::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:3px;}
+.kt-doc h2{
+  font-family:'Outfit',sans-serif;
+  font-size:13px;font-weight:800;
+  letter-spacing:.06em;text-transform:uppercase;
+  color:var(--red);
+  margin:28px 0 10px;
+  padding-bottom:6px;
+  border-bottom:2px solid rgba(237,28,36,.15);
+}
+.kt-doc h2:first-child{margin-top:0;}
+.kt-doc h3{
+  font-family:'Outfit',sans-serif;
+  font-size:12.5px;font-weight:700;
+  color:var(--navy);
+  margin:18px 0 7px;
+}
+.kt-doc p{font-size:13px;line-height:1.7;color:var(--sub);margin-bottom:10px;}
+.kt-doc ol,.kt-doc ul{padding-left:18px;margin-bottom:10px;}
+.kt-doc li{font-size:13px;line-height:1.7;color:var(--sub);margin-bottom:5px;}
+.kt-doc li::marker{color:var(--navy);font-weight:700;}
+.kt-doc strong{color:var(--navy);font-weight:600;}
+.kt-doc .doc-label{
+  font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);background:var(--bg);
+  border:1px solid var(--border);border-radius:20px;
+  padding:2px 10px;display:inline-block;margin-bottom:16px;
+}
+.kt-table{width:100%;border-collapse:collapse;margin:10px 0 14px;font-size:12px;}
+.kt-table th{background:var(--bg);color:var(--navy);font-weight:700;text-align:left;padding:8px 10px;border:1px solid var(--border);}
+.kt-table td{padding:7px 10px;border:1px solid var(--border);color:var(--sub);vertical-align:top;line-height:1.5;}
+.kt-table tr:nth-child(even) td{background:#fafbfd;}
+@media(max-width:900px){
+  .kt-doc-grid{grid-template-columns:1fr;}
+  .kt-pane{height:auto;max-height:80vh;}
 }
 </style>
 </head>
@@ -449,6 +541,7 @@ html,body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text
   <button class="tab-btn tab-live" data-tab="checklists">
     <span class="live-dot"></span> Live Checklists
   </button>
+  <button class="tab-btn" data-tab="original">KT Document</button>
 </nav>
 
 <main class="content">
@@ -1065,6 +1158,263 @@ html,body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text
     </div>
   </div>
 
+</div>
+
+<div id="tab-original" class="tab-panel">
+  <div class="kt-doc-grid">
+
+    <!-- LEFT PANE: Sections 0–3 -->
+    <div class="kt-pane">
+      <div class="kt-doc">
+        <span class="doc-label">Original KT Document — Sections 0–3</span>
+
+        <h2>MuleSoft Practice — Scoping &amp; Pricing Knowledge Transfer Guide</h2>
+        <p>Covering MuleSoft IDP · MuleSoft Anypoint Platform · MuleSoft for Flow</p>
+
+        <h2>0. Purpose of This Document</h2>
+        <p>This guide is the handover reference for scoping MuleSoft engagements — MuleSoft IDP (Intelligent Document Processing), MuleSoft Anypoint Platform (integration/iPaaS), and MuleSoft for Flow — the way scoping has actually been done on live customer calls to date. It captures the discovery question set, the complexity-scoring logic used to translate customer answers into a t-shirt size (Simple / Medium / Complex), and pricing patterns pulled from real deals we've scoped.</p>
+        <p>Treat this as a living checklist to bring into every scoping call, not a static reference to read once. Update it after every new deal — new document types, new source/target systems, and new pricing data points all belong here.</p>
+        <h3>How to use this document</h3>
+        <p>Print or duplicate Section 3 (IDP) and Section 4 (Anypoint) as your live call checklist. Use Section 6 (Pricing Framework) only after complexity is scored — never quote price before scoring complexity.</p>
+
+        <h2>1. Product Line Overview</h2>
+        <p>We scope three related but distinct MuleSoft products. Do not assume a customer request maps cleanly to one product — most real deals (see case studies in Sections 3 and 4) blend IDP + Anypoint together, e.g. "extract data from a document, then push it into a target system."</p>
+        <h3>1.1 MuleSoft IDP (Intelligent Document Processing)</h3>
+        <p>Extracts structured data out of unstructured or semi-structured documents (PDF, image, Word, Excel, scans, faxes) and classifies documents by type, so the extracted data can be handed off to a downstream system or human review queue.</p>
+        <h3>1.2 MuleSoft Anypoint Platform</h3>
+        <p>The core iPaaS / integration layer — connects a source system to a target system via API, database, file, or event-driven flows. This is where extracted IDP data (or any system-to-system data) actually gets moved, transformed, and delivered.</p>
+        <h3>1.3 MuleSoft for Flow</h3>
+        <p>A lighter-weight, Salesforce-Flow-native automation capability that lets Salesforce admins invoke MuleSoft-published APIs/processes directly from Flow Builder, without a full Anypoint developer build.</p>
+
+        <h2>2. General Scoping Methodology</h2>
+        <p>Regardless of product, every scoping call follows the same shape. This is the muscle memory to build before diving into the product-specific checklists.</p>
+        <h3>2.1 The Four-Step Call Flow</h3>
+        <ol>
+          <li>Identify the trigger: what business pain or event is driving this project right now (compliance deadline, manual labor cost, error rate, new system rollout)?</li>
+          <li>Map source → target: for every data point in scope, name the exact source system and exact target system. Never leave this as "the CRM" or "our ERP" — we need to get the product name and version/deployment (see Section 4).</li>
+          <li>Run the relevant complexity checklist (Section 3 for IDP, Section 4 for Anypoint/For Flow) live on the call, or immediately after from the recording/transcript.</li>
+          <li>Flag open items explicitly and get them into an SOW "Open Items &amp; Decision Points" section rather than guessing — unresolved items (e.g. unconfirmed ingestion channel, unconfirmed API access) are the #1 source of scope creep after go-live.</li>
+        </ol>
+        <h3>2.2 Rules of Thumb</h3>
+        <ul>
+          <li><strong>Get an AI Transcript or Meeting Recorder:</strong> All Calls and conversations Need to be strictly recorded in our Local or personal AI Transcript recorder or Meeting recorder — make sure this tool is passive or non-invasive. Example: Krisp AI</li>
+          <li><strong>Get a transcript or recording:</strong> Several deals required scoping strictly off the call transcript. Always ask for the recording/transcript before the call ends which helps you rebuild the scope precisely instead of from memory.</li>
+          <li><strong>Never assume the ingestion channel:</strong> The ingestion source (EAC inbox vs. Outlook vs. Gmail vs. fax-to-email bridge vs SharePoint) will almost never be confirmed on the discovery call and will need to be flagged as an explicit SOW assumption. Always nail down the literal endpoint IDP or Anypoint will listen to or source of the document.</li>
+          <li><strong>Bi-directional sync doubles the surface area:</strong> On most of the deals, "bi-directional" requirements will be sounded like one flow to the customer but is really two integration patterns. If a customer says "bi-directional" or "two-way sync" and can't immediately tell you what writes back and when, park it as a Phase 2 / change order rather than pricing it into Phase 1 — but for example if the Opportunity is closed won in Salesforce which needs to create a sales order inside QuickBooks and we need to write back the sales order number from QuickBooks into Salesforce then this is considered as one Flow.</li>
+          <li><strong>Confirm deployment before pricing connectivity:</strong> On few of the deals we need to confirm the Target and source System deployment availability to be on-cloud or on-prem to confirm the connectivity — this will be the single biggest cost driver was cloud vs. on-prem deployment of the source/target system — not the data model. Always ask this before any other technical question.</li>
+          <li><strong>Desktop / legacy systems need a connector strategy:</strong> QuickBooks Desktop (vs. Online), Sage 100 (ProvideX/legacy), and IQMS on older on-prem builds all needed a workaround (Web Connector, ODBC/DB connector, file-based polling) instead of a clean REST call. Ask specifically whether the system exposes REST APIs natively or only legacy protocols (ODBC, SOAP, flat file, EDI).</li>
+          <li><strong>Template variance multiplies IDP effort:</strong> On most of the deals, each of the document can be a different PDF template, meaning each vendor/Client effectively required its own extraction prompt to be written. Always ask "how many distinct source templates/formats exist across all your document sources?" — not just "what document types."</li>
+          <li><strong>Large or bundled documents need a splitting strategy up front:</strong> On the EliteExperts deal, some inbound PDFs ran into the thousands of pages and required a custom chunking workaround; chunking failures needed monitoring/alerting. Treat &gt;40-page and bundled/multi-document files as an architecture decision, not a footnote.</li>
+        </ul>
+
+        <h2>3. MuleSoft IDP — Scoping Framework</h2>
+        <p>This is the standing discovery checklist for any deal involving document extraction/classification. Ask every question below on the call — even if the answer seems obvious — because the answer directly changes the t-shirt size and the price.</p>
+        <h3>3.1 Discovery Checklist (ask on every call)</h3>
+        <ol>
+          <li>What is the source system the documents are picked up / processed from? (email inbox, SharePoint, EAC/fax bridge, scanning device/service, secure document portal, SFTP, etc.)</li>
+          <li>What file extensions are in scope? (PDF, image/scan, Excel, Word, etc. — for a few additional format types we would need the conversion of format effort considered)</li>
+          <li>What distinct document types are in scope? Each is scoped and priced separately (e.g. invoice, purchase order, sales order, driver's license, medical prescription, medical report, lab report, insurance policy summary, inspection report, handwritten field notes).</li>
+          <li>Is any document type routinely longer than 40 pages? If yes → splitting logic + data aggregation across chunks is required → Complex.</li>
+          <li>Are document formats standard/consistent, or do they vary a lot? Standard format → Simple. Some variance → Medium. High variance (e.g. different template per source/carrier) → Complex.</li>
+          <li>Are there multiple sources the files need to be extracted from (multiple inboxes, multiple partner portals, multiple carriers)?</li>
+          <li>How many fields need to be extracted per document type? &lt;10 fields → Simple. 10–15 fields → Medium. &gt;15 fields → Complex.</li>
+          <li>Do the documents contain checkboxes that must be identified/extracted? &gt;5 checkboxes → Complex. ≤5 checkboxes → Medium. None → no added complexity.</li>
+          <li>Do the documents contain diagrams or images from which data must be collected? If yes → Medium (minimum).</li>
+          <li>What is the target system the extracted data lands in? (Salesforce, Workday, a database, Sage, Pioneer Rx, Cerner, etc. — confirm deployment per Section 4.2.)</li>
+          <li>Multi-record processing: will every document arrive as its own single PDF, or can one email/upload contain multiple attachments / multiple records?</li>
+          <li>Will any inbound file bundle multiple distinct documents together (e.g. one PDF containing an invoice + a packing slip + a PO)? If yes → Complex (bundle-splitting logic required).</li>
+        </ol>
+        <h3>3.2 Complexity Scoring Matrix</h3>
+        <table class="kt-table">
+          <thead><tr><th>Factor</th><th>Simple</th><th>Medium</th><th>Complex</th></tr></thead>
+          <tbody>
+            <tr><td>Document length</td><td>&lt; 40 pages</td><td>—</td><td>&gt; 40 pages (splitting + aggregation needed)</td></tr>
+            <tr><td>Format consistency</td><td>Standard, consistent format</td><td>Some variance</td><td>High variance / different template per source</td></tr>
+            <tr><td>Fields extracted per doc type</td><td>&lt; 10 fields</td><td>10–15 fields</td><td>&gt; 15 fields</td></tr>
+            <tr><td>Checkboxes to extract</td><td>None</td><td>≤ 5 checkboxes</td><td>&gt; 5 checkboxes</td></tr>
+            <tr><td>Diagrams / images with data</td><td>None</td><td>Present (drives to at least Medium)</td><td>Present + high field count</td></tr>
+            <tr><td>Multiple source systems/channels</td><td>Single source</td><td>2–3 sources</td><td>4+ sources / per-source templates</td></tr>
+            <tr><td>Bundled / multi-document files</td><td>Not present</td><td>—</td><td>Present — requires bundle-splitting logic</td></tr>
+          </tbody>
+        </table>
+        <h3>3.3 Common Source Systems Observed</h3>
+        <ul>
+          <li><strong>Email inbox (Outlook / Gmail):</strong> IDP can monitor an inbox directly as the ingestion point.</li>
+          <li><strong>Scanning device / service:</strong> File-creation event triggers IDP processing automatically — useful during a digitization rollout.</li>
+          <li><strong>Secure document portals:</strong> e.g. SecureDocs-style portals for referral packages — usually require an RPA layer to log in and download files on a schedule, since these portals rarely expose a public API.</li>
+          <li><strong>Existing file server / SharePoint:</strong> Used for retroactive/backfill processing of documents already on file, in addition to new incoming documents.</li>
+        </ul>
+        <h3>3.5 Non-Negotiable Technical Call-Outs</h3>
+        <ul>
+          <li><strong>Confidence thresholds &amp; human review:</strong> Every IDP scope we've delivered includes a confidence threshold (e.g. &lt;80%) that routes low-confidence extractions to a human review queue rather than auto-committing bad data. Always scope this explicitly — it is a distinct configuration line item, not something that comes free with extraction.</li>
+          <li><strong>Deduplication logic:</strong> Needed whenever the same document could arrive more than once (fax retries, multi-channel submission) — scope as part of the integration logic, not IDP extraction.</li>
+          <li><strong>Large-document workaround:</strong> For consistently huge files (thousands of pages), expect a custom chunking component (e.g. Mule PDFBox module or equivalent) plus monitoring/alerting for chunking failures — call this out as its own effort line, it is fragile and needs support.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- RIGHT PANE: Sections 4–9 -->
+    <div class="kt-pane">
+      <div class="kt-doc">
+        <span class="doc-label">Original KT Document — Sections 4–9</span>
+
+        <h2>4. MuleSoft Anypoint Platform — Scoping Framework</h2>
+        <p>Anypoint scoping is fundamentally about two questions asked twice — once for the source system, once for the target system — plus the business logic that sits between them.</p>
+        <h3>4.1 Discovery Checklist (ask on every call)</h3>
+        <ol>
+          <li>What is the source system?</li>
+          <li>Is the source system API-enabled? If not, what protocols does it expose (ODBC, SOAP, flat file/SFTP, EDI, database direct)?</li>
+          <li>Is the source system cloud-hosted or on-prem?</li>
+          <li>What is the target system?</li>
+          <li>Is the target system API-enabled?</li>
+          <li>Is the target system cloud-hosted or on-prem?</li>
+          <li>What business objects are being exchanged? (e.g. Account, Order, Invoice, Product, Payment — name the actual object per system, e.g. "Salesforce Opportunity" not just "deal.")</li>
+          <li>What actions are needed per business object? (get / extract / receive / create / update / sync — and in which direction; if bi-directional, define exactly what writes back and on what trigger.)</li>
+          <li>Is there business logic to apply between source and target for this object (transformation, mapping, deduplication, conditional routing, aggregation)? If yes → Complex; a straight pass-through mapping is the Medium default.</li>
+        </ol>
+        <h3>4.2 Connectivity Complexity Matrix (apply once to source, once to target)</h3>
+        <table class="kt-table">
+          <thead><tr><th>Deployment</th><th>API Access</th><th>Complexity</th></tr></thead>
+          <tbody>
+            <tr><td>Cloud</td><td>API-enabled</td><td>Simple</td></tr>
+            <tr><td>On-Prem</td><td>API connectivity available</td><td>Medium</td></tr>
+            <tr><td>On-Prem</td><td>No API connectivity</td><td>Complex — custom coding required</td></tr>
+          </tbody>
+        </table>
+        <h3>4.3 Business Object &amp; Logic Complexity</h3>
+        <ul>
+          <li><strong>Straight pass-through / 1:1 field mapping:</strong> No transformation logic beyond field mapping and basic validation → counts toward Medium, not Simple, per our standing rule ("if yes then complex otherwise medium" for business logic presence).</li>
+          <li><strong>Transformation / conditional logic present:</strong> Field-level business rules, conditional routing, currency/unit conversion, multi-object aggregation → Complex.</li>
+          <li><strong>Bi-directional flows:</strong> Always scope as two integration patterns, not one — this alone can double the flow count and should be reflected as two separate line items unless proven trivial.</li>
+          <li><strong>Multi-entity / multi-company targets:</strong> One source feeding multiple company instances/tenants in the target (e.g. one Salesforce org → 3 QuickBooks Desktop companies) adds a routing-logic layer — price as additional effort on top of the base flow, not folded in.</li>
+        </ul>
+        <h3>4.4 MuleSoft for Flow — Discovery Starting Point (validate before quoting)</h3>
+        <p>MuleSoft for Flow is scoped like a lightweight Anypoint engagement, but the packaging and limits are Salesforce-Flow-native rather than full Anypoint Studio development. Until we have more deal history, treat this checklist as a draft and confirm against the current datasheet:</p>
+        <ol start="10">
+          <li>Is the requirement being triggered from inside Salesforce Flow Builder, or does it need a standalone API/process outside Salesforce's runtime?</li>
+          <li>Does the target/source system already have a MuleSoft-published "Flow-ready" action, or would a custom API need to be built and then exposed to Flow?</li>
+          <li>Same source/target complexity questions as Section 4.2 still apply — Flow does not remove the cloud/on-prem/API question, it only changes who builds and triggers the integration.</li>
+          <li>Confirm licensing/consumption model directly with the MuleSoft for Flow datasheet before quoting — do not assume it uses the same Flows+Messages model as core Anypoint (Section 6.1) without checking.</li>
+        </ol>
+
+        <h2>5. Pricing Framework</h2>
+        <p>Complexity scoring (Sections 3.2 and 4.2) must always come before pricing. Below are the pricing mechanics and the actual pricing benchmarks pulled from deals we've scoped — use them as anchors, not as a rate card to copy blindly, since every customer's flow count/volume differs.</p>
+        <h3>5.1 Anypoint Platform Pricing Mechanics</h3>
+        <ul>
+          <li><strong>Pricing unit — Flows:</strong> Each distinct integration pipeline is one flow (e.g. "NetSuite ↔ Salesforce case sync" = 1 flow). Packages include a flow allocation sized to projected need — get the customer's realistic flow count from the discovery checklist (Section 4) before recommending a package.</li>
+        </ul>
+        <h3>5.2 IDP Pricing Pattern — Per Document Type</h3>
+        <p>IDP has consistently been priced as a fixed fee per document type, scaled by the complexity tier from Section 3.2 — not as one blended project fee. Structure every IDP proposal as a document-type line-item table:</p>
+        <table class="kt-table">
+          <thead><tr><th>Document Type</th><th>Complexity</th><th>Illustrative Fixed Fee</th></tr></thead>
+          <tbody>
+            <tr><td>Handwritten operational documents</td><td>High / Complex</td><td>$3,500</td></tr>
+            <tr><td>Plant visit report (structured)</td><td>Medium</td><td>$3,500</td></tr>
+            <tr><td>VIP inspection report (structured)</td><td>Medium</td><td>$3,500</td></tr>
+            <tr><td>Standard invoice / PO / sales order (consistent template)</td><td>Simple</td><td>$3,500</td></tr>
+            <tr><td>Insurance policy summary (per carrier template)</td><td>Medium–Complex per carrier</td><td>$3,500 + depending on the leverage we have</td></tr>
+          </tbody>
+        </table>
+        <h3>5.3 Implementation Timeline Mechanics</h3>
+        <p><em>(Section reserved for future updates.)</em></p>
+
+        <h2>6. Standard SOW Structure</h2>
+        <p>Every SOW we've produced from a scoping call has followed roughly this shape. Use it as the outline when you sit down to draft the deliverable after a call.</p>
+        <ol>
+          <li>Executive summary / opportunity overview</li>
+          <li>Current-state pain points (from the discovery call — this is your ROI narrative)</li>
+          <li>In-scope systems and stakeholders</li>
+          <li>Scope — document types (IDP) and/or integration flows (Anypoint), each with a complexity rating</li>
+          <li>Key integration/extraction logic (dedup, confidence thresholds, error handling, audit trail)</li>
+          <li>Explicit out-of-scope table — name what was discussed but is NOT included, to prevent scope-creep disputes later</li>
+          <li>Timeline — milestone table with owners and deliverables per week/phase</li>
+          <li>Pricing — line-item breakdown, payment terms, ROI reference</li>
+          <li>RACI table</li>
+          <li>Assumptions &amp; dependencies</li>
+          <li>Acceptance criteria</li>
+          <li>Change management process</li>
+          <li>Confidentiality / compliance requirements (HIPAA/BAA etc. if applicable)</li>
+          <li>Governing law and signature blocks</li>
+        </ol>
+
+        <h2>7. Master Discovery Checklist (Print/Copy for Live Calls)</h2>
+        <h3>7.1 IDP Quick Checklist</h3>
+        <ul>
+          <li>☐ Source system(s) for document pickup</li>
+          <li>☐ File extensions in scope (PDF / image / Excel / Word / other)</li>
+          <li>☐ Distinct document types in scope (list each by name)</li>
+          <li>☐ Any document type routinely &gt; 40 pages?</li>
+          <li>☐ Format consistency: standard / some variance / high variance?</li>
+          <li>☐ Multiple source systems/channels?</li>
+          <li>☐ Fields to extract per document type (count)</li>
+          <li>☐ Checkboxes present? How many?</li>
+          <li>☐ Diagrams/images with data to extract?</li>
+          <li>☐ Target system(s) and deployment</li>
+          <li>☐ Multi-record handling — one doc per file, or multiple attachments/records per file?</li>
+          <li>☐ Bundled/multi-document files possible?</li>
+          <li>☐ Confidence threshold + human review queue required?</li>
+          <li>☐ Dedup logic required?</li>
+          <li>☐ Audit trail / compliance requirement (HIPAA, etc.)?</li>
+        </ul>
+        <h3>7.2 Anypoint / Integration Quick Checklist</h3>
+        <ul>
+          <li>☐ Source system name + version</li>
+          <li>☐ Source: API-enabled? Cloud or on-prem?</li>
+          <li>☐ Target system name + version</li>
+          <li>☐ Target: API-enabled? Cloud or on-prem?</li>
+          <li>☐ Business objects to exchange (named per system)</li>
+          <li>☐ Actions needed per object (get/extract/receive/create/update) and direction</li>
+          <li>☐ Business/transformation logic required between systems?</li>
+          <li>☐ Bi-directional? If so, what exactly writes back and on what trigger?</li>
+          <li>☐ Multi-entity/multi-company routing required?</li>
+          <li>☐ Realistic flow count and message volume (for licensing tier)</li>
+        </ul>
+
+        <h2>9. Additional Checklist Items</h2>
+        <h3>9.1 IDP — Additional Discovery Questions</h3>
+        <ol>
+          <li>Is there any document type the customer is contractually or legally restricted from processing with AI (e.g. NDA clauses that prohibit AI review, regulatory rules against AI transcription of calls)? If yes, that document type must be flagged and routed straight to human handling — never through automated extraction — and should be called out explicitly as an out-of-scope / human-only item in the SOW.</li>
+          <li>Beyond "what document types," ask for volume AND average page count together (e.g. "~1,200 docs/year, ~40 pages average") — the two combine to drive effort very differently than either alone.</li>
+          <li>For every document type, separate "must-have" fields from "nice-to-have" fields. This lets you scope an MVP field set instead of pricing every field the customer can imagine on day one.</li>
+          <li>Ask whether documents are always in one language or can arrive in multiple languages — this changes the extraction/OCR model, not just the volume.</li>
+          <li>Ask exactly how documents currently arrive: email attachment, portal download, or scanned physical mail. Each has a different ingestion architecture even if the document type is identical.</li>
+          <li>Never quote IDP effort without asking for 3–5 real sample documents per distinct format/template variant. Sample documents are what let you size the extraction model accurately — a verbal description of the document is not enough.</li>
+          <li>Ask what confidence threshold the business is comfortable with, and — separately — who operationally owns the human-review queue day to day. A threshold number without a named owner is an incomplete scope item.</li>
+          <li>Ask if any inbound file mixes a structured form with free-text/handwritten notes in the same document (a hybrid document). These often need a splitting or dual-extraction step before classification, and should be scored above a plain structured or plain unstructured document of the same type.</li>
+          <li>If the customer currently has a manual second-person review/verification step, ask explicitly whether they want that dual-control step preserved as a human-in-the-loop gate post-automation, or fully eliminated. This is a business decision that changes the confidence-threshold configuration, not a technical default.</li>
+          <li>Ask whether the extracted data needs to trigger any downstream business automation (renewal reminders, compliance flags, approval workflows). If yes, that logic belongs in the Anypoint/integration scope, not the IDP extraction line item — price it separately.</li>
+          <li>When an engagement mixes structured/templated sources (e.g. a fixed Excel template) with unstructured freeform sources (e.g. a scanned PDF) under one project, score and price them separately even if the customer thinks of them as "the same document." Structured extraction is materially cheaper to build and tune than unstructured extraction.</li>
+          <li>Confirm whether the downstream delivery needs full Anypoint Platform or can be met with a lighter native Salesforce Flow ingestion path. Choosing Anypoint over Flow when Flow would suffice adds avoidable ingestion-configuration effort — budget roughly an extra half-day of configuration work when Anypoint is pulled in over a Flow-native path, and confirm this is actually necessary before defaulting to it.</li>
+        </ol>
+        <h3>9.2 Anypoint / Integration — Additional Discovery Questions</h3>
+        <ol>
+          <li>For every shared entity (customer, account, order, etc.), ask directly: "which system is the system of record?" Get the answer in writing before building any sync logic — do not infer it from which system happens to be more modern or more central to the conversation.</li>
+          <li>Ask what should happen if the same record is updated in both systems at nearly the same time — which system wins? "Bi-directional" is not a complete answer until this conflict-resolution rule is defined.</li>
+          <li>Ask whether deletes should propagate between systems, and if so, whether that should be a hard delete or a soft delete/archive flag. Undefined delete behavior is a common source of data-loss incidents post go-live.</li>
+          <li>Ask whether the source system supports push-based real-time events (webhooks, Change Data Capture, Platform Events) or whether MuleSoft must poll on a schedule. This materially changes both latency expectations and licensing/message volume.</li>
+          <li>Ask about API rate limits on both source and target, and confirm whether a separate bulk export/import mechanism exists for the one-time historical/initial data load — a one-time backfill is a distinct effort line from the ongoing incremental sync and should be scoped and priced separately.</li>
+          <li>Ask how many environments are needed on each side (Dev/QA/UAT/Production) and whether the customer can actually provide non-production credentials or sandbox access for testing — do not assume anything beyond production access will be available.</li>
+          <li>Ask explicitly how integration failures should be handled: silent log, email alert, or retry queue — and who on the customer side owns monitoring that error queue. An error-handling design with no named owner is incomplete.</li>
+          <li>Ask whether the integration depends on any third party outside the customer's direct control (an external distributor, partner, or vendor feed). If so, confirm that third party is already aware of and has agreed to the integration and its timeline — external-party onboarding is one of the most common causes of stalled go-live dates.</li>
+          <li>Ask whether there is a hard external deadline driving the project (a board meeting, an audit, a fiscal year-end, a contract renewal). Capture it explicitly as a project dependency/driver, not just background context — it often dictates the whole timeline more than technical complexity does.</li>
+          <li>When a legacy on-prem system has no native REST API, map every available connectivity option before assuming custom coding is the only path: direct database/ODBC access, a vendor-specific business-object/COM interface, a third-party REST wrapper product, a dedicated connector product, or flat-file import/export. A third-party wrapper is frequently faster and cheaper to implement than fully custom code, and should be priced as the default option, not custom coding.</li>
+          <li>For any object with child/line-item records (invoice line items, order line items, quote line items), confirm explicitly whether the target system needs line-item-level detail or whether a header-level summary record is sufficient for the customer's reporting needs. This changes both the field count and the mapping complexity.</li>
+          <li>If the customer's current process syncs on a fixed cadence (e.g. a few times per week), ask whether that cadence is a deliberate business choice or simply a limitation of their current tooling. Don't assume the new integration should preserve the old cadence by default — ask what cadence they'd actually prefer if cost/technical limits were removed, then price accordingly.</li>
+          <li>Ask whether any personal data crossing systems triggers data-residency or privacy requirements (e.g. GDPR) — especially relevant when the source or target system, or its users, sit outside the customer's home jurisdiction.</li>
+          <li>Ask whether an audit trail of every synced record is required for compliance or financial reporting. This is a distinct build item (logging + retrieval) and should never be assumed to come free with the base sync.</li>
+          <li>If the integration touches quoting/pricing, confirm whether multiple price books or pricing tiers exist for different channels or customer segments (e.g. self-serve vs. sales-assisted, or different regions). Multiple price books multiply mapping and testing effort and must be counted as separate scope, not a variant of one flow.</li>
+        </ol>
+        <h3>9.3 Cross-Cutting Discipline</h3>
+        <ul>
+          <li><strong>Verify every use case against the transcript before it goes in an SOW:</strong> When building scope from a discovery call, check each proposed use case against what was actually said, and label it Confirmed, Partially Discussed, or Not Discussed. It is common for something to be mentioned once as an existing feature or a "nice to have" and later get treated as a firm build requirement by mistake — this is one of the most common sources of scope disputes after signature.</li>
+          <li><strong>Distinguish an existing automation from a new build:</strong> If a workflow already exists in the target system today (e.g. an existing report or automation) and the new integration just feeds it better data, don't scope it as new build effort — call it out as a beneficiary of the integration, not a deliverable.</li>
+          <li><strong>Treat "nice to have" language literally:</strong> If a stakeholder says something like "if it can be implemented, that'd be great" in response to a direct scoping question, treat that as an explicit signal to mark the item optional/stretch-goal in the SOW rather than a confirmed requirement — do not upgrade it to firm scope on your own initiative.</li>
+          <li><strong>Confirm the stated tool boundary:</strong> If a stakeholder states a boundary on tooling (e.g. "we will only use MuleSoft to insert data into the target system" or "no contract-generation automation"), treat anything outside that boundary as explicitly out of scope, even if it was discussed elsewhere in the conversation.</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
 </div>
 <!-- END PANELS -->
 </main>
