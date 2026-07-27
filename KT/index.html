@@ -414,6 +414,7 @@ html,body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text
   <button class="tab-btn" data-tab="methodology">Methodology</button>
   <button class="tab-btn" data-tab="idp">IDP Scope</button>
   <button class="tab-btn" data-tab="anypoint">Anypoint Scope</button>
+  <button class="tab-btn" data-tab="flow">Flow Scope</button>
   <button class="tab-btn" data-tab="pricing">Pricing</button>
   <button class="tab-btn" data-tab="sow">SOW Guide</button>
   <button class="tab-btn tab-live" data-tab="checklists">
@@ -755,6 +756,52 @@ html,body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text
   </div>
 </div>
 
+<!-- ════════════════ FLOW SCOPE ════════════════ -->
+<div id="tab-flow" class="tab-panel">
+
+  <div class="callout blue" style="margin-bottom:24px">
+    <strong>MuleSoft for Flow</strong> lets Salesforce admins invoke MuleSoft-published APIs directly from Flow Builder — no Anypoint Studio development required. Scope it like lightweight Anypoint, but confirm the trigger lives inside Salesforce's runtime. Always validate licensing against the current MuleSoft for Flow datasheet before quoting.
+  </div>
+
+  <div class="section">
+    <div class="section-title"><i data-lucide="list-checks"></i>Discovery Checklist — 4 Questions</div>
+    <div class="q-list">
+      <div class="q-item"><span class="q-num">1</span>Is the requirement being triggered from <strong>inside Salesforce Flow Builder</strong>, or does it need a standalone API/process outside Salesforce's runtime? <span class="badge complex" style="margin-left:6px">Standalone → use Anypoint tab instead</span></div>
+      <div class="q-item"><span class="q-num">2</span>Does the target/source already have a MuleSoft-published <strong>"Flow-ready" action</strong>, or would a custom API need to be built and exposed to Flow? <span class="badge complex" style="margin-left:6px">Custom API → additional effort</span></div>
+      <div class="q-item"><span class="q-num">3</span>Same <strong>source/target connectivity questions</strong> still apply — Flow does not remove the cloud/on-prem/API question. Score connectivity complexity using the matrix below.</div>
+      <div class="q-item"><span class="q-num">4</span><strong>Confirm licensing/consumption model</strong> with the MuleSoft for Flow datasheet before quoting. Do not assume it uses the same model as core Anypoint.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><i data-lucide="network"></i>Connectivity Complexity Matrix</div>
+    <div class="callout" style="margin-bottom:14px"><strong>Apply once to source, then again to target.</strong> The higher of the two scores sets the connectivity baseline — same rule as Anypoint.</div>
+    <div class="matrix-wrap">
+      <table class="matrix">
+        <thead><tr><th>Deployment</th><th>API Access</th><th>Complexity</th></tr></thead>
+        <tbody>
+          <tr><td>Cloud</td><td>API-enabled</td><td><span class="badge simple">Simple</span></td></tr>
+          <tr><td>On-Prem</td><td>API connectivity available</td><td><span class="badge medium">Medium</span></td></tr>
+          <tr><td>On-Prem</td><td>No API connectivity</td><td><span class="badge complex">Complex — custom coding required</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><i data-lucide="zap"></i>Key Differences from Core Anypoint</div>
+    <div class="card">
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div><span class="badge navy" style="margin-right:8px">Runtime</span><strong>Salesforce Flow Builder is the orchestrator</strong> — MuleSoft is invoked as an action inside a Flow, not as a standalone integration process.</div>
+        <div style="border-top:1px solid var(--border);padding-top:10px"><span class="badge navy" style="margin-right:8px">Licensing</span><strong>Different consumption model</strong> — do not quote Anypoint pricing for a Flow deal. Verify with the MuleSoft for Flow datasheet every time.</div>
+        <div style="border-top:1px solid var(--border);padding-top:10px"><span class="badge navy" style="margin-right:8px">Actions</span><strong>"Flow-ready" actions must exist or be built</strong> — if the target system doesn't have a published Flow action, building one is a distinct effort line, not a free config step.</div>
+        <div style="border-top:1px solid var(--border);padding-top:10px"><span class="badge navy" style="margin-right:8px">Audience</span><strong>Salesforce admins, not developers</strong> — the buyer/user is typically a SF admin. Frame effort and complexity language accordingly in the SOW.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
 <!-- ════════════════ PRICING ════════════════ -->
 <div id="tab-pricing" class="tab-panel">
 
@@ -932,6 +979,44 @@ html,body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text
     </div>
   </div>
 
+  <!-- Flow Checklist -->
+  <div class="checklist-block">
+    <div class="checklist-header">
+      <div>
+        <div class="checklist-name"><i data-lucide="zap"></i>MuleSoft for Flow Checklist</div>
+        <div class="checklist-meta">
+          <span id="flow-count">0</span> / <span id="flow-total">8</span> confirmed
+          <div class="progress-bar"><div class="progress-fill" id="flow-progress" style="width:0%"></div></div>
+        </div>
+      </div>
+      <button class="reset-btn" onclick="resetChecklist('flow')"><i data-lucide="rotate-ccw"></i> New Call</button>
+    </div>
+
+    <div class="cl-section">
+      <div class="cl-section-title">Flow Qualification</div>
+      <div class="cl-item" data-group="flow" onclick="toggleCheck(this)"><div class="cl-checkbox"><div class="cl-checkbox-inner"><i data-lucide="check"></i></div></div><div class="cl-text">Trigger confirmed as inside Salesforce Flow Builder (not a standalone process)</div></div>
+      <div class="cl-item" data-group="flow" onclick="toggleCheck(this)"><div class="cl-checkbox"><div class="cl-checkbox-inner"><i data-lucide="check"></i></div></div><div class="cl-text">Flow-ready action exists for target/source — or custom API build scoped as separate effort</div></div>
+      <div class="cl-item" data-group="flow" onclick="toggleCheck(this)"><div class="cl-checkbox"><div class="cl-checkbox-inner"><i data-lucide="check"></i></div></div><div class="cl-text">Licensing/consumption model confirmed with MuleSoft for Flow datasheet</div></div>
+    </div>
+
+    <div class="cl-section">
+      <div class="cl-section-title">Source System</div>
+      <div class="cl-item" data-group="flow" onclick="toggleCheck(this)"><div class="cl-checkbox"><div class="cl-checkbox-inner"><i data-lucide="check"></i></div></div><div class="cl-text">Source system name + version confirmed</div></div>
+      <div class="cl-item" data-group="flow" onclick="toggleCheck(this)"><div class="cl-checkbox"><div class="cl-checkbox-inner"><i data-lucide="check"></i></div></div><div class="cl-text">Source: API-enabled? Cloud or on-prem? (Connectivity complexity scored)</div></div>
+    </div>
+
+    <div class="cl-section">
+      <div class="cl-section-title">Target System</div>
+      <div class="cl-item" data-group="flow" onclick="toggleCheck(this)"><div class="cl-checkbox"><div class="cl-checkbox-inner"><i data-lucide="check"></i></div></div><div class="cl-text">Target system name + version confirmed</div></div>
+      <div class="cl-item" data-group="flow" onclick="toggleCheck(this)"><div class="cl-checkbox"><div class="cl-checkbox-inner"><i data-lucide="check"></i></div></div><div class="cl-text">Target: API-enabled? Cloud or on-prem? (Connectivity complexity scored)</div></div>
+    </div>
+
+    <div class="cl-section">
+      <div class="cl-section-title">Scope</div>
+      <div class="cl-item" data-group="flow" onclick="toggleCheck(this)"><div class="cl-checkbox"><div class="cl-checkbox-inner"><i data-lucide="check"></i></div></div><div class="cl-text">Business objects and actions confirmed — what exactly moves between systems and in which direction?</div></div>
+    </div>
+  </div>
+
 </div>
 <!-- END PANELS -->
 </main>
@@ -978,6 +1063,7 @@ function resetChecklist(group){
 
 updateProgress('idp');
 updateProgress('any');
+updateProgress('flow');
 </script>
 </body>
 </html>
