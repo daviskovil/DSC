@@ -8,194 +8,407 @@
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --navy:#13192b;--navy-2:#1c2538;--navy-3:#222d42;
-  --red:#ed1c24;--bg:#eef0f4;--card:#fff;
-  --text:#1a1f36;--muted:#6b7280;--border:#e5e7eb;
-  --simple:#16a34a;--simple-bg:rgba(22,163,74,.1);--simple-border:rgba(22,163,74,.25);
-  --medium:#b45309;--medium-bg:rgba(245,158,11,.12);--medium-border:rgba(245,158,11,.3);
-  --complex:#dc2626;--complex-bg:rgba(220,38,38,.1);--complex-border:rgba(220,38,38,.25);
-}
-html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);}
 
-/* ── header ── */
-.site-header{background:var(--navy);padding:0 28px;height:54px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;position:sticky;top:0;z-index:100;}
+:root{
+  --navy:#13192b;
+  --navy-2:#1c2538;
+  --red:#ed1c24;
+  --white:#ffffff;
+  --bg:#f5f7fb;
+  --card:#ffffff;
+  --text:#0f1524;
+  --sub:#4a5068;
+  --muted:#7c849c;
+  --border:#e3e7f0;
+  --border-strong:#c8cedc;
+  --simple:#16a34a;--simple-bg:#f0fdf4;--simple-bd:rgba(22,163,74,.22);
+  --medium:#b45309;--medium-bg:#fffbeb;--medium-bd:rgba(180,83,9,.28);
+  --complex:#dc2626;--complex-bg:#fef2f2;--complex-bd:rgba(220,38,38,.22);
+}
+
+html,body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100%;}
+
+/* ── HEADER ──────────────────────────────────── */
+.site-header{
+  background:var(--navy);
+  padding:0 28px;
+  height:52px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+}
 .logo{display:flex;align-items:center;gap:8px;text-decoration:none;}
 .logo-name{font-family:'Outfit',sans-serif;font-weight:900;font-size:16px;color:#fff;letter-spacing:-.3px;}
-.logo-name span{color:var(--red);}
-.header-title{font-family:'Outfit',sans-serif;font-weight:700;font-size:15px;color:rgba(255,255,255,.7);letter-spacing:-.1px;}
-.header-badge{font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:rgba(255,255,255,.35);background:rgba(255,255,255,.07);padding:4px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.1);}
+.logo-name em{font-style:normal;color:var(--red);}
+.header-title{font-family:'Outfit',sans-serif;font-weight:700;font-size:14px;color:rgba(255,255,255,.55);letter-spacing:-.1px;}
+.header-badge{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.38);background:rgba(255,255,255,.07);padding:4px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.1);}
 
-/* ── tabs ── */
-.tab-nav{background:var(--navy-2);border-bottom:1px solid rgba(255,255,255,.06);padding:0 24px;display:flex;gap:2px;overflow-x:auto;flex-shrink:0;position:sticky;top:54px;z-index:99;}
+/* ── TAB NAV ─────────────────────────────────── */
+.tab-nav{
+  background:var(--white);
+  border-bottom:1px solid var(--border);
+  padding:0 24px;
+  display:flex;
+  align-items:stretch;
+  gap:0;
+  overflow-x:auto;
+  position:sticky;top:52px;z-index:99;
+}
 .tab-nav::-webkit-scrollbar{height:0;}
-.tab-btn{background:none;border:none;padding:12px 16px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:rgba(255,255,255,.4);cursor:pointer;white-space:nowrap;position:relative;transition:color .15s;}
-.tab-btn:hover{color:rgba(255,255,255,.75);}
-.tab-btn.active{color:#fff;font-weight:600;}
-.tab-btn.active::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--red);border-radius:2px 2px 0 0;}
-.tab-btn.highlight{color:#f59e0b;}
-.tab-btn.highlight.active{color:#f59e0b;}
 
-/* ── layout ── */
-.content{max-width:960px;margin:0 auto;padding:28px 20px 60px;}
+.tab-btn{
+  background:none;border:none;
+  padding:0 15px;
+  height:46px;
+  font-family:'DM Sans',sans-serif;
+  font-size:13px;font-weight:500;
+  color:var(--muted);
+  cursor:pointer;white-space:nowrap;
+  position:relative;
+  transition:color .14s;
+  flex-shrink:0;
+}
+.tab-btn:hover{color:var(--text);}
+.tab-btn.active{color:var(--navy);font-weight:700;}
+.tab-btn.active::after{
+  content:'';position:absolute;
+  bottom:0;left:10px;right:10px;
+  height:2px;background:var(--red);
+  border-radius:2px 2px 0 0;
+}
+
+/* Live Checklists — special pill */
+.tab-live{
+  display:flex;align-items:center;gap:6px;
+  margin-left:auto;
+  padding:0 15px;
+  font-weight:600;
+  color:var(--red) !important;
+}
+.tab-live .live-dot{
+  width:7px;height:7px;
+  border-radius:50%;
+  background:var(--red);
+  animation:blink 1.6s ease-in-out infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.tab-live.active::after{left:10px;right:10px;}
+
+/* ── LAYOUT ──────────────────────────────────── */
+.content{max-width:960px;margin:0 auto;padding:32px 24px 72px;}
 .tab-panel{display:none;}
 .tab-panel.active{display:block;}
 
-/* ── section ── */
-.section{margin-bottom:28px;}
-.section-title{font-family:'Outfit',sans-serif;font-weight:800;font-size:17px;color:var(--text);margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--border);display:flex;align-items:center;gap:8px;}
-.section-title [data-lucide]{width:16px;height:16px;color:var(--red);flex-shrink:0;}
+/* ── SECTION ─────────────────────────────────── */
+.section{margin-bottom:36px;}
+.section-title{
+  font-family:'Outfit',sans-serif;
+  font-weight:800;font-size:19px;
+  letter-spacing:-.35px;
+  color:var(--text);
+  margin-bottom:18px;
+  display:flex;align-items:center;gap:10px;
+}
+.section-title [data-lucide]{width:18px;height:18px;color:var(--red);flex-shrink:0;}
 
-/* ── cards ── */
+/* ── CALLOUTS ────────────────────────────────── */
+.callout{
+  border-radius:12px;
+  padding:14px 18px;
+  margin-bottom:14px;
+  font-size:13.5px;
+  line-height:1.65;
+}
+.callout strong{font-weight:700;}
+.callout.blue{background:#eef5ff;color:#1a3560;border:1px solid #c2d8fa;}
+.callout.red{background:#fff2f2;color:#7c1c1c;border:1px solid #f9c0c0;}
+.callout:not(.blue):not(.red){background:#fffbeb;color:#78350f;border:1px solid #fde68a;}
+
+/* ── PRODUCT ROWS (Overview) ─────────────────── */
+.product-rows{display:flex;flex-direction:column;gap:10px;margin-bottom:24px;}
+.product-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:18px 20px;
+  display:flex;align-items:center;gap:18px;
+  transition:border-color .15s,box-shadow .15s;
+}
+.product-card:hover{border-color:var(--border-strong);box-shadow:0 4px 16px rgba(15,21,36,.05);}
+.product-ico{
+  width:50px;height:50px;
+  border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.product-ico [data-lucide]{width:22px;height:22px;}
+.product-meta{flex:1;min-width:0;}
+.product-tag{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px;}
+.product-name{font-family:'Outfit',sans-serif;font-weight:800;font-size:17px;color:var(--text);letter-spacing:-.2px;margin-bottom:5px;}
+.product-desc{font-size:13px;color:var(--sub);line-height:1.55;}
+
+/* ── GENERIC CARD / CARD-GRID ────────────────── */
 .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:12px;}
-.card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;}
-@media(max-width:680px){.card-grid{grid-template-columns:1fr;}}
-.product-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;}
-.product-card-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;}
-.product-ico{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.product-ico [data-lucide]{width:18px;height:18px;}
-.product-tag{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-bottom:3px;}
-.product-name{font-family:'Outfit',sans-serif;font-weight:800;font-size:16px;color:var(--text);}
-.product-desc{font-size:13px;color:var(--muted);line-height:1.6;}
+.card-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:24px;}
+@media(max-width:640px){.card-grid{grid-template-columns:1fr;}}
 
-/* ── steps ── */
-.steps{display:flex;flex-direction:column;gap:12px;}
-.step{display:flex;gap:16px;align-items:flex-start;}
-.step-num{width:28px;height:28px;border-radius:50%;background:var(--red);color:#fff;font-family:'Outfit',sans-serif;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
-.step-body{flex:1;}
-.step-title{font-weight:700;font-size:14px;color:var(--text);margin-bottom:3px;}
-.step-desc{font-size:13px;color:var(--muted);line-height:1.55;}
-
-/* ── rules ── */
+/* ── RULE CARDS ──────────────────────────────── */
 .rules-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
 @media(max-width:640px){.rules-grid{grid-template-columns:1fr;}}
-.rule-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;}
-.rule-title{font-weight:700;font-size:13px;color:var(--text);margin-bottom:5px;display:flex;align-items:center;gap:7px;}
-.rule-title [data-lucide]{width:13px;height:13px;color:var(--red);flex-shrink:0;}
-.rule-desc{font-size:12.5px;color:var(--muted);line-height:1.55;}
+.rule-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:16px 18px;
+  transition:border-color .15s,box-shadow .15s;
+}
+.rule-card:hover{border-color:var(--border-strong);box-shadow:0 3px 10px rgba(15,21,36,.04);}
+.rule-title{font-weight:700;font-size:13.5px;color:var(--text);margin-bottom:6px;display:flex;align-items:center;gap:7px;}
+.rule-title [data-lucide]{width:14px;height:14px;color:var(--red);flex-shrink:0;}
+.rule-desc{font-size:12.5px;color:var(--sub);line-height:1.6;}
 
-/* ── checklist (detail) ── */
-.q-list{display:flex;flex-direction:column;gap:10px;}
-.q-item{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;font-size:13.5px;color:var(--text);line-height:1.55;}
-.q-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--navy);color:#fff;font-family:'Outfit',sans-serif;font-weight:700;font-size:10px;margin-right:8px;flex-shrink:0;vertical-align:middle;}
+/* ── TIMELINE STEPS ──────────────────────────── */
+.steps{display:flex;flex-direction:column;position:relative;}
+
+.step{
+  display:flex;gap:20px;
+  align-items:flex-start;
+  position:relative;
+  padding-bottom:32px;
+}
+.step:last-child{padding-bottom:0;}
+
+/* connecting line between circles */
+.step:not(:last-child)::after{
+  content:'';
+  position:absolute;
+  left:19px;
+  top:44px;
+  bottom:0;
+  width:2px;
+  background:linear-gradient(to bottom, rgba(237,28,36,.3), rgba(237,28,36,.06));
+}
+
+.step-num{
+  width:40px;height:40px;
+  border-radius:50%;
+  background:var(--red);
+  color:#fff;
+  font-family:'Outfit',sans-serif;
+  font-weight:800;font-size:15px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+  position:relative;z-index:1;
+  box-shadow:0 0 0 5px rgba(237,28,36,.1);
+}
+.step-body{flex:1;padding-top:8px;}
+.step-title{font-weight:700;font-size:15px;color:var(--text);margin-bottom:5px;}
+.step-desc{font-size:13px;color:var(--sub);line-height:1.65;}
+
+/* ── QUESTION LIST ───────────────────────────── */
+.q-list{display:flex;flex-direction:column;gap:8px;}
+.q-item{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:14px 18px;
+  font-size:13.5px;color:var(--text);line-height:1.65;
+  transition:border-color .12s;
+}
+.q-item:hover{border-color:var(--border-strong);}
+.q-num{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:24px;height:24px;
+  border-radius:50%;
+  background:var(--navy);
+  color:#fff;
+  font-family:'Outfit',sans-serif;font-weight:800;font-size:10px;
+  margin-right:10px;
+  flex-shrink:0;vertical-align:middle;
+}
 .q-badge{float:right;margin-left:8px;}
 
-/* ── complexity tables ── */
-.matrix-wrap{overflow-x:auto;margin-bottom:20px;}
+/* ── CHIPS ───────────────────────────────────── */
+.chip-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+.chip{padding:3px 11px;border-radius:20px;font-size:11.5px;font-weight:600;border:1px solid var(--border);background:var(--bg);color:var(--muted);}
+
+/* ── BADGES ──────────────────────────────────── */
+.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;vertical-align:middle;}
+.badge.simple{background:var(--simple-bg);color:var(--simple);border:1px solid var(--simple-bd);}
+.badge.medium{background:var(--medium-bg);color:var(--medium);border:1px solid var(--medium-bd);}
+.badge.complex{background:var(--complex-bg);color:var(--complex);border:1px solid var(--complex-bd);}
+.badge.navy{background:rgba(19,25,43,.07);color:var(--navy-2);border:1px solid rgba(19,25,43,.15);}
+
+/* ── TABLES ──────────────────────────────────── */
+.matrix-wrap{
+  overflow-x:auto;
+  margin-bottom:20px;
+  border-radius:12px;
+  border:1px solid var(--border);
+}
 .matrix{width:100%;border-collapse:collapse;font-size:13px;}
-.matrix th{background:var(--navy);color:#fff;padding:10px 14px;text-align:left;font-family:'Outfit',sans-serif;font-weight:700;font-size:12px;letter-spacing:.3px;}
-.matrix th:first-child{border-radius:8px 0 0 0;}
-.matrix th:last-child{border-radius:0 8px 0 0;}
-.matrix td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top;background:var(--card);}
-.matrix tr:last-child td{border-bottom:none;}
-.matrix tr:last-child td:first-child{border-radius:0 0 0 8px;}
-.matrix tr:last-child td:last-child{border-radius:0 0 8px 0;}
-.matrix td:first-child{font-weight:600;color:var(--text);width:28%;}
+.matrix thead tr{background:var(--navy);}
+.matrix th{
+  padding:11px 16px;text-align:left;
+  font-family:'Outfit',sans-serif;font-weight:700;font-size:11px;
+  letter-spacing:.06em;text-transform:uppercase;
+  color:rgba(255,255,255,.75);
+}
+.matrix tbody tr:nth-child(even){background:#f8fafd;}
+.matrix tbody tr:nth-child(odd){background:var(--card);}
+.matrix td{padding:11px 16px;border-bottom:1px solid var(--border);vertical-align:middle;}
+.matrix tbody tr:last-child td{border-bottom:none;}
+.matrix td:first-child{font-weight:600;color:var(--text);width:30%;}
 
-/* ── badges ── */
-.badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;}
-.badge.simple{background:var(--simple-bg);color:var(--simple);border:1px solid var(--simple-border);}
-.badge.medium{background:var(--medium-bg);color:var(--medium);border:1px solid var(--medium-border);}
-.badge.complex{background:var(--complex-bg);color:var(--complex);border:1px solid var(--complex-border);}
-.badge.navy{background:rgba(19,25,43,.08);color:var(--navy-2);border:1px solid rgba(19,25,43,.15);}
-
-/* ── callout box ── */
-.callout{background:#fefce8;border:1px solid #fde68a;border-left:4px solid #f59e0b;border-radius:8px;padding:13px 16px;margin-bottom:12px;font-size:13px;color:#78350f;line-height:1.55;}
-.callout.red{background:#fef2f2;border-color:#fecaca;border-left-color:var(--red);color:#7f1d1d;}
-.callout.blue{background:#eff6ff;border-color:#bfdbfe;border-left-color:#3b82f6;color:#1e3a5f;}
-.callout strong{font-weight:700;}
-
-/* ── pricing table ── */
+/* ── PRICE TABLE ─────────────────────────────── */
 .price-table{width:100%;border-collapse:collapse;font-size:13px;}
-.price-table th{background:var(--navy);color:#fff;padding:11px 16px;text-align:left;font-family:'Outfit',sans-serif;font-weight:700;font-size:12px;letter-spacing:.3px;}
-.price-table th:first-child{border-radius:8px 0 0 0;}
-.price-table th:last-child{border-radius:0 8px 0 0;}
-.price-table td{padding:11px 16px;border-bottom:1px solid var(--border);background:var(--card);vertical-align:middle;}
-.price-table tr:last-child td{border-bottom:none;}
-.price-table tr:last-child td:first-child{border-radius:0 0 0 8px;}
-.price-table tr:last-child td:last-child{border-radius:0 0 8px 0;}
-.price-val{font-family:'Outfit',sans-serif;font-weight:800;font-size:17px;color:var(--text);}
+.price-table thead tr{background:var(--navy);}
+.price-table th{padding:11px 16px;text-align:left;font-family:'Outfit',sans-serif;font-weight:700;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.75);}
+.price-table tbody tr:nth-child(even){background:#f8fafd;}
+.price-table tbody tr:nth-child(odd){background:var(--card);}
+.price-table td{padding:13px 16px;border-bottom:1px solid var(--border);vertical-align:middle;}
+.price-table tbody tr:last-child td{border-bottom:none;}
+.price-val{font-family:'Outfit',sans-serif;font-weight:800;font-size:18px;color:var(--text);}
 .price-note{font-size:11.5px;color:var(--muted);margin-top:2px;}
 
-/* ── SOW list ── */
-.sow-list{display:flex;flex-direction:column;gap:8px;}
-.sow-item{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:13px 16px;}
-.sow-n{font-family:'Outfit',sans-serif;font-weight:800;font-size:13px;color:var(--red);flex-shrink:0;width:24px;}
-.sow-title{font-weight:700;font-size:14px;color:var(--text);margin-bottom:3px;}
-.sow-desc{font-size:12.5px;color:var(--muted);line-height:1.5;}
-
-/* ── LIVE CHECKLISTS ── */
-.checklist-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
-.checklist-meta{font-size:13px;color:var(--muted);}
-.progress-bar{width:160px;height:6px;background:#e5e7eb;border-radius:3px;overflow:hidden;display:inline-block;vertical-align:middle;margin-left:8px;}
-.progress-fill{height:100%;background:var(--red);border-radius:3px;transition:width .2s;}
-.reset-btn{padding:7px 16px;background:var(--navy);color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .15s;}
-.reset-btn:hover{background:var(--navy-3);}
-.reset-btn [data-lucide]{width:13px;height:13px;}
-
-.cl-section{margin-bottom:20px;}
-.cl-section-title{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;padding-left:4px;}
-.cl-item{display:flex;align-items:flex-start;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:6px;cursor:pointer;transition:background .12s,border-color .12s;}
-.cl-item:hover{background:#f9fafb;border-color:#d1d5db;}
-.cl-item.checked{background:#f0fdf4;border-color:rgba(22,163,74,.3);}
-.cl-checkbox{width:18px;height:18px;border:2px solid #d1d5db;border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .12s;}
-.cl-item.checked .cl-checkbox{background:var(--simple);border-color:var(--simple);}
-.cl-checkbox-inner{display:none;}
-.cl-item.checked .cl-checkbox-inner{display:block;}
-.cl-checkbox-inner [data-lucide]{width:11px;height:11px;color:#fff;stroke-width:3;}
-.cl-text{font-size:13.5px;color:var(--text);line-height:1.5;flex:1;}
-.cl-item.checked .cl-text{color:var(--muted);text-decoration:line-through;text-decoration-color:rgba(107,114,128,.4);}
-
-/* ── info chips ── */
-.chip-row{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px;}
-.chip{padding:4px 12px;border-radius:20px;font-size:11.5px;font-weight:600;border:1px solid var(--border);background:var(--bg);color:var(--muted);}
-
-/* ── source list ── */
+/* ── SOURCE LIST ─────────────────────────────── */
 .source-list{display:flex;flex-direction:column;gap:8px;}
-.source-item{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:13px 16px;}
+.source-item{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:14px 18px;}
 .source-name{font-weight:700;font-size:13.5px;color:var(--text);margin-bottom:3px;}
-.source-desc{font-size:12.5px;color:var(--muted);line-height:1.55;}
+.source-desc{font-size:12.5px;color:var(--sub);line-height:1.55;}
 
-/* ── additional questions ── */
-.add-qs{display:flex;flex-direction:column;gap:8px;}
-.add-q{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 16px;font-size:13px;color:var(--text);line-height:1.55;}
-.add-q-num{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--bg);border:1px solid var(--border);font-family:'Outfit',sans-serif;font-weight:700;font-size:10px;color:var(--muted);margin-right:7px;flex-shrink:0;vertical-align:middle;}
+/* ── ADD'L QUESTIONS ─────────────────────────── */
+.add-qs{display:flex;flex-direction:column;gap:7px;}
+.add-q{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 16px;font-size:13px;color:var(--text);line-height:1.6;}
+.add-q-num{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--border);font-family:'Outfit',sans-serif;font-weight:700;font-size:10px;color:var(--muted);margin-right:7px;flex-shrink:0;vertical-align:middle;}
 
-/* ── collapsible ── */
+/* ── COLLAPSIBLE ─────────────────────────────── */
 .collapsible{margin-bottom:12px;}
-.collapsible-toggle{width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:13px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;text-align:left;transition:background .12s;}
-.collapsible-toggle:hover{background:#f9fafb;}
-.collapsible-toggle.open{border-radius:10px 10px 0 0;border-bottom-color:transparent;}
+.collapsible-toggle{
+  width:100%;background:var(--card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:14px 18px;
+  display:flex;align-items:center;justify-content:space-between;
+  cursor:pointer;text-align:left;
+  transition:background .12s,border-color .12s;
+}
+.collapsible-toggle:hover{background:#f8fafd;border-color:var(--border-strong);}
+.collapsible-toggle.open{border-radius:12px 12px 0 0;border-bottom-color:transparent;}
 .collapsible-title{font-weight:700;font-size:14px;color:var(--text);display:flex;align-items:center;gap:8px;}
 .collapsible-title [data-lucide]{width:14px;height:14px;color:var(--red);}
 .collapsible-arrow{width:16px;height:16px;color:var(--muted);transition:transform .2s;flex-shrink:0;}
 .collapsible-toggle.open .collapsible-arrow{transform:rotate(180deg);}
-.collapsible-body{background:var(--card);border:1px solid var(--border);border-top:none;border-radius:0 0 10px 10px;padding:16px;}
+.collapsible-body{background:var(--card);border:1px solid var(--border);border-top:none;border-radius:0 0 12px 12px;padding:16px 18px;}
 .collapsible-body.hidden{display:none;}
 
-/* ── responsive ── */
+/* ── SOW LIST ────────────────────────────────── */
+.sow-list{display:flex;flex-direction:column;gap:8px;}
+.sow-item{
+  display:flex;gap:16px;align-items:flex-start;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:12px;padding:14px 18px;
+  transition:border-color .12s;
+}
+.sow-item:hover{border-color:var(--border-strong);}
+.sow-n{font-family:'Outfit',sans-serif;font-weight:800;font-size:12px;color:var(--red);flex-shrink:0;width:26px;padding-top:1px;}
+.sow-title{font-weight:700;font-size:13.5px;color:var(--text);margin-bottom:3px;}
+.sow-desc{font-size:12.5px;color:var(--sub);line-height:1.5;}
+
+/* ── LIVE CHECKLISTS ─────────────────────────── */
+.checklist-block{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:22px 24px;
+  margin-bottom:20px;
+}
+.checklist-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:18px;}
+.checklist-name{font-family:'Outfit',sans-serif;font-weight:800;font-size:17px;letter-spacing:-.2px;color:var(--text);display:flex;align-items:center;gap:9px;margin-bottom:5px;}
+.checklist-name [data-lucide]{width:17px;height:17px;color:var(--red);}
+.checklist-meta{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:8px;}
+.progress-bar{width:120px;height:5px;background:var(--border);border-radius:3px;overflow:hidden;display:inline-block;vertical-align:middle;}
+.progress-fill{height:100%;background:var(--red);border-radius:3px;transition:width .25s ease;}
+
+.reset-btn{
+  padding:8px 16px;
+  background:var(--navy);color:#fff;
+  border:none;border-radius:10px;
+  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;
+  cursor:pointer;
+  display:flex;align-items:center;gap:6px;
+  flex-shrink:0;
+  transition:background .14s;
+}
+.reset-btn:hover{background:var(--navy-2);}
+.reset-btn [data-lucide]{width:13px;height:13px;}
+
+.cl-section{margin-bottom:16px;}
+.cl-section-title{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;padding-left:2px;}
+
+.cl-item{
+  display:flex;align-items:flex-start;gap:12px;
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:11px 14px;
+  margin-bottom:6px;
+  cursor:pointer;
+  transition:background .12s,border-color .12s;
+  user-select:none;
+}
+.cl-item:hover{background:#eff1f8;border-color:var(--border-strong);}
+.cl-item.checked{background:#f0fdf4;border-color:rgba(22,163,74,.28);}
+
+.cl-checkbox{
+  width:20px;height:20px;
+  border:2px solid var(--border-strong);
+  border-radius:6px;
+  flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  margin-top:1px;
+  transition:all .12s;
+  background:var(--white);
+}
+.cl-item.checked .cl-checkbox{background:var(--simple);border-color:var(--simple);}
+.cl-checkbox-inner{display:none;}
+.cl-item.checked .cl-checkbox-inner{display:block;}
+.cl-checkbox-inner [data-lucide]{width:12px;height:12px;color:#fff;stroke-width:3;}
+.cl-text{font-size:13px;color:var(--text);line-height:1.55;flex:1;}
+.cl-item.checked .cl-text{color:var(--muted);text-decoration:line-through;text-decoration-color:rgba(107,114,128,.35);}
+
+/* ── RESPONSIVE ──────────────────────────────── */
 @media(max-width:640px){
-  .content{padding:20px 12px 48px;}
-  .matrix th,.matrix td,.price-table th,.price-table td{padding:8px 10px;font-size:12px;}
+  .content{padding:20px 14px 52px;}
+  .site-header{padding:0 16px;}
+  .header-title,.header-badge{display:none;}
+  .product-card{flex-wrap:wrap;}
+  .matrix th,.matrix td,.price-table th,.price-table td{padding:9px 11px;font-size:12px;}
+  .checklist-block{padding:16px;}
+}
+@media(prefers-reduced-motion:reduce){
+  .live-dot{animation:none;}
+  .step:not(:last-child)::after{display:none;}
 }
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
+<!-- ── HEADER ──────────────────────────────── -->
 <header class="site-header">
   <a href="/" class="logo">
     <svg viewBox="156 275 78 66" xmlns="http://www.w3.org/2000/svg" style="width:22px;height:18px">
       <path fill="#ed1c24" d="m195.02,287.72v-12.49c21.94,0,38.48,10.29,38.48,23.93s-16.55,23.93-38.48,23.93v-12.49c15.86,0,25.99-6.77,25.99-11.44s-10.13-11.44-25.99-11.44Z"/>
       <path fill="#ffffff" d="m195.02,327.75v12.49c-21.94,0-38.48-10.29-38.48-23.93s16.55-23.93,38.48-23.93v12.49c-15.86,0-25.99,6.77-25.99,11.44s10.13,11.44,25.99,11.44Z"/>
     </svg>
-    <div class="logo-name">data<span>skate</span></div>
+    <div class="logo-name">data<em>skate</em></div>
   </a>
   <div class="header-title">Scoping &amp; Pricing KT</div>
   <div class="header-badge">MuleSoft Practice</div>
 </header>
 
-<!-- TAB NAV -->
+<!-- ── TAB NAV ─────────────────────────────── -->
 <nav class="tab-nav">
   <button class="tab-btn active" data-tab="overview">Overview</button>
   <button class="tab-btn" data-tab="methodology">Methodology</button>
@@ -203,51 +416,57 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
   <button class="tab-btn" data-tab="anypoint">Anypoint Scope</button>
   <button class="tab-btn" data-tab="pricing">Pricing</button>
   <button class="tab-btn" data-tab="sow">SOW Guide</button>
-  <button class="tab-btn highlight" data-tab="checklists">⚡ Live Checklists</button>
+  <button class="tab-btn tab-live" data-tab="checklists">
+    <span class="live-dot"></span> Live Checklists
+  </button>
 </nav>
 
 <main class="content">
 
-<!-- ════════════════════════════ OVERVIEW ════════════════════════════ -->
+<!-- ════════════════ OVERVIEW ════════════════ -->
 <div id="tab-overview" class="tab-panel active">
 
-  <div class="callout blue" style="margin-bottom:20px;">
-    <strong>How to use this guide:</strong> Use the <strong>IDP Scope</strong> or <strong>Anypoint Scope</strong> tabs as your call reference. Score complexity first, then go to <strong>Pricing</strong>. For live calls, open <strong>⚡ Live Checklists</strong> and tick items in real time.
+  <div class="callout blue" style="margin-bottom:24px">
+    <strong>How to use this guide:</strong> Use the <strong>IDP Scope</strong> or <strong>Anypoint Scope</strong> tabs as your call reference. Score complexity first, then go to <strong>Pricing</strong>. For live calls, open <strong>Live Checklists</strong> and tick items in real time.
   </div>
 
   <div class="section">
     <div class="section-title"><i data-lucide="layers"></i>Product Lines</div>
-    <div class="card-grid">
+    <div class="product-rows">
+
       <div class="product-card">
-        <div class="product-card-head">
-          <div class="product-ico" style="background:rgba(237,28,36,.12)"><i data-lucide="file-scan" style="color:#ed1c24"></i></div>
-          <div>
-            <div class="product-tag" style="color:#ed1c24">Document AI</div>
-            <div class="product-name">MuleSoft IDP</div>
-          </div>
+        <div class="product-ico" style="background:rgba(237,28,36,.1)">
+          <i data-lucide="file-scan" style="color:#ed1c24"></i>
         </div>
-        <div class="product-desc">Extracts structured data from unstructured documents (PDF, image, Word, Excel, scans, faxes) and classifies document types for downstream delivery or human review.</div>
+        <div class="product-meta">
+          <div class="product-tag" style="color:#ed1c24">Document AI</div>
+          <div class="product-name">MuleSoft IDP</div>
+          <div class="product-desc">Extracts structured data from unstructured documents (PDF, image, Word, Excel, scans, faxes) and classifies document types for downstream delivery or human review.</div>
+        </div>
       </div>
+
       <div class="product-card">
-        <div class="product-card-head">
-          <div class="product-ico" style="background:rgba(59,130,246,.12)"><i data-lucide="git-branch" style="color:#3b82f6"></i></div>
-          <div>
-            <div class="product-tag" style="color:#3b82f6">Integration / iPaaS</div>
-            <div class="product-name">Anypoint Platform</div>
-          </div>
+        <div class="product-ico" style="background:rgba(59,130,246,.1)">
+          <i data-lucide="git-branch" style="color:#3b82f6"></i>
         </div>
-        <div class="product-desc">Core integration layer — connects source → target systems via API, database, file, or event-driven flows. Moves, transforms, and delivers data between systems.</div>
+        <div class="product-meta">
+          <div class="product-tag" style="color:#3b82f6">Integration / iPaaS</div>
+          <div class="product-name">Anypoint Platform</div>
+          <div class="product-desc">Core integration layer — connects source → target systems via API, database, file, or event-driven flows. Moves, transforms, and delivers data between systems.</div>
+        </div>
       </div>
+
       <div class="product-card">
-        <div class="product-card-head">
-          <div class="product-ico" style="background:rgba(124,58,237,.12)"><i data-lucide="zap" style="color:#7c3aed"></i></div>
-          <div>
-            <div class="product-tag" style="color:#7c3aed">Salesforce-native</div>
-            <div class="product-name">MuleSoft for Flow</div>
-          </div>
+        <div class="product-ico" style="background:rgba(124,58,237,.1)">
+          <i data-lucide="zap" style="color:#7c3aed"></i>
         </div>
-        <div class="product-desc">Lightweight automation letting Salesforce admins invoke MuleSoft-published APIs directly from Flow Builder — no full Anypoint Studio development required.</div>
+        <div class="product-meta">
+          <div class="product-tag" style="color:#7c3aed">Salesforce-native</div>
+          <div class="product-name">MuleSoft for Flow</div>
+          <div class="product-desc">Lightweight automation letting Salesforce admins invoke MuleSoft-published APIs directly from Flow Builder — no full Anypoint Studio development required.</div>
+        </div>
       </div>
+
     </div>
   </div>
 
@@ -255,7 +474,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
     <strong>Critical rule:</strong> Most real deals blend IDP + Anypoint together — e.g. "extract data from a document, then push it into a target system." Never assume a customer request maps cleanly to one product.
   </div>
 
-  <div class="section" style="margin-top:20px;">
+  <div class="section" style="margin-top:24px">
     <div class="section-title"><i data-lucide="map"></i>When to use each tab</div>
     <div class="rules-grid">
       <div class="rule-card">
@@ -278,7 +497,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
   </div>
 </div>
 
-<!-- ════════════════════════════ METHODOLOGY ════════════════════════════ -->
+<!-- ════════════════ METHODOLOGY ════════════════ -->
 <div id="tab-methodology" class="tab-panel">
 
   <div class="section">
@@ -332,7 +551,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
       </div>
       <div class="rule-card">
         <div class="rule-title"><i data-lucide="server"></i>Cloud vs. on-prem = #1 cost driver</div>
-        <div class="rule-desc">Confirm deployment before pricing connectivity. Cloud vs. on-prem of source/target is the single biggest cost driver — not the data model. Ask this before any other technical question.</div>
+        <div class="rule-desc">Confirm deployment before pricing connectivity. Cloud vs. on-prem of source/target is the single biggest cost driver — not the data model.</div>
       </div>
       <div class="rule-card">
         <div class="rule-title"><i data-lucide="plug"></i>Legacy systems need connector strategy</div>
@@ -344,34 +563,34 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
       </div>
       <div class="rule-card">
         <div class="rule-title"><i data-lucide="scissors"></i>Large docs need splitting strategy up front</div>
-        <div class="rule-desc">PDFs >40 pages can run into thousands of pages (EliteExperts case). Custom chunking + monitoring needed. Treat >40-page and bundled files as an architecture decision, not a footnote.</div>
+        <div class="rule-desc">PDFs &gt;40 pages can run into thousands of pages (EliteExperts case). Custom chunking + monitoring needed. Treat &gt;40-page and bundled files as an architecture decision.</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ════════════════════════════ IDP SCOPE ════════════════════════════ -->
+<!-- ════════════════ IDP SCOPE ════════════════ -->
 <div id="tab-idp" class="tab-panel">
 
-  <div class="callout blue" style="margin-bottom:20px;">
+  <div class="callout blue" style="margin-bottom:24px">
     <strong>Use this for any deal involving document extraction or classification.</strong> Ask every question even if the answer seems obvious — the answer directly changes t-shirt size and price.
   </div>
 
   <div class="section">
     <div class="section-title"><i data-lucide="list-checks"></i>Discovery Checklist — 12 Questions</div>
     <div class="q-list">
-      <div class="q-item"><span class="q-num">1</span>What is the <strong>source system</strong> the documents are picked up from? <span class="chip-row" style="margin-top:6px;"><span class="chip">Email inbox</span><span class="chip">SharePoint</span><span class="chip">EAC/fax bridge</span><span class="chip">Scanning device</span><span class="chip">Secure portal</span><span class="chip">SFTP</span></span></div>
-      <div class="q-item"><span class="q-num">2</span>What <strong>file extensions</strong> are in scope? <span class="chip-row" style="margin-top:6px;"><span class="chip">PDF</span><span class="chip">Image/scan</span><span class="chip">Excel</span><span class="chip">Word</span><span class="chip">Other</span></span></div>
-      <div class="q-item"><span class="q-num">3</span>What <strong>distinct document types</strong> are in scope? Each is scoped and priced separately. <em style="color:var(--muted);font-size:12px;display:block;margin-top:4px;">e.g. invoice, PO, sales order, driver's license, prescription, lab report, insurance policy, inspection report, handwritten notes</em></div>
-      <div class="q-item"><span class="q-num">4</span>Is any document type routinely <strong>longer than 40 pages</strong>? <span class="badge complex" style="margin-left:6px;">→ Complex if yes</span></div>
-      <div class="q-item"><span class="q-num">5</span>Are document formats <strong>standard/consistent or variable</strong>? <span class="badge simple" style="margin-left:6px;">Standard → Simple</span> <span class="badge medium" style="margin-left:4px;">Some variance → Medium</span> <span class="badge complex" style="margin-left:4px;">High variance → Complex</span></div>
+      <div class="q-item"><span class="q-num">1</span>What is the <strong>source system</strong> the documents are picked up from? <span class="chip-row" style="margin-top:6px"><span class="chip">Email inbox</span><span class="chip">SharePoint</span><span class="chip">EAC/fax bridge</span><span class="chip">Scanning device</span><span class="chip">Secure portal</span><span class="chip">SFTP</span></span></div>
+      <div class="q-item"><span class="q-num">2</span>What <strong>file extensions</strong> are in scope? <span class="chip-row" style="margin-top:6px"><span class="chip">PDF</span><span class="chip">Image/scan</span><span class="chip">Excel</span><span class="chip">Word</span><span class="chip">Other</span></span></div>
+      <div class="q-item"><span class="q-num">3</span>What <strong>distinct document types</strong> are in scope? Each is scoped and priced separately. <em style="color:var(--muted);font-size:12px;display:block;margin-top:4px">e.g. invoice, PO, sales order, driver's license, prescription, lab report, insurance policy, inspection report, handwritten notes</em></div>
+      <div class="q-item"><span class="q-num">4</span>Is any document type routinely <strong>longer than 40 pages</strong>? <span class="badge complex" style="margin-left:6px">→ Complex if yes</span></div>
+      <div class="q-item"><span class="q-num">5</span>Are document formats <strong>standard/consistent or variable</strong>? <span class="badge simple" style="margin-left:6px">Standard → Simple</span> <span class="badge medium" style="margin-left:4px">Some variance → Medium</span> <span class="badge complex" style="margin-left:4px">High variance → Complex</span></div>
       <div class="q-item"><span class="q-num">6</span>Are there <strong>multiple source systems/channels</strong> (multiple inboxes, portals, carriers)?</div>
-      <div class="q-item"><span class="q-num">7</span>How many <strong>fields to extract</strong> per document type? <span class="badge simple" style="margin-left:6px;">&lt;10 Simple</span> <span class="badge medium" style="margin-left:4px;">10–15 Medium</span> <span class="badge complex" style="margin-left:4px;">&gt;15 Complex</span></div>
-      <div class="q-item"><span class="q-num">8</span>Do documents contain <strong>checkboxes</strong>? <span class="badge navy" style="margin-left:6px;">None → no impact</span> <span class="badge medium" style="margin-left:4px;">≤5 → Medium</span> <span class="badge complex" style="margin-left:4px;">&gt;5 → Complex</span></div>
-      <div class="q-item"><span class="q-num">9</span>Do documents contain <strong>diagrams or images</strong> with data to extract? <span class="badge medium" style="margin-left:6px;">If yes → Medium minimum</span></div>
-      <div class="q-item"><span class="q-num">10</span>What is the <strong>target system</strong> the extracted data lands in? <em style="color:var(--muted);font-size:12px;display:block;margin-top:4px;">Salesforce, Workday, database, Sage, Pioneer Rx, Cerner — confirm cloud/on-prem per Anypoint §4.2</em></div>
+      <div class="q-item"><span class="q-num">7</span>How many <strong>fields to extract</strong> per document type? <span class="badge simple" style="margin-left:6px">&lt;10 Simple</span> <span class="badge medium" style="margin-left:4px">10–15 Medium</span> <span class="badge complex" style="margin-left:4px">&gt;15 Complex</span></div>
+      <div class="q-item"><span class="q-num">8</span>Do documents contain <strong>checkboxes</strong>? <span class="badge navy" style="margin-left:6px">None → no impact</span> <span class="badge medium" style="margin-left:4px">≤5 → Medium</span> <span class="badge complex" style="margin-left:4px">&gt;5 → Complex</span></div>
+      <div class="q-item"><span class="q-num">9</span>Do documents contain <strong>diagrams or images</strong> with data to extract? <span class="badge medium" style="margin-left:6px">If yes → Medium minimum</span></div>
+      <div class="q-item"><span class="q-num">10</span>What is the <strong>target system</strong> the extracted data lands in? <em style="color:var(--muted);font-size:12px;display:block;margin-top:4px">Salesforce, Workday, database, Sage, Pioneer Rx, Cerner — confirm cloud/on-prem per Anypoint §4.2</em></div>
       <div class="q-item"><span class="q-num">11</span><strong>Multi-record processing</strong>: will every document arrive as its own single PDF, or can one email/upload contain multiple attachments/records?</div>
-      <div class="q-item"><span class="q-num">12</span>Will any inbound file <strong>bundle multiple distinct documents</strong> together? (e.g. one PDF = invoice + packing slip + PO) <span class="badge complex" style="margin-left:6px;">If yes → Complex</span></div>
+      <div class="q-item"><span class="q-num">12</span>Will any inbound file <strong>bundle multiple distinct documents</strong> together? (e.g. one PDF = invoice + packing slip + PO) <span class="badge complex" style="margin-left:6px">If yes → Complex</span></div>
     </div>
   </div>
 
@@ -437,10 +656,10 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
   </div>
 </div>
 
-<!-- ════════════════════════════ ANYPOINT SCOPE ════════════════════════════ -->
+<!-- ════════════════ ANYPOINT SCOPE ════════════════ -->
 <div id="tab-anypoint" class="tab-panel">
 
-  <div class="callout blue" style="margin-bottom:20px;">
+  <div class="callout blue" style="margin-bottom:24px">
     <strong>Core principle:</strong> Anypoint scoping is two questions asked twice — once for the source system, once for the target system — plus the business logic that sits between them.
   </div>
 
@@ -448,20 +667,20 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
     <div class="section-title"><i data-lucide="list-checks"></i>Discovery Checklist — 9 Questions</div>
     <div class="q-list">
       <div class="q-item"><span class="q-num">1</span>What is the <strong>source system</strong>?</div>
-      <div class="q-item"><span class="q-num">2</span>Is the source system <strong>API-enabled</strong>? If not, what protocols does it expose? <span class="chip-row" style="margin-top:6px;"><span class="chip">ODBC</span><span class="chip">SOAP</span><span class="chip">Flat file/SFTP</span><span class="chip">EDI</span><span class="chip">Database direct</span></span></div>
+      <div class="q-item"><span class="q-num">2</span>Is the source system <strong>API-enabled</strong>? If not, what protocols does it expose? <span class="chip-row" style="margin-top:6px"><span class="chip">ODBC</span><span class="chip">SOAP</span><span class="chip">Flat file/SFTP</span><span class="chip">EDI</span><span class="chip">Database direct</span></span></div>
       <div class="q-item"><span class="q-num">3</span>Is the source system <strong>cloud-hosted or on-prem</strong>?</div>
       <div class="q-item"><span class="q-num">4</span>What is the <strong>target system</strong>?</div>
       <div class="q-item"><span class="q-num">5</span>Is the target system <strong>API-enabled</strong>?</div>
       <div class="q-item"><span class="q-num">6</span>Is the target system <strong>cloud-hosted or on-prem</strong>?</div>
-      <div class="q-item"><span class="q-num">7</span>What <strong>business objects</strong> are being exchanged? Name the actual object per system. <em style="color:var(--muted);font-size:12px;display:block;margin-top:4px;">"Salesforce Opportunity" not just "deal" — Account, Order, Invoice, Product, Payment</em></div>
-      <div class="q-item"><span class="q-num">8</span>What <strong>actions</strong> are needed per object and in which direction? If bi-directional, what exactly writes back and on what trigger? <span class="chip-row" style="margin-top:6px;"><span class="chip">get</span><span class="chip">extract</span><span class="chip">receive</span><span class="chip">create</span><span class="chip">update</span><span class="chip">sync</span></span></div>
-      <div class="q-item"><span class="q-num">9</span>Is there <strong>business logic</strong> between source and target (transformation, mapping, dedup, conditional routing, aggregation)? <span class="badge complex" style="margin-left:6px;">If yes → Complex</span> <span class="badge medium" style="margin-left:4px;">Pass-through → Medium</span></div>
+      <div class="q-item"><span class="q-num">7</span>What <strong>business objects</strong> are being exchanged? Name the actual object per system. <em style="color:var(--muted);font-size:12px;display:block;margin-top:4px">"Salesforce Opportunity" not just "deal" — Account, Order, Invoice, Product, Payment</em></em></div>
+      <div class="q-item"><span class="q-num">8</span>What <strong>actions</strong> are needed per object and in which direction? If bi-directional, what exactly writes back and on what trigger? <span class="chip-row" style="margin-top:6px"><span class="chip">get</span><span class="chip">extract</span><span class="chip">receive</span><span class="chip">create</span><span class="chip">update</span><span class="chip">sync</span></span></div>
+      <div class="q-item"><span class="q-num">9</span>Is there <strong>business logic</strong> between source and target (transformation, mapping, dedup, conditional routing, aggregation)? <span class="badge complex" style="margin-left:6px">If yes → Complex</span> <span class="badge medium" style="margin-left:4px">Pass-through → Medium</span></div>
     </div>
   </div>
 
   <div class="section">
     <div class="section-title"><i data-lucide="network"></i>Connectivity Complexity Matrix</div>
-    <div class="callout" style="margin-bottom:12px;"><strong>Apply once to source, then again to target.</strong> The higher of the two scores sets the connectivity baseline.</div>
+    <div class="callout" style="margin-bottom:14px"><strong>Apply once to source, then again to target.</strong> The higher of the two scores sets the connectivity baseline.</div>
     <div class="matrix-wrap">
       <table class="matrix">
         <thead><tr><th>Deployment</th><th>API Access</th><th>Complexity</th></tr></thead>
@@ -477,11 +696,11 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
   <div class="section">
     <div class="section-title"><i data-lucide="code-2"></i>Business Object & Logic Complexity</div>
     <div class="card">
-      <div style="display:flex;flex-direction:column;gap:10px;">
-        <div><span class="badge medium" style="margin-right:8px;">Medium</span><strong>Straight pass-through / 1:1 field mapping</strong> — no transformation beyond field mapping and basic validation. Standing rule: "if business logic is present then Complex, otherwise Medium."</div>
-        <div style="border-top:1px solid var(--border);padding-top:10px;"><span class="badge complex" style="margin-right:8px;">Complex</span><strong>Transformation / conditional logic</strong> — field-level business rules, conditional routing, currency/unit conversion, multi-object aggregation.</div>
-        <div style="border-top:1px solid var(--border);padding-top:10px;"><span class="badge complex" style="margin-right:8px;">Complex</span><strong>Bi-directional flows</strong> — always scope as <em>two</em> integration patterns, not one. Can double flow count. Price as two separate line items unless proven trivial.</div>
-        <div style="border-top:1px solid var(--border);padding-top:10px;"><span class="badge complex" style="margin-right:8px;">Additional</span><strong>Multi-entity / multi-company targets</strong> — one source feeding multiple company instances (e.g. 1 Salesforce org → 3 QuickBooks Desktop companies) adds routing logic. Price as additional effort on top of base flow.</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div><span class="badge medium" style="margin-right:8px">Medium</span><strong>Straight pass-through / 1:1 field mapping</strong> — no transformation beyond field mapping and basic validation. Standing rule: "if business logic is present then Complex, otherwise Medium."</div>
+        <div style="border-top:1px solid var(--border);padding-top:10px"><span class="badge complex" style="margin-right:8px">Complex</span><strong>Transformation / conditional logic</strong> — field-level business rules, conditional routing, currency/unit conversion, multi-object aggregation.</div>
+        <div style="border-top:1px solid var(--border);padding-top:10px"><span class="badge complex" style="margin-right:8px">Complex</span><strong>Bi-directional flows</strong> — always scope as <em>two</em> integration patterns, not one. Can double flow count. Price as two separate line items unless proven trivial.</div>
+        <div style="border-top:1px solid var(--border);padding-top:10px"><span class="badge complex" style="margin-right:8px">Additional</span><strong>Multi-entity / multi-company targets</strong> — one source feeding multiple company instances (e.g. 1 Salesforce org → 3 QuickBooks Desktop companies) adds routing logic. Price as additional effort on top of base flow.</div>
       </div>
     </div>
   </div>
@@ -489,7 +708,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
   <div class="section">
     <div class="section-title"><i data-lucide="zap"></i>MuleSoft for Flow — Discovery Starting Point</div>
     <div class="callout"><strong>Scope like lightweight Anypoint, but Salesforce-Flow-native.</strong> Validate against current datasheet before quoting — do not assume it uses the same Flows+Messages model as core Anypoint.</div>
-    <div class="q-list" style="margin-top:12px;">
+    <div class="q-list" style="margin-top:12px">
       <div class="q-item"><span class="q-num">10</span>Is the requirement being triggered from <strong>inside Salesforce Flow Builder</strong>, or does it need a standalone API/process outside Salesforce's runtime?</div>
       <div class="q-item"><span class="q-num">11</span>Does the target/source already have a MuleSoft-published <strong>"Flow-ready" action</strong>, or would a custom API need to be built and exposed to Flow?</div>
       <div class="q-item"><span class="q-num">12</span>Same <strong>source/target complexity questions</strong> (§4.2) still apply — Flow does not remove the cloud/on-prem/API question.</div>
@@ -522,8 +741,8 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
           <div class="add-q"><span class="add-q-num">14</span>Is an <strong>audit trail</strong> of every synced record required for compliance or financial reporting? This is a distinct build item — never assumed to come free with the base sync.</div>
           <div class="add-q"><span class="add-q-num">15</span>If the integration touches quoting/pricing, do <strong>multiple price books or pricing tiers</strong> exist? Multiple price books multiply mapping and testing effort — count as separate scope.</div>
         </div>
-        <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);">
-          <div style="font-weight:700;font-size:13px;color:var(--text);margin-bottom:10px;">Cross-Cutting Discipline</div>
+        <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
+          <div style="font-weight:700;font-size:13px;color:var(--text);margin-bottom:10px">Cross-Cutting Discipline</div>
           <div class="add-qs">
             <div class="add-q"><strong>Verify every use case against the transcript:</strong> Label each proposed use case Confirmed / Partially Discussed / Not Discussed before it goes in an SOW.</div>
             <div class="add-q"><strong>Distinguish existing automation from new build:</strong> If a workflow already exists and the integration just feeds it better data — call it a beneficiary, not a deliverable.</div>
@@ -536,16 +755,16 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
   </div>
 </div>
 
-<!-- ════════════════════════════ PRICING ════════════════════════════ -->
+<!-- ════════════════ PRICING ════════════════ -->
 <div id="tab-pricing" class="tab-panel">
 
-  <div class="callout red" style="margin-bottom:20px;">
+  <div class="callout red" style="margin-bottom:24px">
     <strong>Rule:</strong> Complexity scoring must always come before pricing. Never quote price before complexity is scored.
   </div>
 
   <div class="section">
     <div class="section-title"><i data-lucide="file-text"></i>IDP Pricing — Per Document Type</div>
-    <div class="callout" style="margin-bottom:14px;">IDP is priced as a <strong>fixed fee per document type</strong>, scaled by complexity tier. Structure every IDP proposal as a document-type line-item table — not one blended project fee.</div>
+    <div class="callout" style="margin-bottom:14px">IDP is priced as a <strong>fixed fee per document type</strong>, scaled by complexity tier. Structure every IDP proposal as a document-type line-item table — not one blended project fee.</div>
     <div class="matrix-wrap">
       <table class="price-table">
         <thead><tr><th>Document Type</th><th>Complexity</th><th>Illustrative Fixed Fee</th></tr></thead>
@@ -584,27 +803,27 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
   <div class="section">
     <div class="section-title"><i data-lucide="git-merge"></i>Anypoint Platform — Pricing Mechanics</div>
     <div class="card">
-      <div style="margin-bottom:14px;">
-        <div style="font-weight:700;font-size:14px;color:var(--text);margin-bottom:6px;">Pricing unit: Flows</div>
-        <div style="font-size:13.5px;color:var(--muted);line-height:1.6;">Each distinct integration pipeline = one flow. Example: "NetSuite ↔ Salesforce case sync" = 1 flow. Packages include a flow allocation sized to projected need — get the customer's realistic flow count from the discovery checklist before recommending a package.</div>
+      <div style="margin-bottom:14px">
+        <div style="font-weight:700;font-size:14px;color:var(--text);margin-bottom:6px">Pricing unit: Flows</div>
+        <div style="font-size:13.5px;color:var(--sub);line-height:1.65">Each distinct integration pipeline = one flow. Example: "NetSuite ↔ Salesforce case sync" = 1 flow. Packages include a flow allocation sized to projected need — get the customer's realistic flow count from the discovery checklist before recommending a package.</div>
       </div>
-      <div style="border-top:1px solid var(--border);padding-top:14px;">
-        <div style="font-weight:700;font-size:14px;color:var(--text);margin-bottom:8px;">Flow count traps to avoid</div>
-        <div style="display:flex;flex-direction:column;gap:8px;">
-          <div style="font-size:13px;color:var(--muted);">• <strong style="color:var(--text);">Bi-directional sync</strong> = 2 flows minimum, not 1 — price as two line items</div>
-          <div style="font-size:13px;color:var(--muted);">• <strong style="color:var(--text);">Multi-company routing</strong> (e.g. 1 SF org → 3 QB companies) = base flow + routing layer effort</div>
-          <div style="font-size:13px;color:var(--muted);">• <strong style="color:var(--text);">Historical backfill</strong> = distinct scope item from ongoing incremental sync — price separately</div>
-          <div style="font-size:13px;color:var(--muted);">• <strong style="color:var(--text);">MuleSoft for Flow</strong> — confirm licensing model with datasheet, do not assume same as core Anypoint</div>
+      <div style="border-top:1px solid var(--border);padding-top:14px">
+        <div style="font-weight:700;font-size:14px;color:var(--text);margin-bottom:8px">Flow count traps to avoid</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="font-size:13px;color:var(--sub)">• <strong style="color:var(--text)">Bi-directional sync</strong> = 2 flows minimum, not 1 — price as two line items</div>
+          <div style="font-size:13px;color:var(--sub)">• <strong style="color:var(--text)">Multi-company routing</strong> (e.g. 1 SF org → 3 QB companies) = base flow + routing layer effort</div>
+          <div style="font-size:13px;color:var(--sub)">• <strong style="color:var(--text)">Historical backfill</strong> = distinct scope item from ongoing incremental sync — price separately</div>
+          <div style="font-size:13px;color:var(--sub)">• <strong style="color:var(--text)">MuleSoft for Flow</strong> — confirm licensing model with datasheet, do not assume same as core Anypoint</div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ════════════════════════════ SOW GUIDE ════════════════════════════ -->
+<!-- ════════════════ SOW GUIDE ════════════════ -->
 <div id="tab-sow" class="tab-panel">
 
-  <div class="callout blue" style="margin-bottom:20px;">Every SOW produced from a scoping call follows this shape. Use it as your outline when drafting the deliverable after a call.</div>
+  <div class="callout blue" style="margin-bottom:24px">Every SOW produced from a scoping call follows this shape. Use it as your outline when drafting the deliverable after a call.</div>
 
   <div class="section">
     <div class="section-title"><i data-lucide="file-check"></i>Standard SOW Structure — 14 Sections</div>
@@ -627,17 +846,20 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
   </div>
 </div>
 
-<!-- ════════════════════════════ LIVE CHECKLISTS ════════════════════════════ -->
+<!-- ════════════════ LIVE CHECKLISTS ════════════════ -->
 <div id="tab-checklists" class="tab-panel">
 
-  <div class="callout blue" style="margin-bottom:20px;"><strong>Use this tab during live calls.</strong> Tick each item as it's confirmed. Hit "New Call" to reset before your next call.</div>
+  <div class="callout blue" style="margin-bottom:24px"><strong>Use this tab during live calls.</strong> Tick each item as it's confirmed. Hit "New Call" to reset before your next call.</div>
 
   <!-- IDP Checklist -->
-  <div class="section">
+  <div class="checklist-block">
     <div class="checklist-header">
       <div>
-        <div class="section-title" style="margin-bottom:4px;border-bottom:none;padding-bottom:0;"><i data-lucide="file-scan"></i>IDP Discovery Checklist</div>
-        <div class="checklist-meta"><span id="idp-count">0</span> / <span id="idp-total">15</span> confirmed <div class="progress-bar"><div class="progress-fill" id="idp-progress" style="width:0%"></div></div></div>
+        <div class="checklist-name"><i data-lucide="file-scan"></i>IDP Discovery Checklist</div>
+        <div class="checklist-meta">
+          <span id="idp-count">0</span> / <span id="idp-total">15</span> confirmed
+          <div class="progress-bar"><div class="progress-fill" id="idp-progress" style="width:0%"></div></div>
+        </div>
       </div>
       <button class="reset-btn" onclick="resetChecklist('idp')"><i data-lucide="rotate-ccw"></i> New Call</button>
     </div>
@@ -675,11 +897,14 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
   </div>
 
   <!-- Anypoint Checklist -->
-  <div class="section">
+  <div class="checklist-block">
     <div class="checklist-header">
       <div>
-        <div class="section-title" style="margin-bottom:4px;border-bottom:none;padding-bottom:0;"><i data-lucide="git-branch"></i>Anypoint / Integration Checklist</div>
-        <div class="checklist-meta"><span id="any-count">0</span> / <span id="any-total">10</span> confirmed <div class="progress-bar"><div class="progress-fill" id="any-progress" style="width:0%"></div></div></div>
+        <div class="checklist-name"><i data-lucide="git-branch"></i>Anypoint / Integration Checklist</div>
+        <div class="checklist-meta">
+          <span id="any-count">0</span> / <span id="any-total">10</span> confirmed
+          <div class="progress-bar"><div class="progress-fill" id="any-progress" style="width:0%"></div></div>
+        </div>
       </div>
       <button class="reset-btn" onclick="resetChecklist('any')"><i data-lucide="rotate-ccw"></i> New Call</button>
     </div>
@@ -714,7 +939,6 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 <script>
 lucide.createIcons();
 
-// ── Tab switching ──
 document.querySelectorAll('.tab-btn').forEach(btn=>{
   btn.addEventListener('click',()=>{
     document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
@@ -726,15 +950,12 @@ document.querySelectorAll('.tab-btn').forEach(btn=>{
   });
 });
 
-// ── Collapsible ──
 function toggleCollapsible(btn){
   btn.classList.toggle('open');
-  const body=btn.nextElementSibling;
-  body.classList.toggle('hidden');
+  btn.nextElementSibling.classList.toggle('hidden');
   lucide.createIcons();
 }
 
-// ── Checklist logic ──
 function toggleCheck(item){
   item.classList.toggle('checked');
   updateProgress(item.dataset.group);
@@ -744,8 +965,7 @@ function toggleCheck(item){
 function updateProgress(group){
   const items=document.querySelectorAll(`.cl-item[data-group="${group}"]`);
   const checked=document.querySelectorAll(`.cl-item[data-group="${group}"].checked`);
-  const total=items.length;
-  const done=checked.length;
+  const total=items.length,done=checked.length;
   document.getElementById(group+'-count').textContent=done;
   document.getElementById(group+'-total').textContent=total;
   document.getElementById(group+'-progress').style.width=(total>0?(done/total*100):0)+'%';
@@ -756,7 +976,6 @@ function resetChecklist(group){
   updateProgress(group);
 }
 
-// init counts
 updateProgress('idp');
 updateProgress('any');
 </script>
