@@ -877,14 +877,33 @@ html,body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text
   </div>
 
   <div class="section">
-    <div class="section-title"><i data-lucide="git-merge"></i>Anypoint Platform — Pricing Mechanics</div>
+    <div class="section-title"><i data-lucide="git-merge"></i>Anypoint Platform — Pricing</div>
+    <div class="callout" style="margin-bottom:14px">Anypoint is priced as a <strong>fixed fee per unique flow</strong>. Structure every Anypoint proposal as a flow line-item table — not one blended project fee. Get the customer's confirmed flow count from the discovery checklist before building the quote.</div>
+    <div class="matrix-wrap">
+      <table class="price-table">
+        <thead><tr><th>Flow Type</th><th>Complexity</th><th>Fixed Fee per Flow</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Cloud source → Cloud target</strong>, API-enabled both sides, pass-through / simple mapping</td>
+            <td><span class="badge simple">Simple</span></td>
+            <td><div class="price-val">$3,500</div></td>
+          </tr>
+          <tr>
+            <td><strong>On-prem source or target</strong>, API connectivity available, or cloud with business logic</td>
+            <td><span class="badge medium">Medium</span></td>
+            <td><div class="price-val">$3,500</div></td>
+          </tr>
+          <tr>
+            <td><strong>On-prem with no API</strong>, transformation / conditional logic, or bi-directional flow</td>
+            <td><span class="badge complex">Complex</span></td>
+            <td><div class="price-val">$3,500</div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <div class="card">
       <div style="margin-bottom:14px">
-        <div style="font-weight:700;font-size:14px;color:var(--text);margin-bottom:6px">Pricing unit: Flows</div>
-        <div style="font-size:13.5px;color:var(--sub);line-height:1.65">Each distinct integration pipeline = one flow. Example: "NetSuite ↔ Salesforce case sync" = 1 flow. Packages include a flow allocation sized to projected need — get the customer's realistic flow count from the discovery checklist before recommending a package.</div>
-      </div>
-      <div style="border-top:1px solid var(--border);padding-top:14px">
-        <div style="font-weight:700;font-size:14px;color:var(--text);margin-bottom:8px">Flow count traps to avoid</div>
+        <div style="font-weight:700;font-size:14px;color:var(--text);margin-bottom:6px">Flow count traps to avoid</div>
         <div style="display:flex;flex-direction:column;gap:8px">
           <div style="font-size:13px;color:var(--sub)">• <strong style="color:var(--text)">Bi-directional sync</strong> = 2 flows minimum, not 1 — price as two line items</div>
           <div style="font-size:13px;color:var(--sub)">• <strong style="color:var(--text)">Multi-company routing</strong> (e.g. 1 SF org → 3 QB companies) = base flow + routing layer effort</div>
