@@ -1,0 +1,9 @@
+{
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/wireframe.html",
+      "has": [{ "type": "host", "value": "wireframe.dataskate.online" }]
+    }
+  ]
+}
