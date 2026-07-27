@@ -213,8 +213,10 @@ html,body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text
   border:1px solid var(--border);
   border-radius:12px;
   padding:14px 18px;
+  padding-right:38px;
   font-size:13.5px;color:var(--text);line-height:1.65;
   transition:border-color .12s;
+  position:relative;
 }
 .q-item:hover{border-color:var(--border-strong);}
 .q-num{
@@ -228,6 +230,31 @@ html,body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text
   flex-shrink:0;vertical-align:middle;
 }
 .q-badge{float:right;margin-left:8px;}
+
+/* help icon + popover */
+.q-help-btn{
+  position:absolute;
+  top:13px;right:13px;
+  background:none;border:none;cursor:pointer;
+  padding:3px;border-radius:6px;
+  color:var(--muted);
+  transition:color .12s,background .12s;
+  line-height:0;
+}
+.q-help-btn:hover,.q-help-btn.active{color:var(--navy);background:var(--bg);}
+.q-help-btn [data-lucide]{width:14px;height:14px;}
+.q-help-text{
+  display:none;
+  margin-top:10px;
+  padding:10px 14px;
+  background:#eef5ff;
+  border:1px solid #c2d8fa;
+  border-radius:8px;
+  font-size:12.5px;
+  color:#1a3560;
+  line-height:1.65;
+}
+.q-help-text.open{display:block;}
 
 /* ── CHIPS ───────────────────────────────────── */
 .chip-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
@@ -1034,6 +1061,67 @@ document.querySelectorAll('.tab-btn').forEach(btn=>{
     lucide.createIcons();
   });
 });
+
+const HELP={
+  idp:[
+    "The ingestion channel shapes the entire connection architecture — email inbox, SharePoint, SFTP, and portal each require a different connector and carry different reliability characteristics. Missed ingestion channels are the most common source of scope surprises after go-live.",
+    "Each file format requires a different extraction model. Scanned images need OCR before extraction; structured Word or Excel files may already have parseable data. Format diversity multiplies testing scope and can add extraction prompt variants.",
+    "IDP is scoped and priced per document type — each type gets its own extraction configuration, field mapping, and confidence threshold. Every document type missed here becomes a change order after the SOW is signed.",
+    "Documents over ~40 pages can exceed IDP's single-pass processing limits and require custom chunking logic (e.g. a PDFBox module) plus dedicated monitoring for chunking failures. This is a separate architecture decision, not a configuration option.",
+    "Format variance is the #1 driver of extraction prompt complexity. A consistent invoice from one vendor is simple; the same 'invoice' from 50 different carriers with unique layouts requires a separate extraction prompt per template variant.",
+    "Each additional ingestion channel adds a separate connection, monitoring point, and failure mode. Three email inboxes plus a SharePoint folder means four independent things that can break in production — each needing its own alerting.",
+    "Field count directly determines prompt engineering effort and QA scope. Under 10 fields is typically one focused build session; over 15 usually requires multiple extraction iterations and significantly more validation time per document type.",
+    "Checkboxes require visual classification — is the box filled or empty? — rather than text reading, which is a fundamentally harder problem. Each checkbox adds disproportionate extraction complexity compared to a standard text field.",
+    "Images embedded in documents require vision-based extraction, a separate model and processing step from text extraction. Any diagram with labeled data points — floor plans, schematics, charts — is a distinct extraction challenge, not a variant of text extraction.",
+    "The target system determines the delivery integration approach. Cloud targets with REST APIs are straightforward; on-prem systems (QuickBooks Desktop, legacy ERPs) need Anypoint middleware, which is additional scope that should be flagged and priced early.",
+    "If one email can contain multiple attachments, a loop and batch processing layer is needed. This is commonly overlooked and causes missed records or incorrect record creation in production if not designed into the architecture from the start.",
+    "A single PDF containing multiple distinct document types — invoice + PO + packing slip — requires bundle-splitting logic before extraction can run. IDP cannot split bundled files natively; this is a separate build item with its own effort."
+  ],
+  anypoint:[
+    "The exact product name and version determines which MuleSoft connector is available, whether custom connector work is needed, and which connectivity complexity tier applies. 'Salesforce' and 'Salesforce Government Cloud' are different targets with different connectors.",
+    "No REST API means falling back to ODBC, SOAP, flat-file polling, or direct database access — each with different reliability, latency, and error-handling profiles. This is the single biggest complexity driver for legacy source systems and must be confirmed before pricing.",
+    "On-prem source systems require a MuleSoft Hybrid deployment with a Mule Runtime agent installed inside the customer's network. This changes the architecture, infrastructure requirements, and the degree of customer involvement needed during setup and ongoing maintenance.",
+    "Same reasoning as the source — exact product name is required. The target system determines which connector, write method, and rate limit apply. Always confirm cloud vs. on-prem for the target independently of the source assessment.",
+    "If the target has no API, data delivery requires file-based imports, database writes, or custom workarounds — each with different data freshness, reliability, and error-visibility tradeoffs that need to be explicitly called out in the SOW.",
+    "On-prem targets may require a VPN tunnel or agent, and often have rate limits on import file sizes or batch import frequencies that cloud API targets don't. Infrastructure coordination scope can be a significant surprise for customers mid-project.",
+    "Exact system object names — 'Salesforce Opportunity', not 'deal' — prevent field-mapping ambiguity during development. Different objects have different permission requirements, relationship structures, and API limits that affect build effort.",
+    "The action type (create vs. update vs. upsert) determines whether idempotency and duplicate-detection logic are needed. Bi-directional always means two flows, and the conflict-resolution rule ('which system wins when both update the same record?') must be defined before development starts.",
+    "Any transformation beyond 1:1 field mapping — conditional routing, lookups, currency conversion, aggregation — moves complexity from Medium to Complex. This is the #1 driver of post-SOW scope creep when assumed to be 'just a mapping.'"
+  ],
+  flow:[
+    "MuleSoft for Flow only applies when Salesforce Flow Builder is the orchestrator. If the trigger is external — a scheduled job, a webhook, a third-party event — it's a full Anypoint integration, not a Flow use case, and should be scoped on the Anypoint Scope tab instead.",
+    "MuleSoft for Flow requires a pre-published API action exposed to Salesforce Flow Builder. If the target system doesn't have one, building and publishing it is a separate development effort with its own testing scope — not a configuration step bundled with the base engagement.",
+    "Even though Flow is lighter-weight than full Anypoint, the underlying source and target systems still have the same cloud/on-prem and API access characteristics. A Flow invoking an on-prem system still requires a Hybrid Runtime and Mule agent — the connectivity complexity doesn't disappear.",
+    "MuleSoft for Flow uses a different consumption model from core Anypoint — typically per-action or per-automation run rather than per-flow. Applying Anypoint pricing to a Flow deal produces a mispriced SOW. Always verify with the current MuleSoft for Flow datasheet before quoting."
+  ]
+};
+
+(function injectHelpIcons(){
+  const tabMap={'tab-idp':'idp','tab-anypoint':'anypoint','tab-flow':'flow'};
+  Object.entries(tabMap).forEach(([panelId,group])=>{
+    const panel=document.getElementById(panelId);
+    if(!panel)return;
+    panel.querySelectorAll('.q-list .q-item').forEach((item,i)=>{
+      if(!HELP[group][i])return;
+      const btn=document.createElement('button');
+      btn.className='q-help-btn';
+      btn.title='Why we ask this';
+      btn.innerHTML='<i data-lucide="info"></i>';
+      const helpDiv=document.createElement('div');
+      helpDiv.className='q-help-text';
+      helpDiv.textContent=HELP[group][i];
+      btn.addEventListener('click',function(e){
+        e.stopPropagation();
+        const open=helpDiv.classList.toggle('open');
+        btn.classList.toggle('active',open);
+        lucide.createIcons();
+      });
+      item.appendChild(btn);
+      item.appendChild(helpDiv);
+    });
+  });
+  lucide.createIcons();
+})();
 
 function toggleCollapsible(btn){
   btn.classList.toggle('open');
