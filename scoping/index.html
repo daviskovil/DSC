@@ -161,7 +161,9 @@ html,body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text
   border:1px solid var(--border);
   border-radius:12px;
   padding:16px 18px;
+  padding-right:36px;
   transition:border-color .15s,box-shadow .15s;
+  position:relative;
 }
 .rule-card:hover{border-color:var(--border-strong);box-shadow:0 3px 10px rgba(15,21,36,.04);}
 .rule-title{font-weight:700;font-size:13.5px;color:var(--text);margin-bottom:6px;display:flex;align-items:center;gap:7px;}
@@ -1152,6 +1154,40 @@ function resetChecklist(group){
 updateProgress('idp');
 updateProgress('any');
 updateProgress('flow');
+
+const RULE_HELP=[
+  "Verbal agreements made on discovery calls are the #1 source of post-SOW disputes. A transcript lets you rebuild scope from facts, not memory — especially when a customer later says 'we never discussed that.'",
+  "The literal endpoint — which exact email inbox, which SharePoint folder, which SFTP server — determines the connection architecture and which customer team needs to be involved. Discovering it wrong post-SOW means rework before the build even starts.",
+  "A 'bi-directional sync' is always two separate pipelines with separate triggers, error handling, and monitoring requirements. Pricing it as one flow is the most common Anypoint underquote — every bi-directional requirement should be a separate line item.",
+  "On-prem systems require a MuleSoft agent deployed inside the customer's network, often a VPN, and coordination with their IT team. The data model complexity rarely matters as much as whether a Mule agent needs to be deployed and maintained on-site.",
+  "Systems like QuickBooks Desktop, Sage 100, and IQMS don't expose modern REST APIs. Before scoping, confirm exactly how data can be accessed — Web Connector, ODBC, COM interface, or file-based export — because each has different reliability and ongoing maintenance cost.",
+  "IDP extraction is configured per template, not per document type. 'Invoices' sounds like one thing, but 30 vendors with unique layouts means up to 30 separate prompt configurations, each needing its own sample documents and QA pass.",
+  "Large-document handling affects error monitoring, retry logic, and support complexity in ways standard document processing doesn't. Treating a >40-page or bundled file as a standard document type causes architecture problems that only surface in production."
+];
+
+(function injectRuleHelp(){
+  const panel=document.getElementById('tab-methodology');
+  if(!panel)return;
+  panel.querySelectorAll('.rule-card').forEach((card,i)=>{
+    if(!RULE_HELP[i])return;
+    const btn=document.createElement('button');
+    btn.className='q-help-btn';
+    btn.title='More context';
+    btn.innerHTML='<i data-lucide="info"></i>';
+    const helpDiv=document.createElement('div');
+    helpDiv.className='q-help-text';
+    helpDiv.textContent=RULE_HELP[i];
+    btn.addEventListener('click',function(e){
+      e.stopPropagation();
+      const open=helpDiv.classList.toggle('open');
+      btn.classList.toggle('active',open);
+      lucide.createIcons();
+    });
+    card.appendChild(btn);
+    card.appendChild(helpDiv);
+  });
+  lucide.createIcons();
+})();
 </script>
 </body>
 </html>
