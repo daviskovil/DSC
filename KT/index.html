@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Scoping & Pricing KT — Dataskate</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#13192b;--navy-2:#1c2538;--navy-3:#222d42;
+  --red:#ed1c24;--bg:#eef0f4;--card:#fff;
+  --text:#1a1f36;--muted:#6b7280;--border:#e5e7eb;
+  --simple:#16a34a;--simple-bg:rgba(22,163,74,.1);--simple-border:rgba(22,163,74,.25);
+  --medium:#b45309;--medium-bg:rgba(245,158,11,.12);--medium-border:rgba(245,158,11,.3);
+  --complex:#dc2626;--complex-bg:rgba(220,38,38,.1);--complex-border:rgba(220,38,38,.25);
+}
+html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);}
+
+/* ── header ── */
+.site-header{background:var(--navy);padding:0 28px;height:54px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;position:sticky;top:0;z-index:100;}
+.logo{display:flex;align-items:center;gap:8px;text-decoration:none;}
+.logo-name{font-family:'Outfit',sans-serif;font-weight:900;font-size:16px;color:#fff;letter-spacing:-.3px;}
+.logo-name span{color:var(--red);}
+.header-title{font-family:'Outfit',sans-serif;font-weight:700;font-size:15px;color:rgba(255,255,255,.7);letter-spacing:-.1px;}
+.header-badge{font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:rgba(255,255,255,.35);background:rgba(255,255,255,.07);padding:4px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.1);}
+
+/* ── tabs ── */
+.tab-nav{background:var(--navy-2);border-bottom:1px solid rgba(255,255,255,.06);padding:0 24px;display:flex;gap:2px;overflow-x:auto;flex-shrink:0;position:sticky;top:54px;z-index:99;}
+.tab-nav::-webkit-scrollbar{height:0;}
+.tab-btn{background:none;border:none;padding:12px 16px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:rgba(255,255,255,.4);cursor:pointer;white-space:nowrap;position:relative;transition:color .15s;}
+.tab-btn:hover{color:rgba(255,255,255,.75);}
+.tab-btn.active{color:#fff;font-weight:600;}
+.tab-btn.active::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--red);border-radius:2px 2px 0 0;}
+.tab-btn.highlight{color:#f59e0b;}
+.tab-btn.highlight.active{color:#f59e0b;}
+
+/* ── layout ── */
+.content{max-width:960px;margin:0 auto;padding:28px 20px 60px;}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+/* ── section ── */
+.section{margin-bottom:28px;}
+.section-title{font-family:'Outfit',sans-serif;font-weight:800;font-size:17px;color:var(--text);margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--border);display:flex;align-items:center;gap:8px;}
+.section-title [data-lucide]{width:16px;height:16px;color:var(--red);flex-shrink:0;}
+
+/* ── cards ── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:12px;}
+.card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;}
+@media(max-width:680px){.card-grid{grid-template-columns:1fr;}}
+.product-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;}
+.product-card-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;}
+.product-ico{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.product-ico [data-lucide]{width:18px;height:18px;}
+.product-tag{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-bottom:3px;}
+.product-name{font-family:'Outfit',sans-serif;font-weight:800;font-size:16px;color:var(--text);}
+.product-desc{font-size:13px;color:var(--muted);line-height:1.6;}
+
+/* ── steps ── */
+.steps{display:flex;flex-direction:column;gap:12px;}
+.step{display:flex;gap:16px;align-items:flex-start;}
+.step-num{width:28px;height:28px;border-radius:50%;background:var(--red);color:#fff;font-family:'Outfit',sans-serif;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+.step-body{flex:1;}
+.step-title{font-weight:700;font-size:14px;color:var(--text);margin-bottom:3px;}
+.step-desc{font-size:13px;color:var(--muted);line-height:1.55;}
+
+/* ── rules ── */
+.rules-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+@media(max-width:640px){.rules-grid{grid-template-columns:1fr;}}
+.rule-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;}
+.rule-title{font-weight:700;font-size:13px;color:var(--text);margin-bottom:5px;display:flex;align-items:center;gap:7px;}
+.rule-title [data-lucide]{width:13px;height:13px;color:var(--red);flex-shrink:0;}
+.rule-desc{font-size:12.5px;color:var(--muted);line-height:1.55;}
+
+/* ── checklist (detail) ── */
+.q-list{display:flex;flex-direction:column;gap:10px;}
+.q-item{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;font-size:13.5px;color:var(--text);line-height:1.55;}
+.q-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--navy);color:#fff;font-family:'Outfit',sans-serif;font-weight:700;font-size:10px;margin-right:8px;flex-shrink:0;vertical-align:middle;}
+.q-badge{float:right;margin-left:8px;}
+
+/* ── complexity tables ── */
+.matrix-wrap{overflow-x:auto;margin-bottom:20px;}
+.matrix{width:100%;border-collapse:collapse;font-size:13px;}
+.matrix th{background:var(--navy);color:#fff;padding:10px 14px;text-align:left;font-family:'Outfit',sans-serif;font-weight:700;font-size:12px;letter-spacing:.3px;}
+.matrix th:first-child{border-radius:8px 0 0 0;}
+.matrix th:last-child{border-radius:0 8px 0 0;}
+.matrix td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top;background:var(--card);}
+.matrix tr:last-child td{border-bottom:none;}
+.matrix tr:last-child td:first-child{border-radius:0 0 0 8px;}
+.matrix tr:last-child td:last-child{border-radius:0 0 8px 0;}
+.matrix td:first-child{font-weight:600;color:var(--text);width:28%;}
+
+/* ── badges ── */
+.badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;}
+.badge.simple{background:var(--simple-bg);color:var(--simple);border:1px solid var(--simple-border);}
+.badge.medium{background:var(--medium-bg);color:var(--medium);border:1px solid var(--medium-border);}
+.badge.complex{background:var(--complex-bg);color:var(--complex);border:1px solid var(--complex-border);}
+.badge.navy{background:rgba(19,25,43,.08);color:var(--navy-2);border:1px solid rgba(19,25,43,.15);}
+
+/* ── callout box ── */
+.callout{background:#fefce8;border:1px solid #fde68a;border-left:4px solid #f59e0b;border-radius:8px;padding:13px 16px;margin-bottom:12px;font-size:13px;color:#78350f;line-height:1.55;}
+.callout.red{background:#fef2f2;border-color:#fecaca;border-left-color:var(--red);color:#7f1d1d;}
+.callout.blue{background:#eff6ff;border-color:#bfdbfe;border-left-color:#3b82f6;color:#1e3a5f;}
+.callout strong{font-weight:700;}
+
+/* ── pricing table ── */
+.price-table{width:100%;border-collapse:collapse;font-size:13px;}
+.price-table th{background:var(--navy);color:#fff;padding:11px 16px;text-align:left;font-family:'Outfit',sans-serif;font-weight:700;font-size:12px;letter-spacing:.3px;}
+.price-table th:first-child{border-radius:8px 0 0 0;}
+.price-table th:last-child{border-radius:0 8px 0 0;}
+.price-table td{padding:11px 16px;border-bottom:1px solid var(--border);background:var(--card);vertical-align:middle;}
+.price-table tr:last-child td{border-bottom:none;}
+.price-table tr:last-child td:first-child{border-radius:0 0 0 8px;}
+.price-table tr:last-child td:last-child{border-radius:0 0 8px 0;}
+.price-val{font-family:'Outfit',sans-serif;font-weight:800;font-size:17px;color:var(--text);}
+.price-note{font-size:11.5px;color:var(--muted);margin-top:2px;}
+
+/* ── SOW list ── */
+.sow-list{display:flex;flex-direction:column;gap:8px;}
+.sow-item{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:13px 16px;}
+.sow-n{font-family:'Outfit',sans-serif;font-weight:800;font-size:13px;color:var(--red);flex-shrink:0;width:24px;}
+.sow-title{font-weight:700;font-size:14px;color:var(--text);margin-bottom:3px;}
+.sow-desc{font-size:12.5px;color:var(--muted);line-height:1.5;}
+
+/* ── LIVE CHECKLISTS ── */
+.checklist-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.checklist-meta{font-size:13px;color:var(--muted);}
+.progress-bar{width:160px;height:6px;background:#e5e7eb;border-radius:3px;overflow:hidden;display:inline-block;vertical-align:middle;margin-left:8px;}
+.progress-fill{height:100%;background:var(--red);border-radius:3px;transition:width .2s;}
+.reset-btn{padding:7px 16px;background:var(--navy);color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .15s;}
+.reset-btn:hover{background:var(--navy-3);}
+.reset-btn [data-lucide]{width:13px;height:13px;}
+
+.cl-section{margin-bottom:20px;}
+.cl-section-title{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;padding-left:4px;}
+.cl-item{display:flex;align-items:flex-start;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:6px;cursor:pointer;transition:background .12s,border-color .12s;}
+.cl-item:hover{background:#f9fafb;border-color:#d1d5db;}
+.cl-item.checked{background:#f0fdf4;border-color:rgba(22,163,74,.3);}
+.cl-checkbox{width:18px;height:18px;border:2px solid #d1d5db;border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .12s;}
+.cl-item.checked .cl-checkbox{background:var(--simple);border-color:var(--simple);}
+.cl-checkbox-inner{display:none;}
+.cl-item.checked .cl-checkbox-inner{display:block;}
+.cl-checkbox-inner [data-lucide]{width:11px;height:11px;color:#fff;stroke-width:3;}
+.cl-text{font-size:13.5px;color:var(--text);line-height:1.5;flex:1;}
+.cl-item.checked .cl-text{color:var(--muted);text-decoration:line-through;text-decoration-color:rgba(107,114,128,.4);}
+
+/* ── info chips ── */
+.chip-row{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px;}
+.chip{padding:4px 12px;border-radius:20px;font-size:11.5px;font-weight:600;border:1px solid var(--border);background:var(--bg);color:var(--muted);}
+
+/* ── source list ── */
+.source-list{display:flex;flex-direction:column;gap:8px;}
+.source-item{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:13px 16px;}
+.source-name{font-weight:700;font-size:13.5px;color:var(--text);margin-bottom:3px;}
+.source-desc{font-size:12.5px;color:var(--muted);line-height:1.55;}
+
+/* ── additional questions ── */
+.add-qs{display:flex;flex-direction:column;gap:8px;}
+.add-q{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 16px;font-size:13px;color:var(--text);line-height:1.55;}
+.add-q-num{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--bg);border:1px solid var(--border);font-family:'Outfit',sans-serif;font-weight:700;font-size:10px;color:var(--muted);margin-right:7px;flex-shrink:0;vertical-align:middle;}
+
+/* ── collapsible ── */
+.collapsible{margin-bottom:12px;}
+.collapsible-toggle{width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:13px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;text-align:left;transition:background .12s;}
+.collapsible-toggle:hover{background:#f9fafb;}
+.collapsible-toggle.open{border-radius:10px 10px 0 0;border-bottom-color:transparent;}
+.collapsible-title{font-weight:700;font-size:14px;color:var(--text);display:flex;align-items:center;gap:8px;}
+.collapsible-title [data-lucide]{width:14px;height:14px;color:var(--red);}
+.collapsible-arrow{width:16px;height:16px;color:var(--muted);transition:transform .2s;flex-shrink:0;}
+.collapsible-toggle.open .collapsible-arrow{transform:rotate(180deg);}
+.collapsible-body{background:var(--card);border:1px solid var(--border);border-top:none;border-radius:0 0 10px 10px;padding:16px;}
+.collapsible-body.hidden{display:none;}
+
+/* ── responsive ── */
+@media(max-width:640px){
+  .content{padding:20px 12px 48px;}
+  .matrix th,.matrix td,.price-table th,.price-table td{padding:8px 10px;font-size:12px;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <a href="/" class="logo">
+    <svg viewBox="156 275 78 66" xmlns="http://www.w3.org/2000/svg" style="width:22px;height:18px">
+      <path fill="#ed1c24" d="m195.02,287.72v-12.49c21.94,0,38.48,10.29,38.48,23.93s-16.55,23.93-38.48,23.93v-12.49c15.86,0,25.99-6.77,25.99-11.44s-10.13-11.44-25.99-11.44Z"/>
+      <path fill="#ffffff" d="m195.02,327.75v12.49c-21.94,0-38.48-10.29-38.48-23.93s16.55-23.93,38.48-23.93v12.49c-15.86,0-25.99,6.77-25.99,11.44s10.13,11.44,25.99,11.44Z"/>
+    </svg>
+    <div class="logo-name">data<span>skate</span></div>
+  </a>
+  <div class="header-title">Scoping &amp; Pricing KT</div>
+  <div class="header-badge">MuleSoft Practice</div>
+</header>
+
+<!-- TAB NAV -->
+<nav class="tab-nav">
+  <button class="tab-btn active" data-tab="overview">Overview</button>
+  <button class="tab-btn" data-tab="methodology">Methodology</button>
+  <button class="tab-btn" data-tab="idp">IDP Scope</button>
+  <button class="tab-btn" data-tab="anypoint">Anypoint Scope</button>
+  <button class="tab-btn" data-tab="pricing">Pricing</button>
+  <button class="tab-btn" data-tab="sow">SOW Guide</button>
+  <button class="tab-btn highlight" data-tab="checklists">⚡ Live Checklists</button>
+</nav>
+
+<main class="content">
+
+<!-- ════════════════════════════ OVERVIEW ════════════════════════════ -->
+<div id="tab-overview" class="tab-panel active">
+
+  <div class="callout blue" style="margin-bottom:20px;">
+    <strong>How to use this guide:</strong> Use the <strong>IDP Scope</strong> or <strong>Anypoint Scope</strong> tabs as your call reference. Score complexity first, then go to <strong>Pricing</strong>. For live calls, open <strong>⚡ Live Checklists</strong> and tick items in real time.
+  </div>
+
+  <div class="section">
+    <div class="section-title"><i data-lucide="layers"></i>Product Lines</div>
+    <div class="card-grid">
+      <div class="product-card">
+        <div class="product-card-head">
+          <div class="product-ico" style="background:rgba(237,28,36,.12)"><i data-lucide="file-scan" style="color:#ed1c24"></i></div>
+          <div>
+            <div class="product-tag" style="color:#ed1c24">Document AI</div>
+            <div class="product-name">MuleSoft IDP</div>
+          </div>
+        </div>
+        <div class="product-desc">Extracts structured data from unstructured documents (PDF, image, Word, Excel, scans, faxes) and classifies document types for downstream delivery or human review.</div>
+      </div>
+      <div class="product-card">
+        <div class="product-card-head">
+          <div class="product-ico" style="background:rgba(59,130,246,.12)"><i data-lucide="git-branch" style="color:#3b82f6"></i></div>
+          <div>
+            <div class="product-tag" style="color:#3b82f6">Integration / iPaaS</div>
+            <div class="product-name">Anypoint Platform</div>
+          </div>
+        </div>
+        <div class="product-desc">Core integration layer — connects source → target systems via API, database, file, or event-driven flows. Moves, transforms, and delivers data between systems.</div>
+      </div>
+      <div class="product-card">
+        <div class="product-card-head">
+          <div class="product-ico" style="background:rgba(124,58,237,.12)"><i data-lucide="zap" style="color:#7c3aed"></i></div>
+          <div>
+            <div class="product-tag" style="color:#7c3aed">Salesforce-native</div>
+            <div class="product-name">MuleSoft for Flow</div>
+          </div>
+        </div>
+        <div class="product-desc">Lightweight automation letting Salesforce admins invoke MuleSoft-published APIs directly from Flow Builder — no full Anypoint Studio development required.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout red">
+    <strong>Critical rule:</strong> Most real deals blend IDP + Anypoint together — e.g. "extract data from a document, then push it into a target system." Never assume a customer request maps cleanly to one product.
+  </div>
+
+  <div class="section" style="margin-top:20px;">
+    <div class="section-title"><i data-lucide="map"></i>When to use each tab</div>
+    <div class="rules-grid">
+      <div class="rule-card">
+        <div class="rule-title"><i data-lucide="file-scan"></i>Document extraction deal</div>
+        <div class="rule-desc">Open IDP Scope tab. Run 12-question checklist. Score complexity. Go to Pricing → IDP table.</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-title"><i data-lucide="git-branch"></i>System-to-system integration</div>
+        <div class="rule-desc">Open Anypoint Scope tab. Run 9-question checklist. Score source + target separately. Go to Pricing → Anypoint mechanics.</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-title"><i data-lucide="layers"></i>Blended IDP + Integration</div>
+        <div class="rule-desc">Run both checklists. Score and price each separately. IDP = per document type. Anypoint = per flow.</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-title"><i data-lucide="zap"></i>MuleSoft for Flow</div>
+        <div class="rule-desc">Start with Anypoint Scope tab §4.4. Confirm trigger is inside Salesforce Flow Builder. Verify licensing separately.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════ METHODOLOGY ════════════════════════════ -->
+<div id="tab-methodology" class="tab-panel">
+
+  <div class="section">
+    <div class="section-title"><i data-lucide="footprints"></i>4-Step Call Flow</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Identify the trigger</div>
+          <div class="step-desc">What business pain or event is driving this project right now — compliance deadline, manual labor cost, error rate, new system rollout?</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Map source → target</div>
+          <div class="step-desc">For every data point in scope, name the exact source system and exact target system. Never leave this as "the CRM" or "our ERP" — get the product name and version/deployment.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Run the complexity checklist live</div>
+          <div class="step-desc">IDP deals → IDP Scope tab. Anypoint/Flow deals → Anypoint Scope tab. Do this on the call or immediately after from the recording/transcript.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-title">Flag open items explicitly</div>
+          <div class="step-desc">Get unresolved items into an SOW "Open Items & Decision Points" section rather than guessing. Unconfirmed ingestion channel / unconfirmed API access = #1 source of scope creep post-go-live.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><i data-lucide="alert-triangle"></i>Rules of Thumb</div>
+    <div class="rules-grid">
+      <div class="rule-card">
+        <div class="rule-title"><i data-lucide="mic"></i>Record every call</div>
+        <div class="rule-desc">Use a passive AI transcript tool (e.g. Krisp AI). Always ask for the recording/transcript before the call ends — rebuild scope from transcript, not memory.</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-title"><i data-lucide="inbox"></i>Never assume ingestion channel</div>
+        <div class="rule-desc">EAC inbox vs. Outlook vs. Gmail vs. fax-to-email vs. SharePoint — almost never confirmed on discovery. Flag as explicit SOW assumption. Always nail down the literal endpoint.</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-title"><i data-lucide="arrow-left-right"></i>Bi-directional = 2 flows</div>
+        <div class="rule-desc">If a customer says "bi-directional" and can't tell you what writes back and when — park it as Phase 2. Exception: closed-won Opp in SF → create SO in QB → write back SO# = one flow.</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-title"><i data-lucide="server"></i>Cloud vs. on-prem = #1 cost driver</div>
+        <div class="rule-desc">Confirm deployment before pricing connectivity. Cloud vs. on-prem of source/target is the single biggest cost driver — not the data model. Ask this before any other technical question.</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-title"><i data-lucide="plug"></i>Legacy systems need connector strategy</div>
+        <div class="rule-desc">QuickBooks Desktop, Sage 100, IQMS — needed workarounds (Web Connector, ODBC, file-based polling). Ask if the system exposes REST APIs natively or only legacy protocols.</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-title"><i data-lucide="copy"></i>Template variance multiplies IDP effort</div>
+        <div class="rule-desc">Each vendor PDF template requires its own extraction prompt. Always ask "how many distinct source templates exist?" — not just "what document types?"</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-title"><i data-lucide="scissors"></i>Large docs need splitting strategy up front</div>
+        <div class="rule-desc">PDFs >40 pages can run into thousands of pages (EliteExperts case). Custom chunking + monitoring needed. Treat >40-page and bundled files as an architecture decision, not a footnote.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════ IDP SCOPE ════════════════════════════ -->
+<div id="tab-idp" class="tab-panel">
+
+  <div class="callout blue" style="margin-bottom:20px;">
+    <strong>Use this for any deal involving document extraction or classification.</strong> Ask every question even if the answer seems obvious — the answer directly changes t-shirt size and price.
+  </div>
+
+  <div class="section">
+    <div class="section-title"><i data-lucide="list-checks"></i>Discovery Checklist — 12 Questions</div>
+    <div class="q-list">
+      <div class="q-item"><span class="q-num">1</span>What is the <strong>source system</strong> the documents are picked up from? <span class="chip-row" style="margin-top:6px;"><span class="chip">Email inbox</span><span class="chip">SharePoint</span><span class="chip">EAC/fax bridge</span><span class="chip">Scanning device</span><span class="chip">Secure portal</span><span class="chip">SFTP</span></span></div>
+      <div class="q-item"><span class="q-num">2</span>What <strong>file extensions</strong> are in scope? <span class="chip-row" style="margin-top:6px;"><span class="chip">PDF</span><span class="chip">Image/scan</span><span class="chip">Excel</span><span class="chip">Word</span><span class="chip">Other</span></span></div>
+      <div class="q-item"><span class="q-num">3</span>What <strong>distinct document types</strong> are in scope? Each is scoped and priced separately. <em style="color:var(--muted);font-size:12px;display:block;margin-top:4px;">e.g. invoice, PO, sales order, driver's license, prescription, lab report, insurance policy, inspection report, handwritten notes</em></div>
+      <div class="q-item"><span class="q-num">4</span>Is any document type routinely <strong>longer than 40 pages</strong>? <span class="badge complex" style="margin-left:6px;">→ Complex if yes</span></div>
+      <div class="q-item"><span class="q-num">5</span>Are document formats <strong>standard/consistent or variable</strong>? <span class="badge simple" style="margin-left:6px;">Standard → Simple</span> <span class="badge medium" style="margin-left:4px;">Some variance → Medium</span> <span class="badge complex" style="margin-left:4px;">High variance → Complex</span></div>
+      <div class="q-item"><span class="q-num">6</span>Are there <strong>multiple source systems/channels</strong> (multiple inboxes, portals, carriers)?</div>
+      <div class="q-item"><span class="q-num">7</span>How many <strong>fields to extract</strong> per document type? <span class="badge simple" style="margin-left:6px;">&lt;10 Simple</span> <span class="badge medium" style="margin-left:4px;">10–15 Medium</span> <span class="badge complex" style="margin-left:4px;">&gt;15 Complex</span></div>
+      <div class="q-item"><span class="q-num">8</span>Do documents contain <strong>checkboxes</strong>? <span class="badge navy" style="margin-left:6px;">None → no impact</span> <span class="badge medium" style="margin-left:4px;">≤5 → Medium</span> <span class="badge complex" style="margin-left:4px;">&gt;5 → Complex</span></div>
+      <div class="q-item"><span class="q-num">9</span>Do documents contain <strong>diagrams or images</strong> with data to extract? <span class="badge medium" style="margin-left:6px;">If yes → Medium minimum</span></div>
+      <div class="q-item"><span class="q-num">10</span>What is the <strong>target system</strong> the extracted data lands in? <em style="color:var(--muted);font-size:12px;display:block;margin-top:4px;">Salesforce, Workday, database, Sage, Pioneer Rx, Cerner — confirm cloud/on-prem per Anypoint §4.2</em></div>
+      <div class="q-item"><span class="q-num">11</span><strong>Multi-record processing</strong>: will every document arrive as its own single PDF, or can one email/upload contain multiple attachments/records?</div>
+      <div class="q-item"><span class="q-num">12</span>Will any inbound file <strong>bundle multiple distinct documents</strong> together? (e.g. one PDF = invoice + packing slip + PO) <span class="badge complex" style="margin-left:6px;">If yes → Complex</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><i data-lucide="bar-chart-2"></i>Complexity Scoring Matrix</div>
+    <div class="matrix-wrap">
+      <table class="matrix">
+        <thead><tr><th>Factor</th><th><span class="badge simple">Simple</span></th><th><span class="badge medium">Medium</span></th><th><span class="badge complex">Complex</span></th></tr></thead>
+        <tbody>
+          <tr><td>Document length</td><td>&lt;40 pages</td><td>—</td><td>&gt;40 pages (splitting + aggregation)</td></tr>
+          <tr><td>Format consistency</td><td>Standard, consistent</td><td>Some variance</td><td>High variance / different template per source</td></tr>
+          <tr><td>Fields extracted per doc type</td><td>&lt;10 fields</td><td>10–15 fields</td><td>&gt;15 fields</td></tr>
+          <tr><td>Checkboxes to extract</td><td>None</td><td>≤5 checkboxes</td><td>&gt;5 checkboxes</td></tr>
+          <tr><td>Diagrams/images with data</td><td>None</td><td>Present (→ at least Medium)</td><td>Present + high field count</td></tr>
+          <tr><td>Source systems/channels</td><td>Single source</td><td>2–3 sources</td><td>4+ sources / per-source templates</td></tr>
+          <tr><td>Bundled/multi-doc files</td><td>Not present</td><td>—</td><td>Present — bundle-splitting logic required</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><i data-lucide="database"></i>Common Source Systems</div>
+    <div class="source-list">
+      <div class="source-item"><div class="source-name">Email inbox (Outlook / Gmail)</div><div class="source-desc">IDP can monitor an inbox directly as the ingestion point.</div></div>
+      <div class="source-item"><div class="source-name">Scanning device / service</div><div class="source-desc">File-creation event triggers IDP processing automatically — useful during a digitization rollout.</div></div>
+      <div class="source-item"><div class="source-name">Secure document portals</div><div class="source-desc">e.g. SecureDocs-style portals — usually require an RPA layer to log in and download on a schedule, since these portals rarely expose a public API.</div></div>
+      <div class="source-item"><div class="source-name">Existing file server / SharePoint</div><div class="source-desc">Used for retroactive/backfill processing of existing documents, plus new incoming documents.</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><i data-lucide="shield-alert"></i>Non-Negotiable Technical Call-Outs</div>
+    <div class="callout red"><strong>Confidence thresholds & human review:</strong> Every IDP scope includes a confidence threshold (e.g. &lt;80%) that routes low-confidence extractions to a human review queue. Always scope this explicitly — it is a distinct configuration line item, not free with extraction.</div>
+    <div class="callout"><strong>Deduplication logic:</strong> Needed whenever the same document could arrive more than once (fax retries, multi-channel submission). Scope as part of the integration logic, not IDP extraction.</div>
+    <div class="callout"><strong>Large-document workaround:</strong> For huge files (thousands of pages), expect a custom chunking component (e.g. Mule PDFBox module) plus monitoring/alerting for chunking failures — call this out as its own effort line. It is fragile and needs support.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><i data-lucide="plus-circle"></i>Additional Discovery Questions</div>
+    <div class="collapsible">
+      <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+        <span class="collapsible-title"><i data-lucide="list"></i>12 additional IDP questions (click to expand)</span>
+        <i data-lucide="chevron-down" class="collapsible-arrow"></i>
+      </button>
+      <div class="collapsible-body hidden">
+        <div class="add-qs">
+          <div class="add-q"><span class="add-q-num">1</span>Any document type <strong>legally restricted from AI processing</strong> (NDA, regulatory rules)? Flag as out-of-scope / human-only in SOW.</div>
+          <div class="add-q"><span class="add-q-num">2</span>Ask for <strong>volume AND average page count together</strong> (e.g. "~1,200 docs/year, ~40 pages average") — both combine to drive effort differently than either alone.</div>
+          <div class="add-q"><span class="add-q-num">3</span>For every document type, separate <strong>"must-have" fields from "nice-to-have" fields</strong> — scope an MVP field set, not everything day one.</div>
+          <div class="add-q"><span class="add-q-num">4</span>Are documents always in <strong>one language or multiple languages</strong>? Multi-language changes the extraction/OCR model, not just volume.</div>
+          <div class="add-q"><span class="add-q-num">5</span>How do documents currently arrive — <strong>email attachment, portal download, or scanned physical mail</strong>? Each has a different ingestion architecture even if the document type is identical.</div>
+          <div class="add-q"><span class="add-q-num">6</span><strong>Never quote IDP effort without 3–5 real sample documents</strong> per distinct format/template variant. A verbal description is not enough.</div>
+          <div class="add-q"><span class="add-q-num">7</span>Ask what <strong>confidence threshold</strong> the business is comfortable with AND who <strong>operationally owns the human-review queue</strong> day to day. A threshold without a named owner is an incomplete scope item.</div>
+          <div class="add-q"><span class="add-q-num">8</span>Does any inbound file mix a <strong>structured form with free-text/handwritten notes</strong> in the same doc (hybrid document)? Needs splitting/dual-extraction step — score above a plain structured document.</div>
+          <div class="add-q"><span class="add-q-num">9</span>If customer has a <strong>manual second-person verification step</strong>, ask whether they want it preserved as human-in-the-loop post-automation or fully eliminated. This is a business decision, not a technical default.</div>
+          <div class="add-q"><span class="add-q-num">10</span>Does extracted data need to <strong>trigger downstream automation</strong> (renewal reminders, compliance flags, approval workflows)? If yes → that logic is Anypoint scope, price separately.</div>
+          <div class="add-q"><span class="add-q-num">11</span>When an engagement mixes <strong>structured/templated sources with unstructured freeform sources</strong>, score and price them separately even if the customer calls them "the same document."</div>
+          <div class="add-q"><span class="add-q-num">12</span>Confirm whether downstream delivery needs <strong>full Anypoint Platform or lighter native Salesforce Flow</strong> ingestion path. Choosing Anypoint over Flow when Flow would suffice adds ~half-day of avoidable configuration effort.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════ ANYPOINT SCOPE ════════════════════════════ -->
+<div id="tab-anypoint" class="tab-panel">
+
+  <div class="callout blue" style="margin-bottom:20px;">
+    <strong>Core principle:</strong> Anypoint scoping is two questions asked twice — once for the source system, once for the target system — plus the business logic that sits between them.
+  </div>
+
+  <div class="section">
+    <div class="section-title"><i data-lucide="list-checks"></i>Discovery Checklist — 9 Questions</div>
+    <div class="q-list">
+      <div class="q-item"><span class="q-num">1</span>What is the <strong>source system</strong>?</div>
+      <div class="q-item"><span class="q-num">2</span>Is the source system <strong>API-enabled</strong>? If not, what protocols does it expose? <span class="chip-row" style="margin-top:6px;"><span class="chip">ODBC</span><span class="chip">SOAP</span><span class="chip">Flat file/SFTP</span><span class="chip">EDI</span><span class="chip">Database direct</span></span></div>
+      <div class="q-item"><span class="q-num">3</span>Is the source system <strong>cloud-hosted or on-prem</strong>?</div>
+      <div class="q-item"><span class="q-num">4</span>What is the <strong>target system</strong>?</div>
+      <div class="q-item"><span class="q-num">5</span>Is the target system <strong>API-enabled</strong>?</div>
+      <div class="q-item"><span class="q-num">6</span>Is the target system <strong>cloud-hosted or on-prem</strong>?</div>
+      <div class="q-item"><span class="q-num">7</span>What <strong>business objects</strong> are being exchanged? Name the actual object per system. <em style="color:var(--muted);font-size:12px;display:block;margin-top:4px;">"Salesforce Opportunity" not just "deal" — Account, Order, Invoice, Product, Payment</em></div>
+      <div class="q-item"><span class="q-num">8</span>What <strong>actions</strong> are needed per object and in which direction? If bi-directional, what exactly writes back and on what trigger? <span class="chip-row" style="margin-top:6px;"><span class="chip">get</span><span class="chip">extract</span><span class="chip">receive</span><span class="chip">create</span><span class="chip">update</span><span class="chip">sync</span></span></div>
+      <div class="q-item"><span class="q-num">9</span>Is there <strong>business logic</strong> between source and target (transformation, mapping, dedup, conditional routing, aggregation)? <span class="badge complex" style="margin-left:6px;">If yes → Complex</span> <span class="badge medium" style="margin-left:4px;">Pass-through → Medium</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><i data-lucide="network"></i>Connectivity Complexity Matrix</div>
+    <div class="callout" style="margin-bottom:12px;"><strong>Apply once to source, then again to target.</strong> The higher of the two scores sets the connectivity baseline.</div>
+    <div class="matrix-wrap">
+      <table class="matrix">
+        <thead><tr><th>Deployment</th><th>API Access</th><th>Complexity</th></tr></thead>
+        <tbody>
+          <tr><td>Cloud</td><td>API-enabled</td><td><span class="badge simple">Simple</span></td></tr>
+          <tr><td>On-Prem</td><td>API connectivity available</td><td><span class="badge medium">Medium</span></td></tr>
+          <tr><td>On-Prem</td><td>No API connectivity</td><td><span class="badge complex">Complex — custom coding required</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><i data-lucide="code-2"></i>Business Object & Logic Complexity</div>
+    <div class="card">
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div><span class="badge medium" style="margin-right:8px;">Medium</span><strong>Straight pass-through / 1:1 field mapping</strong> — no transformation beyond field mapping and basic validation. Standing rule: "if business logic is present then Complex, otherwise Medium."</div>
+        <div style="border-top:1px solid var(--border);padding-top:10px;"><span class="badge complex" style="margin-right:8px;">Complex</span><strong>Transformation / conditional logic</strong> — field-level business rules, conditional routing, currency/unit conversion, multi-object aggregation.</div>
+        <div style="border-top:1px solid var(--border);padding-top:10px;"><span class="badge complex" style="margin-right:8px;">Complex</span><strong>Bi-directional flows</strong> — always scope as <em>two</em> integration patterns, not one. Can double flow count. Price as two separate line items unless proven trivial.</div>
+        <div style="border-top:1px solid var(--border);padding-top:10px;"><span class="badge complex" style="margin-right:8px;">Additional</span><strong>Multi-entity / multi-company targets</strong> — one source feeding multiple company instances (e.g. 1 Salesforce org → 3 QuickBooks Desktop companies) adds routing logic. Price as additional effort on top of base flow.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><i data-lucide="zap"></i>MuleSoft for Flow — Discovery Starting Point</div>
+    <div class="callout"><strong>Scope like lightweight Anypoint, but Salesforce-Flow-native.</strong> Validate against current datasheet before quoting — do not assume it uses the same Flows+Messages model as core Anypoint.</div>
+    <div class="q-list" style="margin-top:12px;">
+      <div class="q-item"><span class="q-num">10</span>Is the requirement being triggered from <strong>inside Salesforce Flow Builder</strong>, or does it need a standalone API/process outside Salesforce's runtime?</div>
+      <div class="q-item"><span class="q-num">11</span>Does the target/source already have a MuleSoft-published <strong>"Flow-ready" action</strong>, or would a custom API need to be built and exposed to Flow?</div>
+      <div class="q-item"><span class="q-num">12</span>Same <strong>source/target complexity questions</strong> (§4.2) still apply — Flow does not remove the cloud/on-prem/API question.</div>
+      <div class="q-item"><span class="q-num">13</span><strong>Confirm licensing/consumption model</strong> with the MuleSoft for Flow datasheet before quoting.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><i data-lucide="plus-circle"></i>Additional Discovery Questions</div>
+    <div class="collapsible">
+      <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+        <span class="collapsible-title"><i data-lucide="list"></i>15 additional Anypoint questions + Cross-cutting discipline (click to expand)</span>
+        <i data-lucide="chevron-down" class="collapsible-arrow"></i>
+      </button>
+      <div class="collapsible-body hidden">
+        <div class="add-qs">
+          <div class="add-q"><span class="add-q-num">1</span>For every shared entity, ask directly: <strong>"which system is the system of record?"</strong> Get the answer in writing before building any sync logic.</div>
+          <div class="add-q"><span class="add-q-num">2</span>What happens if the same record is updated in both systems simultaneously — <strong>which system wins?</strong> "Bi-directional" is not complete until this conflict-resolution rule is defined.</div>
+          <div class="add-q"><span class="add-q-num">3</span>Should <strong>deletes propagate</strong> between systems — hard delete or soft delete/archive flag? Undefined delete behavior = common source of data-loss incidents post go-live.</div>
+          <div class="add-q"><span class="add-q-num">4</span>Does the source support <strong>push-based real-time events</strong> (webhooks, Change Data Capture, Platform Events) or must MuleSoft poll on a schedule?</div>
+          <div class="add-q"><span class="add-q-num">5</span>Ask about <strong>API rate limits</strong> on both source and target. Confirm whether a separate bulk export exists for the one-time historical data load — a backfill is a distinct effort line from ongoing sync.</div>
+          <div class="add-q"><span class="add-q-num">6</span>How many <strong>environments</strong> are needed (Dev/QA/UAT/Prod)? Can the customer provide non-production credentials or sandbox access for testing?</div>
+          <div class="add-q"><span class="add-q-num">7</span>How should <strong>integration failures</strong> be handled — silent log, email alert, or retry queue? Who on the customer side owns the error queue?</div>
+          <div class="add-q"><span class="add-q-num">8</span>Does the integration depend on a <strong>third party outside the customer's control</strong> (distributor, partner, vendor feed)? Confirm they are aware and have agreed to the timeline.</div>
+          <div class="add-q"><span class="add-q-num">9</span>Is there a <strong>hard external deadline</strong> driving the project (board meeting, audit, fiscal year-end)? Capture explicitly — often dictates timeline more than technical complexity.</div>
+          <div class="add-q"><span class="add-q-num">10</span>For legacy on-prem systems with no REST API, <strong>map all connectivity options before defaulting to custom code</strong>: ODBC, business-object/COM interface, third-party REST wrapper, flat-file import/export.</div>
+          <div class="add-q"><span class="add-q-num">11</span>For objects with <strong>child/line-item records</strong> (invoice lines, order lines), does the target need line-item-level detail or a header-level summary?</div>
+          <div class="add-q"><span class="add-q-num">12</span>If the customer syncs on a fixed cadence, ask whether that's a <strong>deliberate business choice or a limitation of current tooling</strong>. Don't assume the new integration should preserve the old cadence.</div>
+          <div class="add-q"><span class="add-q-num">13</span>Does any <strong>personal data crossing systems trigger data-residency or privacy requirements</strong> (e.g. GDPR) — especially if source/target or users sit outside the home jurisdiction?</div>
+          <div class="add-q"><span class="add-q-num">14</span>Is an <strong>audit trail</strong> of every synced record required for compliance or financial reporting? This is a distinct build item — never assumed to come free with the base sync.</div>
+          <div class="add-q"><span class="add-q-num">15</span>If the integration touches quoting/pricing, do <strong>multiple price books or pricing tiers</strong> exist? Multiple price books multiply mapping and testing effort — count as separate scope.</div>
+        </div>
+        <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);">
+          <div style="font-weight:700;font-size:13px;color:var(--text);margin-bottom:10px;">Cross-Cutting Discipline</div>
+          <div class="add-qs">
+            <div class="add-q"><strong>Verify every use case against the transcript:</strong> Label each proposed use case Confirmed / Partially Discussed / Not Discussed before it goes in an SOW.</div>
+            <div class="add-q"><strong>Distinguish existing automation from new build:</strong> If a workflow already exists and the integration just feeds it better data — call it a beneficiary, not a deliverable.</div>
+            <div class="add-q"><strong>Treat "nice to have" language literally:</strong> "If it can be implemented, that'd be great" = mark as optional/stretch-goal in SOW, not a confirmed requirement.</div>
+            <div class="add-q"><strong>Confirm stated tool boundary:</strong> If a stakeholder says "we will only use MuleSoft to insert data" — anything outside that boundary is explicitly out of scope.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════ PRICING ════════════════════════════ -->
+<div id="tab-pricing" class="tab-panel">
+
+  <div class="callout red" style="margin-bottom:20px;">
+    <strong>Rule:</strong> Complexity scoring must always come before pricing. Never quote price before complexity is scored.
+  </div>
+
+  <div class="section">
+    <div class="section-title"><i data-lucide="file-text"></i>IDP Pricing — Per Document Type</div>
+    <div class="callout" style="margin-bottom:14px;">IDP is priced as a <strong>fixed fee per document type</strong>, scaled by complexity tier. Structure every IDP proposal as a document-type line-item table — not one blended project fee.</div>
+    <div class="matrix-wrap">
+      <table class="price-table">
+        <thead><tr><th>Document Type</th><th>Complexity</th><th>Illustrative Fixed Fee</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Handwritten operational documents</strong></td>
+            <td><span class="badge complex">Complex</span></td>
+            <td><div class="price-val">$3,500</div></td>
+          </tr>
+          <tr>
+            <td><strong>Plant visit report</strong> (structured)</td>
+            <td><span class="badge medium">Medium</span></td>
+            <td><div class="price-val">$3,500</div></td>
+          </tr>
+          <tr>
+            <td><strong>VIP inspection report</strong> (structured)</td>
+            <td><span class="badge medium">Medium</span></td>
+            <td><div class="price-val">$3,500</div></td>
+          </tr>
+          <tr>
+            <td><strong>Standard invoice / PO / sales order</strong> (consistent template)</td>
+            <td><span class="badge simple">Simple</span></td>
+            <td><div class="price-val">$3,500</div></td>
+          </tr>
+          <tr>
+            <td><strong>Insurance policy summary</strong> (per carrier template)</td>
+            <td><span class="badge medium">Medium–Complex</span></td>
+            <td><div class="price-val">$3,500+</div><div class="price-note">Depends on leverage and carrier count</div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout"><strong>Note:</strong> Use these as anchors, not a rate card to copy blindly. Every customer's flow count and volume differs. Price is per document type — multiple document types = multiple line items.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><i data-lucide="git-merge"></i>Anypoint Platform — Pricing Mechanics</div>
+    <div class="card">
+      <div style="margin-bottom:14px;">
+        <div style="font-weight:700;font-size:14px;color:var(--text);margin-bottom:6px;">Pricing unit: Flows</div>
+        <div style="font-size:13.5px;color:var(--muted);line-height:1.6;">Each distinct integration pipeline = one flow. Example: "NetSuite ↔ Salesforce case sync" = 1 flow. Packages include a flow allocation sized to projected need — get the customer's realistic flow count from the discovery checklist before recommending a package.</div>
+      </div>
+      <div style="border-top:1px solid var(--border);padding-top:14px;">
+        <div style="font-weight:700;font-size:14px;color:var(--text);margin-bottom:8px;">Flow count traps to avoid</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="font-size:13px;color:var(--muted);">• <strong style="color:var(--text);">Bi-directional sync</strong> = 2 flows minimum, not 1 — price as two line items</div>
+          <div style="font-size:13px;color:var(--muted);">• <strong style="color:var(--text);">Multi-company routing</strong> (e.g. 1 SF org → 3 QB companies) = base flow + routing layer effort</div>
+          <div style="font-size:13px;color:var(--muted);">• <strong style="color:var(--text);">Historical backfill</strong> = distinct scope item from ongoing incremental sync — price separately</div>
+          <div style="font-size:13px;color:var(--muted);">• <strong style="color:var(--text);">MuleSoft for Flow</strong> — confirm licensing model with datasheet, do not assume same as core Anypoint</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════ SOW GUIDE ════════════════════════════ -->
+<div id="tab-sow" class="tab-panel">
+
+  <div class="callout blue" style="margin-bottom:20px;">Every SOW produced from a scoping call follows this shape. Use it as your outline when drafting the deliverable after a call.</div>
+
+  <div class="section">
+    <div class="section-title"><i data-lucide="file-check"></i>Standard SOW Structure — 14 Sections</div>
+    <div class="sow-list">
+      <div class="sow-item"><div class="sow-n">01</div><div><div class="sow-title">Executive summary / opportunity overview</div></div></div>
+      <div class="sow-item"><div class="sow-n">02</div><div><div class="sow-title">Current-state pain points</div><div class="sow-desc">From the discovery call — this is your ROI narrative.</div></div></div>
+      <div class="sow-item"><div class="sow-n">03</div><div><div class="sow-title">In-scope systems and stakeholders</div></div></div>
+      <div class="sow-item"><div class="sow-n">04</div><div><div class="sow-title">Scope — document types (IDP) and/or integration flows (Anypoint)</div><div class="sow-desc">Each with a complexity rating.</div></div></div>
+      <div class="sow-item"><div class="sow-n">05</div><div><div class="sow-title">Key integration/extraction logic</div><div class="sow-desc">Deduplication, confidence thresholds, error handling, audit trail.</div></div></div>
+      <div class="sow-item"><div class="sow-n">06</div><div><div class="sow-title">Explicit out-of-scope table</div><div class="sow-desc">Name what was discussed but is NOT included — prevents scope-creep disputes later.</div></div></div>
+      <div class="sow-item"><div class="sow-n">07</div><div><div class="sow-title">Timeline</div><div class="sow-desc">Milestone table with owners and deliverables per week/phase.</div></div></div>
+      <div class="sow-item"><div class="sow-n">08</div><div><div class="sow-title">Pricing</div><div class="sow-desc">Line-item breakdown, payment terms, ROI reference.</div></div></div>
+      <div class="sow-item"><div class="sow-n">09</div><div><div class="sow-title">RACI table</div></div></div>
+      <div class="sow-item"><div class="sow-n">10</div><div><div class="sow-title">Assumptions &amp; dependencies</div></div></div>
+      <div class="sow-item"><div class="sow-n">11</div><div><div class="sow-title">Acceptance criteria</div></div></div>
+      <div class="sow-item"><div class="sow-n">12</div><div><div class="sow-title">Change management process</div></div></div>
+      <div class="sow-item"><div class="sow-n">13</div><div><div class="sow-title">Confidentiality / compliance requirements</div><div class="sow-desc">HIPAA/BAA etc. if applicable.</div></div></div>
+      <div class="sow-item"><div class="sow-n">14</div><div><div class="sow-title">Governing law and signature blocks</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════ LIVE CHECKLISTS ════════════════════════════ -->
+<div id="tab-checklists" class="tab-panel">
+
+  <div class="callout blue" style="margin-bottom:20px;"><strong>Use this tab during live calls.</strong> Tick each item as it's confirmed. Hit "New Call" to reset before your next call.</div>
+
+  <!-- IDP Checklist -->
+  <div class="section">
+    <div class="checklist-header">
+      <div>
+        <div class="section-title" style="margin-bottom:4px;border-bottom:none;padding-bottom:0;"><i data-lucide="file-scan"></i>IDP Discovery Checklist</div>
+        <div class="checklist-meta"><span id="idp-count">0</span> / <span id="idp-total">15</span> confirmed <div class="progress-bar"><div class="progress-fill" id="idp-progress" style="width:0%"></div></div></div>
+      </div>
+      <button class="reset-btn" onclick="resetChecklist('idp')"><i data-lucide="rotate-ccw"></i> New Call</button>
+    </div>
+
+    <div class="cl-section">
+      <div class="cl-section-title">Document Basics</div>
+      <div class="cl-item" data-group="idp" onclick="toggleCheck(this)"><div class="cl-checkbox"><div class="cl-checkbox-inner"><i data-lucide="check"></i></div></div><div class="cl-text">Source system for document pickup confirmed (email / SharePoint / EAC / portal / SFTP / scanner)</div></div>
+      <div class="cl-item" data-group="idp" onclick="toggleCheck(this)"><div class="cl-checkbox"><div class="cl-checkbox-inner"><i data-lucide="check"></i></div></div><div class="cl-text">File extensions in scope confirmed (PDF / image / Excel / Word / other)</div></div>
+      <div class="cl-item" data-group="idp" onclick="toggleCheck(this)"><div class="cl-checkbox"><div class="cl-checkbox-inner"><i data-lucide="check"></i></div></div><div class="cl-text">Distinct document types in scope — listed each by name</div></div>
+      <div class="cl-item" data-group="idp" onclick="toggleCheck(this)"><div class="cl-checkbox"><div class="cl-checkbox-inner"><i data-lucide="check"></i></div></div><div class="cl-text">Any document type routinely &gt;40 pages? (splitting + aggregation required if yes)</div></div>
+    </div>
+
+    <div class="cl-section">
+      <div class="cl-section-title">Format & Fields</div>
+      <div class="cl-item" data-group="idp" onclick="toggleCheck(this)"><div class="cl-checkbox"><div class="cl-checkbox-inner"><i data-lucide="check"></i></div></div><div class="cl-text">Format consistency assessed: standard / some variance / high variance</div></div>
+      <div class="cl-item" data-group="idp" onclick="toggleCheck(this)"><div class="cl-checkbox"><div class="cl-checkbox-inner"><i data-lucide="check"></i></div></div><div class="cl-text">Number of distinct source templates/formats confirmed (not just doc types)</div></div>
+      <div class="cl-item" data-group="idp" onclick="toggleCheck(this)"><div class="cl-checkbox"><div class="cl-checkbox-inner"><i data-lucide="check"></i></div></div><div class="cl-text">Multiple source systems/channels confirmed (single / 2–3 / 4+)</div></div>
+      <div class="cl-item" data-group="idp" onclick="toggleCheck(this)"><div class="cl-checkbox"><div class="cl-checkbox-inner"><i data-lucide="check"></i></div></div><div class="cl-text">Fields to extract per document type counted (&lt;10 / 10–15 / &gt;15)</div></div>
+      <div class="cl-item" data-group="idp" onclick="toggleCheck(this)"><div class="cl-checkbox"><div class="cl-checkbox-inner"><i data-lucide="check"></i></div></div><div class="cl-text">Checkboxes present and counted (none / ≤5 / &gt;5)</div></div>
+      <div class="cl-item" data-group="idp" onclick="toggleCheck(this)"><div class="cl-checkbox"><div class="cl-checkbox-inner"><i data-lucide="check"></i></div></div><div class="cl-text">Diagrams or images with data to extract? (yes → Medium minimum)</div></div>
+    </div>
+
+    <div class="cl-section">
+      <div class="cl-section-title">Target & Processing</div>
+      <div class="cl-item" data-group="idp" onclick="toggleCheck(this)"><div class="cl-checkbox"><div class="cl-checkbox-inner"><i data-lucide="check"></i></div></div><div class="cl-text">Target system and deployment confirmed (name + cloud/on-prem)</div></div>
+      <div class="cl-item" data-group="idp" onclick="toggleCheck(this)"><div class="cl-checkbox"><div class="cl-checkbox-inner"><i data-lucide="check"></i></div></div><div class="cl-text">Multi-record handling confirmed (one doc per file vs. multiple attachments per email)</div></div>
+      <div class="cl-item" data-group="idp" onclick="toggleCheck(this)"><div class="cl-checkbox"><div class="cl-checkbox-inner"><i data-lucide="check"></i></div></div><div class="cl-text">Bundled/multi-document files possible? (one PDF containing multiple doc types = Complex)</div></div>
+    </div>
+
+    <div class="cl-section">
+      <div class="cl-section-title">Technical Requirements</div>
+      <div class="cl-item" data-group="idp" onclick="toggleCheck(this)"><div class="cl-checkbox"><div class="cl-checkbox-inner"><i data-lucide="check"></i></div></div><div class="cl-text">Confidence threshold + human review queue scoped (always required)</div></div>
+      <div class="cl-item" data-group="idp" onclick="toggleCheck(this)"><div class="cl-checkbox"><div class="cl-checkbox-inner"><i data-lucide="check"></i></div></div><div class="cl-text">Deduplication logic required? Audit trail / compliance (HIPAA etc.) required?</div></div>
+    </div>
+  </div>
+
+  <!-- Anypoint Checklist -->
+  <div class="section">
+    <div class="checklist-header">
+      <div>
+        <div class="section-title" style="margin-bottom:4px;border-bottom:none;padding-bottom:0;"><i data-lucide="git-branch"></i>Anypoint / Integration Checklist</div>
+        <div class="checklist-meta"><span id="any-count">0</span> / <span id="any-total">10</span> confirmed <div class="progress-bar"><div class="progress-fill" id="any-progress" style="width:0%"></div></div></div>
+      </div>
+      <button class="reset-btn" onclick="resetChecklist('any')"><i data-lucide="rotate-ccw"></i> New Call</button>
+    </div>
+
+    <div class="cl-section">
+      <div class="cl-section-title">Source System</div>
+      <div class="cl-item" data-group="any" onclick="toggleCheck(this)"><div class="cl-checkbox"><div class="cl-checkbox-inner"><i data-lucide="check"></i></div></div><div class="cl-text">Source system name + version confirmed</div></div>
+      <div class="cl-item" data-group="any" onclick="toggleCheck(this)"><div class="cl-checkbox"><div class="cl-checkbox-inner"><i data-lucide="check"></i></div></div><div class="cl-text">Source: API-enabled? Cloud or on-prem? (Connectivity complexity scored)</div></div>
+    </div>
+
+    <div class="cl-section">
+      <div class="cl-section-title">Target System</div>
+      <div class="cl-item" data-group="any" onclick="toggleCheck(this)"><div class="cl-checkbox"><div class="cl-checkbox-inner"><i data-lucide="check"></i></div></div><div class="cl-text">Target system name + version confirmed</div></div>
+      <div class="cl-item" data-group="any" onclick="toggleCheck(this)"><div class="cl-checkbox"><div class="cl-checkbox-inner"><i data-lucide="check"></i></div></div><div class="cl-text">Target: API-enabled? Cloud or on-prem? (Connectivity complexity scored)</div></div>
+    </div>
+
+    <div class="cl-section">
+      <div class="cl-section-title">Data & Logic</div>
+      <div class="cl-item" data-group="any" onclick="toggleCheck(this)"><div class="cl-checkbox"><div class="cl-checkbox-inner"><i data-lucide="check"></i></div></div><div class="cl-text">Business objects to exchange named per system (exact object name, not generic)</div></div>
+      <div class="cl-item" data-group="any" onclick="toggleCheck(this)"><div class="cl-checkbox"><div class="cl-checkbox-inner"><i data-lucide="check"></i></div></div><div class="cl-text">Actions per object confirmed (get/extract/create/update) and direction</div></div>
+      <div class="cl-item" data-group="any" onclick="toggleCheck(this)"><div class="cl-checkbox"><div class="cl-checkbox-inner"><i data-lucide="check"></i></div></div><div class="cl-text">Business/transformation logic between systems assessed</div></div>
+      <div class="cl-item" data-group="any" onclick="toggleCheck(this)"><div class="cl-checkbox"><div class="cl-checkbox-inner"><i data-lucide="check"></i></div></div><div class="cl-text">Bi-directional? If yes — exactly what writes back and on what trigger?</div></div>
+      <div class="cl-item" data-group="any" onclick="toggleCheck(this)"><div class="cl-checkbox"><div class="cl-checkbox-inner"><i data-lucide="check"></i></div></div><div class="cl-text">Multi-entity/multi-company routing required?</div></div>
+      <div class="cl-item" data-group="any" onclick="toggleCheck(this)"><div class="cl-checkbox"><div class="cl-checkbox-inner"><i data-lucide="check"></i></div></div><div class="cl-text">Realistic flow count and message volume confirmed (for licensing tier)</div></div>
+    </div>
+  </div>
+
+</div>
+<!-- END PANELS -->
+</main>
+
+<script>
+lucide.createIcons();
+
+// ── Tab switching ──
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+    window.scrollTo(0,0);
+    lucide.createIcons();
+  });
+});
+
+// ── Collapsible ──
+function toggleCollapsible(btn){
+  btn.classList.toggle('open');
+  const body=btn.nextElementSibling;
+  body.classList.toggle('hidden');
+  lucide.createIcons();
+}
+
+// ── Checklist logic ──
+function toggleCheck(item){
+  item.classList.toggle('checked');
+  updateProgress(item.dataset.group);
+  lucide.createIcons();
+}
+
+function updateProgress(group){
+  const items=document.querySelectorAll(`.cl-item[data-group="${group}"]`);
+  const checked=document.querySelectorAll(`.cl-item[data-group="${group}"].checked`);
+  const total=items.length;
+  const done=checked.length;
+  document.getElementById(group+'-count').textContent=done;
+  document.getElementById(group+'-total').textContent=total;
+  document.getElementById(group+'-progress').style.width=(total>0?(done/total*100):0)+'%';
+}
+
+function resetChecklist(group){
+  document.querySelectorAll(`.cl-item[data-group="${group}"]`).forEach(i=>i.classList.remove('checked'));
+  updateProgress(group);
+}
+
+// init counts
+updateProgress('idp');
+updateProgress('any');
+</script>
+</body>
+</html>
