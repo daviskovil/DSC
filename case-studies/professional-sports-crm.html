@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Professional Sports CRM Consolidation | DataSkate Case Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#15161A;
+    --gray-700:#4B4E57;
+    --gray-500:#7A7D87;
+    --gray-300:#C9CBD3;
+    --panel:#F6F6F8;
+    --panel-border:#E6E6EA;
+    --white:#FFFFFF;
+    --red:#E31E2B;
+    --red-dark:#B8131E;
+    --red-tint:#FDEDEE;
+    --blue:#2F7FD1;
+    --blue-tint:#EAF3FC;
+    --radius:14px;
+    --max:1080px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;background:var(--white);color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;line-height:1.55;
+  }
+  h1,h2,h3,.display{font-family:'Fredoka',sans-serif;letter-spacing:-0.01em;margin:0;}
+  .mono{font-family:'IBM Plex Mono',monospace;letter-spacing:0.02em;}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 32px;}
+  .topbar{height:5px;background:linear-gradient(90deg,var(--red),var(--red-dark));}
+
+  /* NAV */
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:28px 0 0;}
+  .logo{display:flex;align-items:center;text-decoration:none;}
+  .nav-tag{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gray-500);}
+  .nav-home{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.06em;color:var(--gray-500);text-decoration:none;border:1px solid var(--panel-border);border-radius:20px;padding:5px 12px;transition:color .15s,border-color .15s;}
+  .nav-home:hover{color:var(--ink);border-color:var(--gray-300);}
+
+  /* HERO */
+  .hero{padding:56px 0 48px;}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;
+    font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--red-dark);
+    background:var(--red-tint);padding:6px 12px;border-radius:100px;margin-bottom:22px;
+  }
+  .eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--red);}
+  .hero-grid{display:grid;grid-template-columns:1.25fr 0.95fr;gap:48px;align-items:stretch;}
+  .hero-left{display:flex;flex-direction:column;}
+  .hero h1{font-size:42px;line-height:1.14;font-weight:600;max-width:600px;}
+  .hero h1 em{font-style:normal;color:var(--red);}
+  .hero-sub{font-size:16.5px;color:var(--gray-700);max-width:520px;margin-top:18px;}
+  .meta-strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin-top:30px;border-top:1px solid var(--panel-border);}
+  .meta-item{position:relative;padding:16px 20px 4px 0;min-width:0;}
+  .meta-item:not(:last-child)::after{content:"";position:absolute;top:16px;bottom:2px;right:8px;width:1px;background:var(--panel-border);}
+  .meta-label{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gray-500);margin-bottom:5px;}
+  .meta-value{font-size:14.5px;font-weight:600;overflow-wrap:break-word;}
+
+  .hero-card{background:var(--panel);border:1px solid var(--panel-border);border-radius:var(--radius);padding:24px;}
+  .hero-card-label{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink);margin-bottom:16px;text-align:center;}
+
+  /* ICON BOX DIAGRAM */
+  .diagram-row{display:flex;flex-direction:column;align-items:center;gap:0;}
+  .icon-box{
+    width:100%;max-width:210px;background:var(--white);border-radius:12px;border:2px solid var(--panel-border);
+    padding-top:20px;padding-bottom:14px;text-align:center;flex-shrink:0;
+    position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100px;
+  }
+  .icon-box.border-red{border-color:var(--red);}
+  .icon-box.border-blue{border-color:var(--blue);}
+  .icon-circle{
+    width:34px;height:34px;border-radius:9px;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;
+  }
+  .icon-circle.bg-red{background:var(--red-tint);}
+  .icon-circle.bg-blue{background:var(--blue-tint);}
+  .icon-circle.bg-gray{background:var(--panel);}
+  .icon-circle svg{width:18px;height:18px;stroke-width:2;fill:none;}
+  .icon-circle.bg-red svg{stroke:var(--red-dark);}
+  .icon-circle.bg-blue svg{stroke:var(--blue);}
+  .icon-circle.bg-gray svg{stroke:var(--gray-700);}
+  .icon-box-title{font-size:11.5px;font-weight:700;line-height:1.2;}
+  .icon-box-sub{font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:var(--gray-500);margin-top:2px;}
+  .mini-pill{
+    position:absolute;top:-11px;left:50%;transform:translateX(-50%);
+    background:var(--ink);color:white;font-size:9.5px;font-weight:700;
+    padding:4px 12px;border-radius:100px;white-space:nowrap;
+  }
+  .mini-pill.red{background:var(--red);}
+  .mini-pill.blue{background:var(--blue);}
+
+  .connector{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6px 0;gap:4px;}
+  .connector .cap{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--gray-500);text-align:center;white-space:nowrap;}
+  .connector .arrow-line{width:2px;height:20px;background:var(--gray-300);position:relative;}
+  .connector .arrow-line::after{content:"";position:absolute;left:50%;bottom:-4px;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--gray-300);}
+  .connector.solid-red .arrow-line{background:var(--red);}
+  .connector.solid-red .arrow-line::after{border-top-color:var(--red);}
+
+  /* SECTIONS */
+  section{padding:54px 0;}
+  section.band{background:var(--panel);border-top:1px solid var(--panel-border);border-bottom:1px solid var(--panel-border);}
+  .section-head{display:grid;grid-template-columns:220px 1fr;gap:40px;margin-bottom:26px;}
+  .section-label{
+    font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;letter-spacing:0.06em;
+    text-transform:uppercase;color:var(--red);padding-top:4px;display:flex;align-items:center;gap:8px;
+  }
+  .section-label::before{content:"";width:8px;height:8px;background:var(--red);flex-shrink:0;border-radius:2px;}
+  .section-head h2{font-size:26px;font-weight:700;}
+  .section-body{display:grid;grid-template-columns:220px 1fr;gap:40px;}
+  .section-body p{font-size:15.5px;color:var(--gray-700);max-width:620px;}
+  .section-body p + p{margin-top:14px;}
+
+  /* SOLUTION FLOW CARDS */
+  .flow-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .flow-card{background:var(--white);border:1px solid var(--panel-border);border-radius:12px;padding:18px 20px;}
+  .flow-head{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+  .flow-badge{
+    width:32px;height:32px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .flow-badge svg{width:15px;height:15px;stroke:white;fill:none;stroke-width:2.3;}
+  .flow-title{font-size:14.5px;font-weight:700;}
+  .flow-path{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--gray-500);}
+  .flow-desc{font-size:14px;color:var(--gray-700);padding-left:44px;}
+
+  /* ARCHITECTURE */
+  .arch-diagram{background:var(--white);border:1px solid var(--panel-border);border-radius:var(--radius);padding:32px 24px;}
+
+  .lane-row{display:flex;align-items:stretch;gap:0;}
+  .lane{
+    flex:1;background:var(--white);border:1.5px solid var(--panel-border);border-radius:var(--radius);
+    padding:34px 16px 20px;position:relative;min-width:0;
+  }
+  .lane-header{
+    position:absolute;top:-16px;left:50%;transform:translateX(-50%);
+    background:var(--ink);color:white;font-size:12.5px;font-weight:700;
+    padding:7px 18px;border-radius:100px;white-space:nowrap;
+  }
+  .lane-header.red{background:var(--red);}
+  .lane-header.blue{background:var(--blue);}
+  .lane-tags{display:flex;gap:6px;justify-content:center;margin-bottom:16px;flex-wrap:wrap;}
+  .lane-tag{
+    font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.04em;color:var(--gray-700);
+    background:var(--panel);border:1px solid var(--panel-border);border-radius:100px;padding:4px 10px;
+  }
+  .lane-boxes{display:flex;flex-direction:column;gap:10px;}
+  .lane-box{
+    display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--panel-border);
+    border-radius:10px;padding:9px 12px;
+  }
+  .lane-box-icon{width:26px;height:26px;border-radius:7px;background:var(--white);border:1.5px solid var(--panel-border);flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+  .lane-box-icon svg{width:13px;height:13px;stroke:var(--gray-700);fill:none;stroke-width:2.2;}
+  .lane-box-text{font-size:12px;font-weight:600;}
+
+  .lane-connector{width:64px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:0 4px;}
+  .gear-icon{width:26px;height:26px;border-radius:50%;background:var(--panel);border:1.5px solid var(--panel-border);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .gear-icon svg{width:13px;height:13px;stroke:var(--gray-500);fill:none;stroke-width:2;}
+  .lane-connector .dots{width:100%;height:0;border-top:2px dotted var(--gray-300);position:relative;}
+  .lane-connector .dots::after{content:"";position:absolute;right:-2px;top:-4px;border:4px solid transparent;border-left-color:var(--gray-300);}
+  .lane-connector-label{font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--gray-500);text-align:center;line-height:1.3;}
+
+  .pipeline-bar{
+    margin-top:22px;background:var(--ink);border-radius:100px;padding:12px 22px;
+    display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:wrap;
+  }
+  .pipeline-step{color:white;font-size:12px;font-weight:600;padding:0 18px;position:relative;}
+  .pipeline-step:not(:last-child)::after{content:"›";position:absolute;right:-2px;color:var(--gray-300);}
+  .pipeline-caption{text-align:center;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--gray-500);margin-top:10px;}
+
+  /* ABOUT CLIENT */
+  .client-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  .client-card{background:var(--white);border:1px solid var(--panel-border);border-radius:12px;padding:18px;}
+  .client-card-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--gray-500);margin-bottom:6px;}
+  .client-card-value{font-size:15px;font-weight:700;}
+  .client-card-sub{font-size:12.5px;color:var(--gray-700);margin-top:3px;}
+
+  /* IMPLEMENTATION */
+  .stepper-track{display:flex;align-items:center;margin-bottom:8px;}
+  .stepper-node{
+    width:34px;height:34px;border-radius:50%;background:var(--red);color:white;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-weight:700;font-size:14px;
+  }
+  .stepper-line{flex:1;height:2px;background:var(--panel-border);}
+  .impl-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:4px;}
+  .impl-card{background:var(--white);border:1px solid var(--panel-border);border-radius:12px;padding:14px 12px;}
+  .impl-week{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--red-dark);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;}
+  .impl-phase{font-size:13.5px;font-weight:700;margin-bottom:6px;}
+  .impl-desc{font-size:11.5px;color:var(--gray-700);line-height:1.4;margin-bottom:8px;}
+  .impl-deliverable{
+    font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--gray-700);background:var(--panel);
+    border:1px solid var(--panel-border);border-radius:6px;padding:5px 7px;line-height:1.3;
+  }
+
+  /* NUMBERS */
+  .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  .stat-card{background:var(--white);border:1px solid var(--panel-border);border-radius:12px;padding:22px 18px;text-align:left;}
+  .stat-value{font-family:'Fredoka',sans-serif;font-size:32px;font-weight:700;color:var(--ink);}
+  .stat-value span{color:var(--red);}
+  .stat-label{font-size:13px;color:var(--gray-500);margin-top:6px;}
+
+  /* RESULTS */
+  .results-pending{border:1.5px dashed var(--gray-300);border-radius:var(--radius);padding:30px;text-align:center;background:var(--white);}
+  .results-pending .tag{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gray-500);background:var(--panel);border:1px solid var(--panel-border);border-radius:100px;padding:5px 12px;margin-bottom:14px;}
+  .results-pending p{font-size:14px;color:var(--gray-500);max-width:440px;margin:0 auto;}
+  .results-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  .result-card{background:var(--white);border:1px solid var(--panel-border);border-radius:12px;padding:20px;}
+  .result-icon{width:32px;height:32px;border-radius:9px;background:var(--red);display:flex;align-items:center;justify-content:center;margin-bottom:12px;}
+  .result-icon svg{width:15px;height:15px;stroke:white;fill:none;stroke-width:2.3;}
+  .result-stat{font-family:'Fredoka',sans-serif;font-size:21px;font-weight:700;margin-bottom:4px;}
+  .result-desc{font-size:13px;color:var(--gray-700);}
+
+  /* WHY DATASKATE */
+  .why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  .why-item{background:var(--white);border:1px solid var(--panel-border);border-radius:12px;padding:18px 18px 20px;}
+  .why-icon{width:32px;height:32px;border-radius:9px;background:var(--red-tint);display:flex;align-items:center;justify-content:center;margin-bottom:12px;}
+  .why-icon svg{width:16px;height:16px;stroke:var(--red-dark);fill:none;stroke-width:2.2;}
+  .why-title{font-size:14.5px;font-weight:700;margin-bottom:6px;}
+  .why-desc{font-size:13.5px;color:var(--gray-700);line-height:1.5;}
+
+  /* CTA */
+  .cta-bar{background:var(--red-tint);border:1px solid #F5C6C9;border-radius:var(--radius);padding:22px 26px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;}
+  .cta-left{display:flex;align-items:center;gap:14px;}
+  .cta-icon{width:38px;height:38px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .cta-icon svg{width:18px;height:18px;stroke:white;fill:none;stroke-width:2.3;}
+  .cta-label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--red-dark);font-weight:600;}
+  .cta-text{font-size:15px;font-weight:600;color:var(--ink);margin-top:2px;}
+  .cta-mid{flex:1;}
+  .cta-btn{background:var(--ink);color:white;border:none;padding:12px 22px;border-radius:9px;font-family:'Inter',sans-serif;font-weight:600;font-size:14px;cursor:pointer;white-space:nowrap;text-decoration:none;display:inline-block;transition:background 0.15s ease;}
+  .cta-btn:hover{background:var(--red-dark);}
+
+  footer{padding:32px 0 46px;color:var(--gray-500);font-size:13px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+
+  .reveal{opacity:0;transform:translateY(14px);transition:opacity 0.5s ease,transform 0.5s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+  @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none;}}
+
+  @media (max-width:820px){
+    .hero-grid{grid-template-columns:1fr;}
+    .hero h1{font-size:30px;}
+    .section-head,.section-body{grid-template-columns:1fr;gap:14px;}
+    .flow-grid,.stat-grid,.results-grid,.why-grid{grid-template-columns:1fr 1fr;}
+    .meta-strip{grid-template-columns:1fr 1fr;row-gap:14px;}
+    .meta-item:nth-child(2)::after{display:none;}
+    .client-grid{grid-template-columns:1fr 1fr;}
+    .lane-row{flex-direction:column;}
+    .lane-connector{width:100%;transform:rotate(90deg);margin:26px 0;}
+    .impl-grid{grid-template-columns:1fr 1fr;}
+    .pipeline-step{font-size:11px;padding:0 10px;}
+  }
+  @media (max-width:520px){
+    .stat-grid,.results-grid,.why-grid,.flow-grid,.client-grid{grid-template-columns:1fr;}
+    .impl-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar"></div>
+<div class="wrap">
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="https://dataskate.online" class="logo">
+      <svg width="116" height="28" viewBox="0 0 116 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="0,26 7,3 14,26" fill="#E31E2B"/>
+        <text x="20" y="22" font-family="Fredoka, sans-serif" font-size="19" font-weight="600" fill="#15161A">dataskate</text>
+      </svg>
+    </a>
+    <div style="display:flex;align-items:center;gap:16px;">
+      <div class="nav-tag">Case Study · CRM Consolidation</div>
+      <a href="https://dataskate.online" class="nav-home">Home</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero reveal">
+    <div class="eyebrow">Professional Sports · CRM Consolidation</div>
+    <div class="hero-grid">
+      <div class="hero-left">
+        <h1>One platform, every fan, <em>zero downtime</em> during the season.</h1>
+        <div class="hero-sub">A six-person revenue team was juggling two disconnected platforms and exporting data by hand. DataSkate replaced the legacy stack, live-synced the ticketing system, and went live without interrupting a single game day.</div>
+        <div class="meta-strip">
+          <div class="meta-item">
+            <div class="meta-label">Industry</div>
+            <div class="meta-value">Professional Sports</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Systems</div>
+            <div class="meta-value">Ticketing → CRM</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Engagement</div>
+            <div class="meta-value">CRM Replacement + Integration</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Team</div>
+            <div class="meta-value">6 revenue staff</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <div class="hero-card-label">Integration at a glance</div>
+        <div class="diagram-row">
+          <div class="icon-box">
+            <div class="icon-circle bg-gray">
+              <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+            </div>
+            <div class="icon-box-title">Ticketing Platform</div>
+            <div class="icon-box-sub">Fan & ticket records</div>
+          </div>
+          <div class="connector solid-red">
+            <div class="cap">Live API sync</div>
+            <div class="arrow-line"></div>
+          </div>
+          <div class="icon-box border-red">
+            <div class="mini-pill red">DataSkate</div>
+            <div class="icon-circle bg-red">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.65 1.65 0 004.6 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+            </div>
+            <div class="icon-box-title">Integration Layer</div>
+            <div class="icon-box-sub">Transform · Map · Sync</div>
+          </div>
+          <div class="connector">
+            <div class="cap">Write-back to native objects</div>
+            <div class="arrow-line"></div>
+          </div>
+          <div class="icon-box border-blue">
+            <div class="mini-pill blue">Native Objects</div>
+            <div class="icon-circle bg-blue">
+              <svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v5c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 10v5c0 1.66 4 3 9 3s9-1.34 9-3v-5"/></svg>
+            </div>
+            <div class="icon-box-title">CRM</div>
+            <div class="icon-box-sub">Campaigns · Contacts · Reports</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT THE CLIENT -->
+  <section class="band reveal">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-label">01 — About the Client</div>
+        <h2>A lean sports organization built to win</h2>
+      </div>
+      <div class="section-body">
+        <div></div>
+        <div>
+          <p>A professional sports franchise operating in a fast-moving, season-driven environment. Six revenue-generating staff drive all ticket sales, account management, and fan engagement — with no dedicated technical or operations resource in-house. Box office operations are outsourced. When it comes to data and systems, there's no one to assign it to.</p>
+          <div style="height:16px;"></div>
+          <div class="client-grid">
+            <div class="client-card">
+              <div class="client-card-label">Industry</div>
+              <div class="client-card-value">Professional Sports</div>
+              <div class="client-card-sub">Live entertainment & ticketing</div>
+            </div>
+            <div class="client-card">
+              <div class="client-card-label">Revenue Team</div>
+              <div class="client-card-value">6 people</div>
+              <div class="client-card-sub">No dedicated ops or tech staff</div>
+            </div>
+            <div class="client-card">
+              <div class="client-card-label">Before DataSkate</div>
+              <div class="client-card-value">2 disconnected systems</div>
+              <div class="client-card-sub">Manual exports, 560+ duplicate records</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHALLENGE -->
+  <section class="reveal">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-label">02 — The Challenge</div>
+        <h2>Two systems telling two different stories</h2>
+      </div>
+      <div class="section-body">
+        <div></div>
+        <div>
+          <p>The team managed fan relationships through a CRM layered with a third-party ISV package — a wrapper that buried native CRM objects behind a proprietary UI and limited what the team could customize or report on. Ticketing data lived in a completely separate platform. Getting the two to talk meant someone manually exporting files, then re-entering records.</p>
+          <p>Over time, the gaps compounded: 560+ duplicate fan records had built up with no automated way to clean them. Campaign creation required jumping between systems. Leadership had no unified view of season ticket holders without reconciling data by hand. The CRM subscription was being paid in full — and used at a fraction of its capacity.</p>
+          <p>With both platform contracts coming up for renewal at the same time, the window to modernize was open — and closing fast. The team needed a clean, all-or-nothing decision: keep the status quo, or go full CRM with a live ticketing integration and no legacy dependencies left behind.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOLUTION -->
+  <section class="band reveal">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-label">03 — The Solution</div>
+        <h2>Six deliverables. Full replacement.</h2>
+      </div>
+      <div class="section-body">
+        <div></div>
+        <div class="flow-grid">
+
+          <div class="flow-card">
+            <div class="flow-head">
+              <div class="flow-badge">
+                <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+              </div>
+              <div>
+                <div class="flow-title">Ticketing ↔ CRM Live Sync</div>
+                <div class="flow-path">Ticketing API → CRM</div>
+              </div>
+            </div>
+            <div class="flow-desc">Live connection pulls fan purchases, contact updates, and segment data directly into the CRM. Manual exports eliminated on day one.</div>
+          </div>
+
+          <div class="flow-card">
+            <div class="flow-head">
+              <div class="flow-badge">
+                <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              </div>
+              <div>
+                <div class="flow-title">Campaign Creation Capability</div>
+                <div class="flow-path">CRM native campaigns</div>
+              </div>
+            </div>
+            <div class="flow-desc">Revenue team builds and launches targeted fan campaigns from within the CRM, using always-current ticketing data — no external tools required.</div>
+          </div>
+
+          <div class="flow-card">
+            <div class="flow-head">
+              <div class="flow-badge">
+                <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+              </div>
+              <div>
+                <div class="flow-title">Full Contact Sync</div>
+                <div class="flow-path">Ticketing → CRM fan records</div>
+              </div>
+            </div>
+            <div class="flow-desc">All fan and contact records migrated to native CRM objects, then kept continuously current with every ticketing transaction.</div>
+          </div>
+
+          <div class="flow-card">
+            <div class="flow-head">
+              <div class="flow-badge">
+                <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+              </div>
+              <div>
+                <div class="flow-title">Legacy Package Decommission</div>
+                <div class="flow-path">ISV wrapper → native CRM</div>
+              </div>
+            </div>
+            <div class="flow-desc">Third-party wrapper fully retired. All data migrated to standard native CRM objects — more flexible, more reportable, one fewer contract to manage.</div>
+          </div>
+
+          <div class="flow-card">
+            <div class="flow-head">
+              <div class="flow-badge">
+                <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+              </div>
+              <div>
+                <div class="flow-title">Core Automations &amp; Reporting</div>
+                <div class="flow-path">CRM workflows + dashboards</div>
+              </div>
+            </div>
+            <div class="flow-desc">All existing workflows replicated and enhanced with baseline automations, plus reporting dashboards the team can use without a data analyst.</div>
+          </div>
+
+          <div class="flow-card">
+            <div class="flow-head">
+              <div class="flow-badge">
+                <svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+              </div>
+              <div>
+                <div class="flow-title">UAT, Training &amp; Go-Live</div>
+                <div class="flow-path">Parallel deploy</div>
+              </div>
+            </div>
+            <div class="flow-desc">Full user acceptance testing, team training, and a phased cutover with rollback window. System went live mid-season with zero disruption to game-day operations.</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ARCHITECTURE -->
+  <section class="reveal">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-label">04 — Architecture</div>
+        <h2>Ticketing in, CRM out — live, all the time</h2>
+      </div>
+      <div class="section-body">
+        <div></div>
+        <div>
+          <div class="arch-diagram">
+            <div class="lane-row">
+
+              <!-- SOURCE -->
+              <div class="lane">
+                <div class="lane-header">Ticketing Platform</div>
+                <div class="lane-tags">
+                  <div class="lane-tag">Fan Data</div>
+                  <div class="lane-tag">Live Events</div>
+                </div>
+                <div class="lane-boxes">
+                  <div class="lane-box">
+                    <div class="lane-box-icon"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3H8a2 2 0 00-2 2v2h12V5a2 2 0 00-2-2z"/></svg></div>
+                    <div class="lane-box-text">Fan Purchases</div>
+                  </div>
+                  <div class="lane-box">
+                    <div class="lane-box-icon"><svg viewBox="0 0 24 24"><path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg></div>
+                    <div class="lane-box-text">Season Ticket Holders</div>
+                  </div>
+                  <div class="lane-box">
+                    <div class="lane-box-icon"><svg viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></div>
+                    <div class="lane-box-text">Price Code Segments</div>
+                  </div>
+                  <div class="lane-box">
+                    <div class="lane-box-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+                    <div class="lane-box-text">Contact Information</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- CONNECTOR 1 -->
+              <div class="lane-connector">
+                <div class="gear-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.65 1.65 0 004.6 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></div>
+                <div class="dots"></div>
+                <div class="lane-connector-label">API<br>polling</div>
+              </div>
+
+              <!-- MIDDLEWARE -->
+              <div class="lane">
+                <div class="lane-header red">DataSkate Integration</div>
+                <div class="lane-tags">
+                  <div class="lane-tag">Transform</div>
+                  <div class="lane-tag">Map</div>
+                  <div class="lane-tag">Sync</div>
+                </div>
+                <div class="lane-boxes">
+                  <div class="lane-box">
+                    <div class="lane-box-icon"><svg viewBox="0 0 24 24"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 012 2v7"/><line x1="6" y1="9" x2="6" y2="21"/></svg></div>
+                    <div class="lane-box-text">API Listener / Polling</div>
+                  </div>
+                  <div class="lane-box">
+                    <div class="lane-box-icon"><svg viewBox="0 0 24 24"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg></div>
+                    <div class="lane-box-text">Data Transform &amp; Field Mapping</div>
+                  </div>
+                  <div class="lane-box">
+                    <div class="lane-box-icon"><svg viewBox="0 0 24 24"><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg></div>
+                    <div class="lane-box-text">Error Handling / Retry</div>
+                  </div>
+                  <div class="lane-box">
+                    <div class="lane-box-icon"><svg viewBox="0 0 24 24"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="9"/></svg></div>
+                    <div class="lane-box-text">Run-log / Monitoring</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- CONNECTOR 2 -->
+              <div class="lane-connector">
+                <div class="gear-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.65 1.65 0 004.6 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></div>
+                <div class="dots"></div>
+                <div class="lane-connector-label">Native<br>write-back</div>
+              </div>
+
+              <!-- TARGET -->
+              <div class="lane">
+                <div class="lane-header blue">CRM — Native Objects</div>
+                <div class="lane-tags">
+                  <div class="lane-tag">Sales Cloud</div>
+                </div>
+                <div class="lane-boxes">
+                  <div class="lane-box">
+                    <div class="lane-box-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
+                    <div class="lane-box-text">Fan / Contact Records</div>
+                  </div>
+                  <div class="lane-box">
+                    <div class="lane-box-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+                    <div class="lane-box-text">Campaign Management</div>
+                  </div>
+                  <div class="lane-box">
+                    <div class="lane-box-icon"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+                    <div class="lane-box-text">Reporting Dashboards</div>
+                  </div>
+                  <div class="lane-box">
+                    <div class="lane-box-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
+                    <div class="lane-box-text">Activity Logging</div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="pipeline-bar">
+              <div class="pipeline-step">Discovery</div>
+              <div class="pipeline-step">Design</div>
+              <div class="pipeline-step">Build</div>
+              <div class="pipeline-step">Testing</div>
+              <div class="pipeline-step">UAT &amp; Go-Live</div>
+            </div>
+            <div class="pipeline-caption">DataSkate delivery pipeline · see Implementation below</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- IMPLEMENTATION -->
+  <section class="band reveal">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-label">05 — Implementation</div>
+        <h2>Parallel build. Five phases. Zero downtime.</h2>
+      </div>
+      <div class="section-body">
+        <div></div>
+        <div>
+          <div class="stepper-track">
+            <div class="stepper-node">1</div><div class="stepper-line"></div>
+            <div class="stepper-node">2</div><div class="stepper-line"></div>
+            <div class="stepper-node">3</div><div class="stepper-line"></div>
+            <div class="stepper-node">4</div><div class="stepper-line"></div>
+            <div class="stepper-node">5</div>
+          </div>
+          <div class="impl-grid">
+            <div class="impl-card">
+              <div class="impl-week">Phase 1</div>
+              <div class="impl-phase">Discovery &amp; Audit</div>
+              <div class="impl-desc">Review current CRM configuration, map legacy ISV objects to native equivalents, confirm ticketing API access and field schemas.</div>
+              <div class="impl-deliverable">Kickoff doc + field mapping matrix</div>
+            </div>
+            <div class="impl-card">
+              <div class="impl-week">Phase 2</div>
+              <div class="impl-phase">Architecture &amp; Design</div>
+              <div class="impl-desc">Define integration architecture, establish error handling and retry strategy, finalize data migration and decommission plan.</div>
+              <div class="impl-deliverable">Design doc + Architecture Review session</div>
+            </div>
+            <div class="impl-card">
+              <div class="impl-week">Phase 3</div>
+              <div class="impl-phase">Build &amp; Migration</div>
+              <div class="impl-desc">Live integration flows built and tested in sandbox. Fan and contact records migrated to native CRM objects. Core automations configured.</div>
+              <div class="impl-deliverable">Working build in sandbox + migration runbook</div>
+            </div>
+            <div class="impl-card">
+              <div class="impl-week">Phase 4</div>
+              <div class="impl-phase">Testing</div>
+              <div class="impl-desc">End-to-end testing across all sync flows. Parallel system run verifies data parity. Defects resolved before cutover.</div>
+              <div class="impl-deliverable">Test results + defect log + parity checklist</div>
+            </div>
+            <div class="impl-card">
+              <div class="impl-week">Phase 5</div>
+              <div class="impl-phase">UAT &amp; Go-Live</div>
+              <div class="impl-desc">Client UAT hand-off, team training, legacy system decommission, production deployment with rollback window and post-launch monitoring.</div>
+              <div class="impl-deliverable">UAT sign-off + handover docs</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BY THE NUMBERS -->
+  <section class="reveal">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-label">06 — By the Numbers</div>
+        <h2>What shipped in Phase 1</h2>
+      </div>
+      <div class="section-body">
+        <div></div>
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="stat-value">6</div>
+            <div class="stat-label">Integration deliverables shipped</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">2</div>
+            <div class="stat-label">Platforms consolidated into one CRM</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">560<span>+</span></div>
+            <div class="stat-label">Duplicate fan records flagged for Phase 2</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">0</div>
+            <div class="stat-label">Downtime during active season</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section class="band reveal">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-label">07 — Results</div>
+        <h2>What changes on day one</h2>
+      </div>
+      <div class="section-body">
+        <div></div>
+        <div>
+          <div class="results-pending">
+            <div class="tag">Post go-live outcomes pending</div>
+            <p>This engagement is in delivery. Outcome data — hours recovered, campaign lift, adoption metrics — will be added here once the team has a full season on the new platform.</p>
+          </div>
+          <div style="height:16px;"></div>
+          <div class="results-grid">
+            <div class="result-card">
+              <div class="result-icon"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+              <div class="result-stat">Live fan data</div>
+              <div class="result-desc">Ticketing purchases flow into CRM in real time — no manual exports, no lag, no stale records.</div>
+            </div>
+            <div class="result-card">
+              <div class="result-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+              <div class="result-stat">Campaign-ready</div>
+              <div class="result-desc">Revenue team targets season ticket holders and segments directly from the CRM — no extra steps, no tool-switching.</div>
+            </div>
+            <div class="result-card">
+              <div class="result-icon"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
+              <div class="result-stat">One system. Done.</div>
+              <div class="result-desc">Legacy ISV package decommissioned. One CRM instance, one contract, full native flexibility — and nothing left to manage from the old stack.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY DATASKATE -->
+  <section class="reveal">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-label">Why DataSkate</div>
+        <h2>Built for teams that can't slow down</h2>
+      </div>
+      <div class="section-body">
+        <div></div>
+        <div class="why-grid">
+          <div class="why-item">
+            <div class="why-icon">
+              <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+            </div>
+            <div class="why-title">Delivery without a technical hire</div>
+            <div class="why-desc">We own the full build end-to-end — architecture, integration, migration, and go-live. No in-house developer or ops resource required from your team.</div>
+          </div>
+          <div class="why-item">
+            <div class="why-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="9"/></svg>
+            </div>
+            <div class="why-title">Built to fit your season</div>
+            <div class="why-desc">Parallel delivery with rollback window. Your team never lost access to their working system during the switch — built around your game schedule, not around ours.</div>
+          </div>
+          <div class="why-item">
+            <div class="why-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            </div>
+            <div class="why-title">Scoped for what matters now</div>
+            <div class="why-desc">Phase 1 delivers the core: live sync, campaign capability, full decommission. Phase 2 — fan record deduplication, unified profiles, advanced automation — is already scoped and waiting.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="reveal">
+    <div class="wrap" style="padding-bottom:54px;">
+      <div class="cta-bar">
+        <div class="cta-left">
+          <div class="cta-icon">
+            <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          </div>
+          <div>
+            <div class="cta-label">Work with DataSkate</div>
+            <div class="cta-text">Have a system handoff coming up? Let's scope it.</div>
+          </div>
+        </div>
+        <div class="cta-mid"></div>
+        <a href="https://dataskate.online" class="cta-btn">Get in touch</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div>© DataSkate LLC · West Windsor, NJ</div>
+    <div class="mono">Case Study · Professional Sports</div>
+  </footer>
+
+</div>
+
+<script>
+  const els = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  },{threshold:0.12});
+  els.forEach(el=>io.observe(el));
+</script>
+
+</body>
+</html>
