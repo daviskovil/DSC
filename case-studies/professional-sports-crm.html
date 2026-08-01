@@ -97,8 +97,8 @@
 
   .connector{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6px 0;gap:4px;}
   .connector .cap{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--gray-500);text-align:center;white-space:nowrap;}
-  .connector .arrow-line{width:2px;height:20px;background:var(--gray-300);position:relative;}
-  .connector .arrow-line::after{content:"";position:absolute;left:50%;bottom:-4px;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--gray-300);}
+  .connector .arrow-line{width:2px;height:32px;background:var(--gray-300);position:relative;overflow:visible;}
+  .connector .arrow-line::after{content:"";position:absolute;left:50%;bottom:-8px;transform:translateX(-50%);border:7px solid transparent;border-top-color:var(--gray-300);}
   .connector.solid-red .arrow-line{background:var(--red);}
   .connector.solid-red .arrow-line::after{border-top-color:var(--red);}
 
@@ -273,14 +273,13 @@
       <span style="font-family:'Fredoka',sans-serif;font-size:20px;font-weight:600;letter-spacing:-0.01em;color:#15161A;">data<span style="color:#E31E2B;">skate</span></span>
     </a>
     <div style="display:flex;align-items:center;gap:16px;">
-      <div class="nav-tag">Case Study · CRM Consolidation</div>
-      <a href="https://dataskate.online" class="nav-home">Home</a>
+      <a href="/case-studies/" class="nav-home">Case Studies Home</a>
     </div>
   </nav>
 
   <!-- HERO -->
   <section class="hero reveal">
-    <div class="eyebrow">Professional Sports · CRM Consolidation</div>
+    <div class="eyebrow">Case Study · CRM Consolidation</div>
     <div class="hero-grid">
       <div class="hero-left">
         <h1>One platform, every fan, <em>zero downtime</em> during the season.</h1>
@@ -631,7 +630,7 @@
     <div class="wrap">
       <div class="section-head">
         <div class="section-label">05 — Implementation</div>
-        <h2>Parallel build. Five phases. Zero downtime.</h2>
+        <h2>Parallel build. Five steps. Zero downtime.</h2>
       </div>
       <div class="section-body">
         <div></div>
@@ -645,31 +644,31 @@
           </div>
           <div class="impl-grid">
             <div class="impl-card">
-              <div class="impl-week">Phase 1</div>
+              <div class="impl-week">Step 1</div>
               <div class="impl-phase">Discovery &amp; Audit</div>
               <div class="impl-desc">Review current CRM configuration, map legacy ISV objects to native equivalents, confirm ticketing API access and field schemas.</div>
               <div class="impl-deliverable">Kickoff doc + field mapping matrix</div>
             </div>
             <div class="impl-card">
-              <div class="impl-week">Phase 2</div>
+              <div class="impl-week">Step 2</div>
               <div class="impl-phase">Architecture &amp; Design</div>
               <div class="impl-desc">Define integration architecture, establish error handling and retry strategy, finalize data migration and decommission plan.</div>
               <div class="impl-deliverable">Design doc + Architecture Review session</div>
             </div>
             <div class="impl-card">
-              <div class="impl-week">Phase 3</div>
+              <div class="impl-week">Step 3</div>
               <div class="impl-phase">Build &amp; Migration</div>
               <div class="impl-desc">Live integration flows built and tested in sandbox. Fan and contact records migrated to native CRM objects. Core automations configured.</div>
               <div class="impl-deliverable">Working build in sandbox + migration runbook</div>
             </div>
             <div class="impl-card">
-              <div class="impl-week">Phase 4</div>
+              <div class="impl-week">Step 4</div>
               <div class="impl-phase">Testing</div>
               <div class="impl-desc">End-to-end testing across all sync flows. Parallel system run verifies data parity. Defects resolved before cutover.</div>
               <div class="impl-deliverable">Test results + defect log + parity checklist</div>
             </div>
             <div class="impl-card">
-              <div class="impl-week">Phase 5</div>
+              <div class="impl-week">Step 5</div>
               <div class="impl-phase">UAT &amp; Go-Live</div>
               <div class="impl-desc">Client UAT hand-off, team training, legacy system decommission, production deployment with rollback window and post-launch monitoring.</div>
               <div class="impl-deliverable">UAT sign-off + handover docs</div>
@@ -685,7 +684,7 @@
     <div class="wrap">
       <div class="section-head">
         <div class="section-label">06 — By the Numbers</div>
-        <h2>What shipped in Phase 1</h2>
+        <h2>What shipped in Step 1</h2>
       </div>
       <div class="section-body">
         <div></div>
@@ -700,7 +699,7 @@
           </div>
           <div class="stat-card">
             <div class="stat-value">560<span>+</span></div>
-            <div class="stat-label">Duplicate fan records flagged for Phase 2</div>
+            <div class="stat-label">Duplicate fan records flagged for Step 2</div>
           </div>
           <div class="stat-card">
             <div class="stat-value">0</div>
@@ -772,28 +771,9 @@
               <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
             </div>
             <div class="why-title">Scoped for what matters now</div>
-            <div class="why-desc">Phase 1 delivers the core: live sync, campaign capability, full decommission. Phase 2 — fan record deduplication, unified profiles, advanced automation — is already scoped and waiting.</div>
+            <div class="why-desc">Step 1 delivers the core: live sync, campaign capability, full decommission. Step 2 — fan record deduplication, unified profiles, advanced automation — is already scoped and waiting.</div>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA -->
-  <section class="reveal">
-    <div class="wrap" style="padding-bottom:54px;">
-      <div class="cta-bar">
-        <div class="cta-left">
-          <div class="cta-icon">
-            <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-          </div>
-          <div>
-            <div class="cta-label">Work with DataSkate</div>
-            <div class="cta-text">Have a system handoff coming up? Let's scope it.</div>
-          </div>
-        </div>
-        <div class="cta-mid"></div>
-        <a href="https://dataskate.online" class="cta-btn">Get in touch</a>
       </div>
     </div>
   </section>
