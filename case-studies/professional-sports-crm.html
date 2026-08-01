@@ -20,6 +20,9 @@
     --red-tint:#FDEDEE;
     --blue:#2F7FD1;
     --blue-tint:#EAF3FC;
+    --sf-blue:#00A1E0;
+    --sf-blue-tint:#E5F6FD;
+    --mule-blue:#00A1E0;
     --radius:14px;
     --max:1080px;
   }
@@ -262,11 +265,12 @@
 
   <!-- NAV -->
   <nav class="nav">
-    <a href="https://dataskate.online" class="logo">
-      <svg width="116" height="28" viewBox="0 0 116 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <polygon points="0,26 7,3 14,26" fill="#E31E2B"/>
-        <text x="20" y="22" font-family="Fredoka, sans-serif" font-size="19" font-weight="600" fill="#15161A">dataskate</text>
+    <a href="https://dataskate.online" class="logo" style="display:flex;align-items:center;gap:9px;text-decoration:none;">
+      <svg viewBox="156 275 78 66" xmlns="http://www.w3.org/2000/svg" style="width:26px;height:22px;flex-shrink:0;">
+        <path fill="#E31E2B" d="m195.02,287.72v-12.49c21.94,0,38.48,10.29,38.48,23.93s-16.55,23.93-38.48,23.93v-12.49c15.86,0,25.99-6.77,25.99-11.44s-10.13-11.44-25.99-11.44Z"/>
+        <path fill="#15161A" d="m195.02,327.75v12.49c-21.94,0-38.48-10.29-38.48-23.93s16.55-23.93,38.48-23.93v12.49c-15.86,0-25.99,6.77-25.99,11.44s10.13,11.44,25.99,11.44Z"/>
       </svg>
+      <span style="font-family:'Fredoka',sans-serif;font-size:20px;font-weight:600;letter-spacing:-0.01em;color:#15161A;">data<span style="color:#E31E2B;">skate</span></span>
     </a>
     <div style="display:flex;align-items:center;gap:16px;">
       <div class="nav-tag">Case Study · CRM Consolidation</div>
@@ -288,7 +292,7 @@
           </div>
           <div class="meta-item">
             <div class="meta-label">Systems</div>
-            <div class="meta-value">Ticketing → CRM</div>
+            <div class="meta-value">AXS → Salesforce</div>
           </div>
           <div class="meta-item">
             <div class="meta-label">Engagement</div>
@@ -304,36 +308,47 @@
       <div class="hero-card">
         <div class="hero-card-label">Integration at a glance</div>
         <div class="diagram-row">
-          <div class="icon-box">
+          <!-- AXS Ticketing -->
+          <div class="icon-box" style="border-color:#1a1a2e;">
+            <div class="mini-pill" style="background:#1a1a2e;">AXS</div>
             <div class="icon-circle bg-gray">
-              <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+              <svg viewBox="0 0 24 24"><rect x="1" y="9" width="22" height="13" rx="2" ry="2"/><path d="M16 9V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v4"/></svg>
             </div>
-            <div class="icon-box-title">Ticketing Platform</div>
-            <div class="icon-box-sub">Fan & ticket records</div>
+            <div class="icon-box-title">AXS Ticketing</div>
+            <div class="icon-box-sub">Fan purchases · Season holders</div>
           </div>
           <div class="connector solid-red">
             <div class="cap">Live API sync</div>
             <div class="arrow-line"></div>
           </div>
+          <!-- MuleSoft Anypoint -->
           <div class="icon-box border-red">
-            <div class="mini-pill red">DataSkate</div>
-            <div class="icon-circle bg-red">
-              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.65 1.65 0 004.6 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+            <div class="mini-pill red">DataSkate · MuleSoft</div>
+            <div style="width:34px;height:34px;border-radius:50%;background:var(--sf-blue-tint,#E5F6FD);margin:0 auto 8px;display:flex;align-items:center;justify-content:center;">
+              <!-- MuleSoft M-in-circle icon -->
+              <svg viewBox="0 0 24 24" width="20" height="20">
+                <circle cx="12" cy="12" r="10" fill="none" stroke="#00A1E0" stroke-width="2"/>
+                <path fill="#00A1E0" d="M6.5,16.5 L6.5,8 L9.5,12.5 L12,9 L14.5,12.5 L17.5,8 L17.5,16.5 C15.5,14.5 13,14 12,15 C11,14 8.5,14.5 6.5,16.5 Z"/>
+              </svg>
             </div>
-            <div class="icon-box-title">Integration Layer</div>
+            <div class="icon-box-title">MuleSoft Anypoint</div>
             <div class="icon-box-sub">Transform · Map · Sync</div>
           </div>
           <div class="connector">
             <div class="cap">Write-back to native objects</div>
             <div class="arrow-line"></div>
           </div>
-          <div class="icon-box border-blue">
-            <div class="mini-pill blue">Native Objects</div>
-            <div class="icon-circle bg-blue">
-              <svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v5c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 10v5c0 1.66 4 3 9 3s9-1.34 9-3v-5"/></svg>
+          <!-- Salesforce CRM -->
+          <div class="icon-box" style="border-color:var(--sf-blue);">
+            <div class="mini-pill" style="background:var(--sf-blue);">Salesforce</div>
+            <div style="width:34px;height:34px;border-radius:9px;background:var(--sf-blue-tint,#E5F6FD);margin:0 auto 8px;display:flex;align-items:center;justify-content:center;">
+              <!-- Salesforce cloud icon -->
+              <svg viewBox="0 0 32 24" width="22" height="16">
+                <path fill="#00A1E0" d="M13,2C10.5,2 8.3,3.5 7.2,5.6C6.4,5.2 5.5,5 4.6,5C2.1,5 0,7.1 0,9.6C0,12.1 2.1,14 4.6,14L27,14C29.2,14 31,12.2 31,10C31,7.8 29.2,6 27,6C26.8,6 26.5,6 26.3,6.1C25.7,3.8 23.6,2.1 21.2,2.1C20.3,2.1 19.4,2.3 18.7,2.8C17.6,2.3 16.3,2 13,2Z"/>
+              </svg>
             </div>
-            <div class="icon-box-title">CRM</div>
-            <div class="icon-box-sub">Campaigns · Contacts · Reports</div>
+            <div class="icon-box-title">Salesforce CRM</div>
+            <div class="icon-box-sub">Contacts · Campaigns · Reports</div>
           </div>
         </div>
       </div>
@@ -365,7 +380,7 @@
             </div>
             <div class="client-card">
               <div class="client-card-label">Before DataSkate</div>
-              <div class="client-card-value">2 disconnected systems</div>
+              <div class="client-card-value">KORE + AXS (manual)</div>
               <div class="client-card-sub">Manual exports, 560+ duplicate records</div>
             </div>
           </div>
@@ -409,8 +424,8 @@
                 <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
               </div>
               <div>
-                <div class="flow-title">Ticketing ↔ CRM Live Sync</div>
-                <div class="flow-path">Ticketing API → CRM</div>
+                <div class="flow-title">AXS ↔ Salesforce Live Sync</div>
+                <div class="flow-path">AXS API → MuleSoft → Salesforce</div>
               </div>
             </div>
             <div class="flow-desc">Live connection pulls fan purchases, contact updates, and segment data directly into the CRM. Manual exports eliminated on day one.</div>
@@ -423,7 +438,7 @@
               </div>
               <div>
                 <div class="flow-title">Campaign Creation Capability</div>
-                <div class="flow-path">CRM native campaigns</div>
+                <div class="flow-path">Salesforce native campaigns</div>
               </div>
             </div>
             <div class="flow-desc">Revenue team builds and launches targeted fan campaigns from within the CRM, using always-current ticketing data — no external tools required.</div>
@@ -436,7 +451,7 @@
               </div>
               <div>
                 <div class="flow-title">Full Contact Sync</div>
-                <div class="flow-path">Ticketing → CRM fan records</div>
+                <div class="flow-path">AXS → Salesforce fan records</div>
               </div>
             </div>
             <div class="flow-desc">All fan and contact records migrated to native CRM objects, then kept continuously current with every ticketing transaction.</div>
@@ -448,8 +463,8 @@
                 <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
               </div>
               <div>
-                <div class="flow-title">Legacy Package Decommission</div>
-                <div class="flow-path">ISV wrapper → native CRM</div>
+                <div class="flow-title">KORE Decommission &amp; Cutover</div>
+                <div class="flow-path">KORE ISV → native Salesforce objects</div>
               </div>
             </div>
             <div class="flow-desc">Third-party wrapper fully retired. All data migrated to standard native CRM objects — more flexible, more reportable, one fewer contract to manage.</div>
@@ -499,9 +514,9 @@
           <div class="arch-diagram">
             <div class="lane-row">
 
-              <!-- SOURCE -->
+              <!-- SOURCE: AXS -->
               <div class="lane">
-                <div class="lane-header">Ticketing Platform</div>
+                <div class="lane-header">AXS · Ticketing</div>
                 <div class="lane-tags">
                   <div class="lane-tag">Fan Data</div>
                   <div class="lane-tag">Live Events</div>
@@ -533,9 +548,9 @@
                 <div class="lane-connector-label">API<br>polling</div>
               </div>
 
-              <!-- MIDDLEWARE -->
+              <!-- MIDDLEWARE: MuleSoft -->
               <div class="lane">
-                <div class="lane-header red">DataSkate Integration</div>
+                <div class="lane-header" style="background:var(--sf-blue);">MuleSoft Anypoint</div>
                 <div class="lane-tags">
                   <div class="lane-tag">Transform</div>
                   <div class="lane-tag">Map</div>
@@ -568,11 +583,12 @@
                 <div class="lane-connector-label">Native<br>write-back</div>
               </div>
 
-              <!-- TARGET -->
+              <!-- TARGET: Salesforce -->
               <div class="lane">
-                <div class="lane-header blue">CRM — Native Objects</div>
+                <div class="lane-header" style="background:var(--sf-blue);">Salesforce</div>
                 <div class="lane-tags">
                   <div class="lane-tag">Sales Cloud</div>
+                  <div class="lane-tag">Native Objects</div>
                 </div>
                 <div class="lane-boxes">
                   <div class="lane-box">
@@ -603,7 +619,7 @@
               <div class="pipeline-step">Testing</div>
               <div class="pipeline-step">UAT &amp; Go-Live</div>
             </div>
-            <div class="pipeline-caption">DataSkate delivery pipeline · see Implementation below</div>
+            <div class="pipeline-caption">DataSkate delivery pipeline · AXS → MuleSoft Anypoint → Salesforce</div>
           </div>
         </div>
       </div>
