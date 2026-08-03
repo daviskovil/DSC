@@ -257,6 +257,16 @@
     .impl-grid{grid-template-columns:1fr;}
   }
 
+  /* Hide arch diagram when replaced by canvas image for printing */
+  .arch-hidden-for-print{display:none !important;}
+  @keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+  .nav-print.loading{opacity:.6;pointer-events:none;}
+  .nav-print.loading svg{animation:spin .8s linear infinite;}
+
+  @media print{
+    .arch-print-img{width:100%;max-width:100%;display:block;border-radius:14px;break-inside:avoid;}
+  }
+
   /* PRINT BUTTON */
   .nav-print{
     font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.06em;
@@ -379,7 +389,7 @@
       <span style="font-family:'Fredoka',sans-serif;font-size:20px;font-weight:600;letter-spacing:-0.01em;color:#15161A;">data<span style="color:#E31E2B;">skate</span></span>
     </a>
     <div style="display:flex;align-items:center;gap:10px;">
-      <button class="nav-print" onclick="window.print()" title="Save as PDF">
+      <button class="nav-print" onclick="printPDF()" title="Save as PDF">
         <svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
         PDF
       </button>
@@ -910,12 +920,57 @@
 
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
+  // Scroll-reveal
   const els = document.querySelectorAll('.reveal');
   const io = new IntersectionObserver((entries)=>{
     entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
   },{threshold:0.12});
   els.forEach(el=>io.observe(el));
+
+  // Print / PDF with arch diagram converted to image
+  async function printPDF() {
+    const btn = document.querySelector('.nav-print');
+    const archDiagram = document.querySelector('.arch-diagram');
+    const originalBtnHTML = btn.innerHTML;
+    let imgEl = null;
+
+    btn.classList.add('loading');
+    btn.innerHTML = '<svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;"><path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"/></svg> Preparing…';
+
+    try {
+      const canvas = await html2canvas(archDiagram, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#ffffff',
+        logging: false
+      });
+
+      imgEl = document.createElement('img');
+      imgEl.src = canvas.toDataURL('image/png');
+      imgEl.className = 'arch-print-img';
+
+      archDiagram.parentNode.insertBefore(imgEl, archDiagram);
+      archDiagram.classList.add('arch-hidden-for-print');
+
+      const restore = () => {
+        archDiagram.classList.remove('arch-hidden-for-print');
+        if (imgEl) { imgEl.remove(); imgEl = null; }
+        window.removeEventListener('afterprint', restore);
+      };
+      window.addEventListener('afterprint', restore);
+
+      window.print();
+
+    } catch(e) {
+      window.print();
+    } finally {
+      btn.classList.remove('loading');
+      btn.innerHTML = originalBtnHTML;
+    }
+  }
 </script>
 
 </body>
