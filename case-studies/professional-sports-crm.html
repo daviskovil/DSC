@@ -275,72 +275,90 @@
   @media print{
     @page{margin:0.5in;size:letter portrait;}
 
-    /* Force all backgrounds and colors to print */
-    *{
-      -webkit-print-color-adjust:exact !important;
-      print-color-adjust:exact !important;
-    }
+    *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
 
-    /* Hide screen-only UI */
     .topbar,.nav,.nav-print{display:none !important;}
 
-    /* Show print-only logo */
     .print-logo{
       display:flex;align-items:center;gap:8px;
-      padding-bottom:14px;margin-bottom:2px;
-      border-bottom:1px solid var(--panel-border);
+      padding-bottom:12px;border-bottom:1px solid var(--panel-border);
     }
 
-    /* Unhide scroll-reveal elements */
     .reveal{opacity:1 !important;transform:none !important;transition:none !important;}
 
-    body{font-size:9pt;line-height:1.45;}
+    body{font-size:9pt;line-height:1.4;}
     .wrap{padding:0;max-width:100%;}
 
-    /* Tighten all section padding so content flows densely */
-    section{padding:16px 0;}
-    section.band{padding:16px 0;}
-    .hero{padding:14px 0 12px;}
-    .hero-sub{font-size:10pt;margin-top:10px;}
-    .meta-strip{margin-top:16px;}
+    section{padding:14px 0;}
+    section.band{padding:14px 0;}
+    .hero{padding:12px 0 10px;}
 
-    /* Section layout */
-    .section-head{margin-bottom:10px;}
-    .section-body{gap:24px;}
-    h2{font-size:14pt;break-after:avoid;}
-    .section-head{break-after:avoid;}
-    .hero h1{font-size:20pt;}
-    .section-label{font-size:8.5pt;}
+    .section-head{margin-bottom:8px;break-after:avoid;}
+    .section-head+.section-body{break-before:avoid;}
+    h2{font-size:13pt;break-after:avoid;}
+    .section-label{font-size:8pt;}
 
-    /* ---- RULE: only small items get break-inside:avoid ----
-       Never apply it to whole sections or grids — that creates
-       huge white gaps when the container exceeds one page.     */
+    /* ── HERO: stack to one column so diagram + text fit on page 1 ── */
+    .hero h1{font-size:18pt;max-width:100%;}
+    .hero-sub{font-size:9.5pt;margin-top:8px;max-width:100%;}
+    .meta-strip{margin-top:12px;}
+    .meta-label{font-size:8.5pt;}
+    .meta-value{font-size:11pt;}
+    .hero-grid{grid-template-columns:1fr;gap:16px;break-inside:avoid;}
 
-    /* Individual cards — small enough to always fit */
-    .flow-card,.stat-card,.result-card,.why-item,.client-card{
-      break-inside:avoid;
-    }
+    /* Compact the hero integration diagram */
+    .hero-card{padding:14px;}
+    .hero-card-label{font-size:10px;margin-bottom:10px;}
+    .icon-box{min-height:56px;padding-top:11px;padding-bottom:8px;max-width:200px;}
+    .icon-circle{width:24px;height:24px;margin-bottom:4px;}
+    .icon-circle svg{width:13px;height:13px;}
+    .icon-box-title{font-size:10px;}
+    .icon-box-sub{font-size:7px;}
+    .mini-pill{font-size:7.5px;padding:3px 8px;top:-9px;}
+    .connector{padding:2px 0;gap:2px;}
+    .connector .cap{font-size:7.5px;}
+    .connector svg{height:26px !important;width:auto !important;}
 
-    /* Hero diagram card — compact, keep together */
-    .hero-card{break-inside:avoid;}
-    .diagram-row{break-inside:avoid;}
+    /* ── CARDS: only individual items, never whole grids ─────────── */
+    .flow-card,.stat-card,.result-card,.why-item,.client-card{break-inside:avoid;}
+    .flow-title{font-size:11pt;}
+    .flow-path{font-size:8.5px;}
+    .flow-desc{font-size:8.5pt;padding-left:36px;}
+    .flow-badge{width:26px;height:26px;flex-shrink:0;}
+    .flow-badge svg{width:12px;height:12px;}
 
-    /* Architecture lanes — keep the 3-column lane row intact */
+    /* ── ARCHITECTURE: shrink to fit 3 lanes on one page ─────────── */
+    .arch-diagram{padding:16px 12px;break-inside:avoid;}
     .lane-row{break-inside:avoid;}
-    .pipeline-bar{break-inside:avoid;margin-top:12px;}
+    .lane{padding:22px 10px 12px;}
+    .lane-tags{margin-bottom:7px;}
+    .lane-tag{font-size:7px;padding:2px 6px;}
+    .lane-boxes{gap:5px;}
+    .lane-box{padding:5px 7px;gap:6px;}
+    .lane-box-icon{width:19px;height:19px;border-radius:4px;flex-shrink:0;}
+    .lane-box-icon svg{width:10px;height:10px;}
+    .lane-box-text{font-size:9.5px;}
+    .lane-connector{width:42px;}
+    .gear-icon{width:18px;height:18px;}
+    .gear-icon svg{width:10px;height:10px;}
+    .lane-connector-label{font-size:6px;}
+    .lane-header{font-size:9px;padding:4px 10px;top:-10px;}
+    .pipeline-bar{padding:8px 14px;margin-top:10px;}
+    .pipeline-step{font-size:9px;padding:0 10px;}
+    .pipeline-caption{font-size:7.5px;margin-top:6px;}
 
-    /* Implementation — keep each card and the stepper heading together */
+    /* ── IMPLEMENTATION: keep all 5 steps together ───────────────── */
     .stepper-track{break-after:avoid;}
-    .impl-card{break-inside:avoid;}
-    .impl-week{font-size:7.5pt;}
-    .impl-phase{font-size:10pt;}
-    .impl-desc{font-size:8.5pt;}
-    .impl-deliverable{font-size:7.5pt;padding:4px 6px;}
+    .stepper-node{width:24px;height:24px;font-size:11px;}
+    .stepper-line{height:1.5px;}
+    .impl-grid{break-inside:avoid;}
+    .impl-card{break-inside:avoid;padding:9px 8px;}
+    .impl-week{font-size:7px;margin-bottom:3px;}
+    .impl-phase{font-size:10pt;margin-bottom:4px;}
+    .impl-desc{font-size:7.5pt;line-height:1.35;margin-bottom:5px;}
+    .impl-deliverable{font-size:7px;padding:3px 5px;}
 
-    /* Keep section heading attached to first content block */
-    .section-head + .section-body{break-before:avoid;}
-
-    footer{margin-top:12px;padding:12px 0 0;break-before:avoid;}
+    footer{margin-top:10px;padding:10px 0 0;break-before:avoid;}
   }
 </style>
 </head>
