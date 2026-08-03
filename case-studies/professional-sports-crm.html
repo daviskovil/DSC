@@ -256,6 +256,91 @@
     .stat-grid,.results-grid,.why-grid,.flow-grid,.client-grid{grid-template-columns:1fr;}
     .impl-grid{grid-template-columns:1fr;}
   }
+
+  /* PRINT BUTTON */
+  .nav-print{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.06em;
+    color:var(--gray-500);background:none;border:1px solid var(--panel-border);
+    border-radius:20px;padding:5px 12px;cursor:pointer;
+    display:inline-flex;align-items:center;gap:6px;
+    transition:color .15s,border-color .15s;
+  }
+  .nav-print:hover{color:var(--ink);border-color:var(--gray-300);}
+  .nav-print svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;}
+
+  /* PRINT-ONLY LOGO HEADER */
+  .print-logo{display:none;}
+
+  /* ===================== PRINT / PDF ===================== */
+  @media print{
+    @page{margin:0.55in 0.5in;size:letter portrait;}
+
+    /* Force all backgrounds and colors */
+    *{
+      -webkit-print-color-adjust:exact !important;
+      print-color-adjust:exact !important;
+    }
+
+    /* Hide screen-only UI */
+    .topbar,.nav,.nav-print{display:none !important;}
+
+    /* Show print-only logo */
+    .print-logo{
+      display:flex;align-items:center;gap:8px;
+      padding-bottom:18px;margin-bottom:4px;
+      border-bottom:1px solid var(--panel-border);
+    }
+
+    /* Unhide scroll-reveal elements */
+    .reveal{opacity:1 !important;transform:none !important;transition:none !important;}
+
+    body{font-size:10pt;line-height:1.5;}
+    .wrap{padding:0;max-width:100%;}
+
+    /* Tighten section padding */
+    section{padding:28px 0;}
+    section.band{padding:28px 0;}
+    .hero{padding:20px 0 18px;}
+
+    /* Section layout */
+    .section-head{margin-bottom:14px;break-after:avoid;}
+    h2{break-after:avoid;font-size:18pt;}
+    .hero h1{font-size:24pt;}
+    .section-label{font-size:10pt;}
+
+    /* ---- Cards: never split across pages ---- */
+    .flow-card,.stat-card,.result-card,.why-item,.client-card,.impl-card{
+      break-inside:avoid;
+    }
+
+    /* ---- Grids: allow page break between rows but not inside a card ---- */
+    .flow-grid,.stat-grid,.results-grid,.why-grid,.client-grid{break-inside:avoid;}
+
+    /* ---- Hero diagram: keep the whole card together ---- */
+    .hero-grid{break-inside:avoid;}
+    .hero-card{break-inside:avoid;}
+    .diagram-row{break-inside:avoid;}
+
+    /* ---- Architecture: always starts fresh page, never splits ---- */
+    #section-arch{break-before:page;break-inside:avoid;}
+    .arch-diagram{break-inside:avoid;}
+    .lane-row{break-inside:avoid;}
+    .pipeline-bar{break-inside:avoid;margin-top:16px;}
+
+    /* ---- Implementation: keep stepper + grid together ---- */
+    .stepper-track{break-after:avoid;}
+    .impl-grid{break-inside:avoid;}
+    .impl-week{font-size:8pt;}
+    .impl-phase{font-size:11pt;}
+    .impl-desc{font-size:9.5pt;}
+    .impl-deliverable{font-size:8pt;}
+
+    /* ---- Results + Why: keep each grid together ---- */
+    section:has(.results-grid){break-inside:avoid;}
+    section:has(.why-grid){break-inside:avoid;}
+
+    footer{margin-top:20px;padding:14px 0;break-before:avoid;}
+  }
 </style>
 </head>
 <body>
@@ -272,10 +357,23 @@
       </svg>
       <span style="font-family:'Fredoka',sans-serif;font-size:20px;font-weight:600;letter-spacing:-0.01em;color:#15161A;">data<span style="color:#E31E2B;">skate</span></span>
     </a>
-    <div style="display:flex;align-items:center;gap:16px;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button class="nav-print" onclick="window.print()" title="Save as PDF">
+        <svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        PDF
+      </button>
       <a href="/case-studies/" class="nav-home">Case Studies Home</a>
     </div>
   </nav>
+
+  <!-- PRINT-ONLY LOGO (nav is hidden in print) -->
+  <div class="print-logo">
+    <svg viewBox="156 275 78 66" xmlns="http://www.w3.org/2000/svg" style="width:22px;height:18px;flex-shrink:0;">
+      <path fill="#E31E2B" d="m195.02,287.72v-12.49c21.94,0,38.48,10.29,38.48,23.93s-16.55,23.93-38.48,23.93v-12.49c15.86,0,25.99-6.77,25.99-11.44s-10.13-11.44-25.99-11.44Z"/>
+      <path fill="#15161A" d="m195.02,327.75v12.49c-21.94,0-38.48-10.29-38.48-23.93s16.55-23.93,38.48-23.93v12.49c-15.86,0-25.99,6.77-25.99,11.44s10.13,11.44,25.99,11.44Z"/>
+    </svg>
+    <span style="font-family:'Fredoka',sans-serif;font-size:17px;font-weight:600;letter-spacing:-0.01em;color:#15161A;">data<span style="color:#E31E2B;">skate</span></span>
+  </div>
 
   <!-- HERO -->
   <section class="hero reveal">
@@ -507,7 +605,7 @@
   </section>
 
   <!-- ARCHITECTURE -->
-  <section class="reveal">
+  <section id="section-arch" class="reveal">
     <div class="wrap">
       <div class="section-head">
         <div class="section-label">04 · Architecture</div>
