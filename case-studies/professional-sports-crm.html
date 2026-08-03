@@ -293,8 +293,10 @@
     section.band{padding:14px 0;}
     .hero{padding:12px 0 10px;}
 
+    /* Every section after the hero starts on a fresh page */
+    section+section{break-before:page;}
+
     .section-head{margin-bottom:8px;break-after:avoid;}
-    .section-head+.section-body{break-before:avoid;}
     h2{font-size:13pt;break-after:avoid;}
     .section-label{font-size:8pt;}
 
