@@ -273,9 +273,9 @@
 
   /* ===================== PRINT / PDF ===================== */
   @media print{
-    @page{margin:0.55in 0.5in;size:letter portrait;}
+    @page{margin:0.5in;size:letter portrait;}
 
-    /* Force all backgrounds and colors */
+    /* Force all backgrounds and colors to print */
     *{
       -webkit-print-color-adjust:exact !important;
       print-color-adjust:exact !important;
@@ -287,59 +287,60 @@
     /* Show print-only logo */
     .print-logo{
       display:flex;align-items:center;gap:8px;
-      padding-bottom:18px;margin-bottom:4px;
+      padding-bottom:14px;margin-bottom:2px;
       border-bottom:1px solid var(--panel-border);
     }
 
     /* Unhide scroll-reveal elements */
     .reveal{opacity:1 !important;transform:none !important;transition:none !important;}
 
-    body{font-size:10pt;line-height:1.5;}
+    body{font-size:9pt;line-height:1.45;}
     .wrap{padding:0;max-width:100%;}
 
-    /* Tighten section padding */
-    section{padding:28px 0;}
-    section.band{padding:28px 0;}
-    .hero{padding:20px 0 18px;}
+    /* Tighten all section padding so content flows densely */
+    section{padding:16px 0;}
+    section.band{padding:16px 0;}
+    .hero{padding:14px 0 12px;}
+    .hero-sub{font-size:10pt;margin-top:10px;}
+    .meta-strip{margin-top:16px;}
 
     /* Section layout */
-    .section-head{margin-bottom:14px;break-after:avoid;}
-    h2{break-after:avoid;font-size:18pt;}
-    .hero h1{font-size:24pt;}
-    .section-label{font-size:10pt;}
+    .section-head{margin-bottom:10px;}
+    .section-body{gap:24px;}
+    h2{font-size:14pt;break-after:avoid;}
+    .section-head{break-after:avoid;}
+    .hero h1{font-size:20pt;}
+    .section-label{font-size:8.5pt;}
 
-    /* ---- Cards: never split across pages ---- */
-    .flow-card,.stat-card,.result-card,.why-item,.client-card,.impl-card{
+    /* ---- RULE: only small items get break-inside:avoid ----
+       Never apply it to whole sections or grids — that creates
+       huge white gaps when the container exceeds one page.     */
+
+    /* Individual cards — small enough to always fit */
+    .flow-card,.stat-card,.result-card,.why-item,.client-card{
       break-inside:avoid;
     }
 
-    /* ---- Grids: allow page break between rows but not inside a card ---- */
-    .flow-grid,.stat-grid,.results-grid,.why-grid,.client-grid{break-inside:avoid;}
-
-    /* ---- Hero diagram: keep the whole card together ---- */
-    .hero-grid{break-inside:avoid;}
+    /* Hero diagram card — compact, keep together */
     .hero-card{break-inside:avoid;}
     .diagram-row{break-inside:avoid;}
 
-    /* ---- Architecture: always starts fresh page, never splits ---- */
-    #section-arch{break-before:page;break-inside:avoid;}
-    .arch-diagram{break-inside:avoid;}
+    /* Architecture lanes — keep the 3-column lane row intact */
     .lane-row{break-inside:avoid;}
-    .pipeline-bar{break-inside:avoid;margin-top:16px;}
+    .pipeline-bar{break-inside:avoid;margin-top:12px;}
 
-    /* ---- Implementation: keep stepper + grid together ---- */
+    /* Implementation — keep each card and the stepper heading together */
     .stepper-track{break-after:avoid;}
-    .impl-grid{break-inside:avoid;}
-    .impl-week{font-size:8pt;}
-    .impl-phase{font-size:11pt;}
-    .impl-desc{font-size:9.5pt;}
-    .impl-deliverable{font-size:8pt;}
+    .impl-card{break-inside:avoid;}
+    .impl-week{font-size:7.5pt;}
+    .impl-phase{font-size:10pt;}
+    .impl-desc{font-size:8.5pt;}
+    .impl-deliverable{font-size:7.5pt;padding:4px 6px;}
 
-    /* ---- Results + Why: keep each grid together ---- */
-    section:has(.results-grid){break-inside:avoid;}
-    section:has(.why-grid){break-inside:avoid;}
+    /* Keep section heading attached to first content block */
+    .section-head + .section-body{break-before:avoid;}
 
-    footer{margin-top:20px;padding:14px 0;break-before:avoid;}
+    footer{margin-top:12px;padding:12px 0 0;break-before:avoid;}
   }
 </style>
 </head>
