@@ -717,7 +717,27 @@ html,body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text
 }
 .doc-action-val{color:var(--sub);line-height:1.4;}
 
+/* ARCH TOOLTIP POPUP */
+.arch-tooltip-popup{
+  position:fixed;z-index:9999;
+  background:var(--navy);color:rgba(255,255,255,.88);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:10px;padding:13px 16px;
+  max-width:280px;width:280px;
+  font-size:12.5px;line-height:1.55;
+  pointer-events:none;
+  opacity:0;transform:translateY(6px);
+  transition:opacity .15s,transform .15s;
+  box-shadow:0 10px 32px rgba(0,0,0,.35);
+}
+.arch-tooltip-popup.show{opacity:1;transform:translateY(0);}
+.arch-tooltip-title{
+  font-family:'Outfit',sans-serif;font-weight:700;font-size:13px;
+  color:var(--ms);margin-bottom:6px;
+}
+
 @media(max-width:820px){
+  .arch-tooltip-popup{display:none;}
   .grid-2,.grid-4,.trust-grid,.scope-row,.doc-action-grid{grid-template-columns:1fr;}
   .scope-col+.scope-col{border-left:none;border-top:1px solid var(--border);}
   .flow-steps{grid-template-columns:1fr 1fr;}
@@ -2146,6 +2166,85 @@ html,body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text
 
 <script>
 lucide.createIcons();
+
+// ── ARCHITECTURE HOVER TOOLTIPS ────────────────────────────
+const ARCH_TIPS = {
+  // Source nodes
+  'SharePoint':{'title':'SharePoint','body':'The most common intake source for insurance and healthcare clients. MuleSoft connects via the SharePoint connector, polling a configured document library at a set interval or triggered by a webhook event when new files are added.'},
+  'Web Portal':{'title':'Web Portal','body':'Documents uploaded through a portal UI are passed to MuleSoft via API or webhook after upload. Note: portal UI development is out of scope for a standard IDP SOW -- it requires a separate engagement and is a common scope boundary item to clarify early.'},
+  'Email Inbox':{'title':'Email Inbox (IMAP/SMTP)','body':'MuleSoft monitors a dedicated email inbox and extracts document attachments as they arrive. Useful when carriers or partners submit documents via email without a structured intake portal.'},
+  'SFTP':{'title':'SFTP','body':'Secure File Transfer Protocol. Used when carriers or partners drop documents on a scheduled basis into a shared SFTP server. MuleSoft polls the SFTP location and processes new files as they appear.'},
+  'Direct Upload API':{'title':'Direct Upload API','body':'An API endpoint exposed by MuleSoft that accepts document uploads programmatically. Used when the client\'s existing portal or internal system needs to push documents directly to the IDP pipeline without manual file placement.'},
+  // Flow Engine nodes
+  'Intake Flow':{'title':'Intake Flow','body':'Triggered when a new document arrives at the intake source. Reads the file into a byte stream, extracts available metadata (filename, folder path, MIME type, upload timestamp), and passes the payload to the Classification Flow. Source-agnostic by design -- swapping intake sources does not touch extraction logic.'},
+  'Classification Flow':{'title':'Classification Flow','body':'Applies 3-layer fallback logic: (1) folder path mapping, (2) filename regex match, (3) AI content classification. If all three fail, the document goes to manual review -- never force-fit into a wrong type. The matched doc type determines which Extraction Flow fires next.'},
+  'Extraction Flow':{'title':'Extraction Flow (per doc type)','body':'One named flow per document type (e.g., sbc-extraction-flow, quote-extraction-flow). Loads the prompt template for that doc type, calls IDP through the Einstein Trust Layer, parses the JSON response, evaluates per-field confidence scores, flags low-confidence fields, and routes the enriched payload to the Salesforce Write Flow.'},
+  'Review Flow':{'title':'Review Flow (Salesforce Write)','body':'Writes extracted fields to the configured Salesforce object via a DataWeave transform. Sets IDP_Review_Status__c = "review", populates confidence score fields, flags low-confidence fields for reviewer attention, and assigns the record to the designated reviewer. No downstream action fires until the reviewer approves.'},
+  'Error Flow':{'title':'Error Flow (Global Handler)','body':'Catches any exception from any flow -- network timeouts, LLM provider errors, OCR failures, Salesforce write errors. Logs the full stack trace to CloudHub, creates an error record in Salesforce with the document metadata and error type, notifies the reviewer, and quarantines the document for manual reprocessing.'},
+  // IDP Engine nodes
+  'OCR / Parse':{'title':'OCR / Parse','body':'Optical Character Recognition converts scanned PDFs and image-based documents to machine-readable text. Digital PDFs with embedded text layers skip OCR and go directly to parsing. Scan quality (300 DPI or higher recommended) is the most common driver of poor extraction accuracy on scanned inputs.'},
+  'Doc Classifier':{'title':'Document Classifier','body':'Identifies the document type using 3 fallback layers: folder path, filename convention, then AI-based content classification. Documents that fail all three layers are flagged for manual review rather than committed to Salesforce. The matched type determines which prompt template and Extraction Flow is invoked.'},
+  'Field Extractor':{'title':'Field Extractor','body':'Runs the configured prompt template against the parsed document text via the LLM. The prompt defines which fields to extract, expected output formats, and handling for missing or ambiguous fields. Returns a structured JSON object with field names, extracted values, and per-field confidence scores.'},
+  'Confidence Score':{'title':'Confidence Score','body':'A 0-100% rating per extracted field, indicating how certain the AI is about each value. Fields below a configurable threshold are flagged in Salesforce for reviewer attention before being committed. After prompt tuning on representative samples, 98-99% field accuracy is achievable for well-structured document types.'},
+  // Einstein Trust Layer steps
+  'Detect PII / PHI fields':{'title':'Step 1: Detect PII / PHI','body':'Scans the outbound extraction prompt for PII and PHI patterns -- names, member IDs, SSNs, dates of birth, addresses, phone numbers. Uses pattern matching and named entity recognition, entirely within the Salesforce trust boundary before any data leaves the environment.'},
+  'Replace with tokens':{'title':'Step 2: Replace with Tokens','body':'Each detected PII/PHI value is swapped with a unique placeholder token (e.g., [NAME_001], [DOB_002]). The token-to-value mapping is held in memory within Salesforce. The external LLM provider never receives this mapping or a decryption key -- it only ever sees the tokenized document.'},
+  'Send sanitized prompt to LLM':{'title':'Step 3: Send Sanitized Prompt','body':'The tokenized, PHI-free prompt is transmitted to the external LLM provider API. The model processes only placeholder tokens -- it never sees real patient or member data. The zero data retention agreement applies to this transmission: data is not stored or used for model training.'},
+  'Receive extracted values':{'title':'Step 4: Receive Extracted Values','body':'The LLM returns a structured JSON response containing extracted field values. Values in the response may reference token placeholders from the input. The Trust Layer receives this response and prepares to re-inject real values in the next step.'},
+  'Re-inject real values':{'title':'Step 5: Re-inject Real Values','body':'Placeholder tokens in the LLM response are replaced with the original real values from the in-memory token map. The final output flowing back into MuleSoft and Salesforce contains complete, real field values. The token mapping is then discarded from memory.'},
+  'Audit log entry created':{'title':'Step 6: Audit Log Entry','body':'Every AI interaction is logged within Salesforce: tokenized prompt sent, response received, model used, timestamp, and confidence scores. This log forms the compliance audit trail and cannot be disabled. It is the record used during HIPAA audits and regulatory reviews.'},
+  // LLM Providers
+  'OpenAI GPT-4':{'title':'OpenAI GPT-4','body':'Strong at structured extraction from complex and varied document layouts. Accessed via Salesforce\'s enterprise API agreement. Zero data retention clause applies -- submitted data is not stored or used for model training. The model used is configurable per Document Action.'},
+  'Google Gemini':{'title':'Google Gemini (Vertex AI)','body':'Google\'s multimodal model, capable of handling both text and image inputs natively. Useful for mixed-format documents. Accessed via the Vertex AI enterprise agreement with zero data retention. A natural choice for organizations with existing Google Cloud agreements.'},
+  'Anthropic Claude':{'title':'Anthropic Claude','body':'Strong at following complex, detailed extraction instructions and handling edge cases in prompts. Particularly useful for documents with unusual layouts or ambiguous field boundaries. Accessed under Salesforce\'s enterprise agreement with zero data retention.'},
+  'Salesforce Einstein':{'title':'Salesforce Einstein','body':'Salesforce\'s native AI runs entirely within the Salesforce trust boundary -- no external API call is required. Best option for organizations with strict data residency requirements. May have different capability tradeoffs vs. third-party models for complex or high-variance document layouts.'},
+  // Output nodes
+  'Salesforce Objects':{'title':'Salesforce Objects','body':'The extracted and DataWeave-mapped fields are written to the configured Salesforce object -- typically an Opportunity, Account, or custom object. One DataWeave transform script per document type defines the field-to-field mapping, type coercions, and default values.'},
+  'Review Queue (status = "review")':{'title':'Review Queue','body':'Every extracted record arrives in Salesforce with IDP_Review_Status__c = "review" and is assigned to the designated reviewer via Salesforce assignment rules. No downstream process (PO creation, notifications, etc.) fires until the reviewer inspects the extraction and marks the record "processed".'},
+  'Audit Table':{'title':'Audit Table','body':'A custom Salesforce object that logs every manual correction: document ID, field name, original extracted value, corrected value, reviewer, and timestamp. Correction rate trends are the primary signal for detecting prompt drift -- a spike in corrections for a specific doc type means the prompt needs retuning.'},
+  'Downstream Triggers (post-approval)':{'title':'Downstream Triggers (post-approval)','body':'Salesforce Process Builder or Flow automation fires only after a reviewer marks the record "processed". Examples: PO creation, finance team notifications, parent record updates, or external webhook calls. These actions are explicitly blocked from firing on unreviewed extractions.'}
+};
+
+(function initArchTooltips() {
+  const tip = document.createElement('div');
+  tip.className = 'arch-tooltip-popup';
+  tip.innerHTML = '<div class="arch-tooltip-title"></div><div class="arch-tooltip-body"></div>';
+  document.body.appendChild(tip);
+
+  function nodeText(el) {
+    return Array.from(el.childNodes)
+      .filter(n => n.nodeType === Node.TEXT_NODE)
+      .map(n => n.textContent.trim())
+      .filter(Boolean)
+      .join(' ')
+      .trim();
+  }
+
+  function position(e) {
+    const W = 280, PAD = 14;
+    let left = e.clientX - W / 2;
+    let top = e.clientY - tip.offsetHeight - PAD;
+    left = Math.max(8, Math.min(left, window.innerWidth - W - 8));
+    if (top < 8) top = e.clientY + PAD;
+    tip.style.left = left + 'px';
+    tip.style.top = top + 'px';
+  }
+
+  document.querySelectorAll('.arch-comp-node, .arch-source-node, .arch-output-node, .arch-trust-step').forEach(el => {
+    const key = nodeText(el);
+    const data = ARCH_TIPS[key];
+    if (!data) return;
+    el.style.cursor = 'help';
+    el.addEventListener('mouseenter', e => {
+      tip.querySelector('.arch-tooltip-title').textContent = data.title;
+      tip.querySelector('.arch-tooltip-body').textContent = data.body;
+      tip.classList.add('show');
+      position(e);
+    });
+    el.addEventListener('mousemove', position);
+    el.addEventListener('mouseleave', () => tip.classList.remove('show'));
+  });
+})();
 
 function switchTab(id, btn) {
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
