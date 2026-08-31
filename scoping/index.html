@@ -541,6 +541,7 @@ html,body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text
   <button class="tab-btn" data-tab="flow">Flow Scope</button>
   <button class="tab-btn" data-tab="pricing">Pricing</button>
   <button class="tab-btn" data-tab="sow">SOW Guide</button>
+  <button class="tab-btn" data-tab="objects">Integration Objects</button>
   <button class="tab-btn tab-live" data-tab="checklists">
     <span class="live-dot"></span> Live Checklists
   </button>
@@ -1419,11 +1420,216 @@ html,body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text
 
   </div>
 </div>
+<!-- ── INTEGRATION OBJECTS REFERENCE ──────────── -->
+<div id="tab-objects" class="tab-panel">
+<div class="content">
+
+  <!-- PART 1: Systems & Fields Reference -->
+  <div class="section">
+    <div class="section-title">
+      <i data-lucide="database"></i> Systems &amp; Fields Reference
+    </div>
+    <p style="font-size:13.5px;color:var(--sub);line-height:1.65;margin-bottom:18px;">Common MuleSoft integration systems, the objects that typically get synced, and the fields that come up in scoping. Use this during discovery to confirm object and field coverage.</p>
+
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+      <div style="position:relative;flex:1;max-width:340px;">
+        <i data-lucide="search" style="position:absolute;left:11px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--muted);pointer-events:none;"></i>
+        <input id="obj-search" type="text" placeholder="Filter by system name..." style="width:100%;padding:9px 12px 9px 34px;border:1px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);background:var(--card);outline:none;transition:border-color .15s;" oninput="filterSystems()" onfocus="this.style.borderColor='var(--navy)'" onblur="this.style.borderColor='var(--border)'"/>
+      </div>
+      <span id="obj-count" style="font-size:12px;color:var(--muted);white-space:nowrap;"></span>
+    </div>
+
+    <div class="matrix-wrap">
+      <table class="matrix" id="obj-table">
+        <thead>
+          <tr>
+            <th style="width:18%">System</th>
+            <th style="width:28%">Common Objects</th>
+            <th>Typical Fields</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-system="netsuite">
+            <td><strong>NetSuite</strong></td>
+            <td>Customer, Vendor, Sales Order, Invoice, Purchase Order, Item/Product, Employee, GL Journal Entry, Project, Estimate</td>
+            <td>internalId, externalId, entity (customer link), tranDate, tranId, amount, currency, lineItems[], status, department, class, location, subsidiary</td>
+          </tr>
+          <tr data-system="salesforce">
+            <td><strong>Salesforce</strong></td>
+            <td>Account, Contact, Lead, Opportunity, Case, Quote, Order, Product2, Pricebook, Task, Event, Campaign</td>
+            <td>Id, Name, AccountId, OwnerId, Stage, Amount, CloseDate, RecordTypeId, ExternalId__c, SyncStatus__c, CreatedDate, LastModifiedDate</td>
+          </tr>
+          <tr data-system="quickbooks online">
+            <td><strong>QuickBooks Online</strong></td>
+            <td>Customer, Vendor, Invoice, Bill, Payment, Estimate, Item, Account (GL), Employee, Purchase Order</td>
+            <td>Id, DisplayName, Balance, TxnDate, DueDate, TotalAmt, CurrencyRef, Line[] (detail), CustomerRef, VendorRef, DocNumber, SyncToken</td>
+          </tr>
+          <tr data-system="workday">
+            <td><strong>Workday</strong></td>
+            <td>Worker, Position, Organization, Cost Center, Pay Component, Time Off, Job Profile, Business Partner</td>
+            <td>Worker_ID, Employee_ID, Hire_Date, Termination_Date, Job_Title, Cost_Center_Reference, Manager_Reference, Pay_Rate_Type, Currency_Code, Status</td>
+          </tr>
+          <tr data-system="sap s/4hana sap">
+            <td><strong>SAP S/4HANA</strong></td>
+            <td>Business Partner, Sales Order, Purchase Order, Material, Delivery, Invoice (BAPI), GL Account, Cost Center, Asset</td>
+            <td>KUNNR/LIFNR (BP number), VBELN (order#), MATNR (material#), WERKS (plant), BUKRS (company code), WAERK (currency), MENGE (qty), NETWR (net value)</td>
+          </tr>
+          <tr data-system="microsoft dynamics 365 dynamics">
+            <td><strong>Microsoft Dynamics 365</strong></td>
+            <td>Account, Contact, Lead, Opportunity, Order, Invoice, Product, Quote, Case, Activity</td>
+            <td>accountid, contactid, fullname, emailaddress1, statecode, statuscode, ownerid, createdon, modifiedon, _transactioncurrencyid_value, new_externalid</td>
+          </tr>
+          <tr data-system="servicenow">
+            <td><strong>ServiceNow</strong></td>
+            <td>Incident, Change Request, Problem, Service Request, CMDB CI, User, Group, Task, Knowledge Article</td>
+            <td>sys_id, number, short_description, state, priority, assignment_group, assigned_to, caller_id, category, opened_at, resolved_at, sys_updated_on</td>
+          </tr>
+          <tr data-system="zendesk">
+            <td><strong>Zendesk</strong></td>
+            <td>Ticket, User, Organization, Group, Article, Comment, Attachment, Macro, View</td>
+            <td>id, subject, status, priority, type, requester_id, assignee_id, organization_id, tags[], created_at, updated_at, custom_fields[], external_id</td>
+          </tr>
+          <tr data-system="hubspot">
+            <td><strong>HubSpot</strong></td>
+            <td>Contact, Company, Deal, Ticket, Product, Line Item, Meeting, Note, Task, Email</td>
+            <td>hs_object_id, email, firstname, lastname, company, dealstage, amount, closedate, pipeline, createdate, lastmodifieddate, hubspot_owner_id, hs_lead_status</td>
+          </tr>
+          <tr data-system="marketo">
+            <td><strong>Marketo</strong></td>
+            <td>Lead/Person, List, Campaign, Program, Email, Activity, Custom Object</td>
+            <td>id, email, firstName, lastName, company, leadSource, status, score, updatedAt, createdAt, marketoGUID, externalSalesPersonId, program membership fields</td>
+          </tr>
+          <tr data-system="stripe">
+            <td><strong>Stripe</strong></td>
+            <td>Customer, Charge, Payment Intent, Invoice, Subscription, Product, Price, Refund, Payout, Dispute</td>
+            <td>id (cus_/pi_/in_), amount, currency, status, customer, metadata{}, created (Unix ts), payment_method, invoice_pdf, subscription_items[], billing_cycle_anchor</td>
+          </tr>
+          <tr data-system="shopify">
+            <td><strong>Shopify</strong></td>
+            <td>Order, Customer, Product, Variant, Inventory Item, Fulfillment, Refund, Collection, Draft Order</td>
+            <td>id, email, total_price, financial_status, fulfillment_status, line_items[], shipping_address, customer{}, created_at, updated_at, tags, source_name</td>
+          </tr>
+          <tr data-system="sharepoint onedrive microsoft">
+            <td><strong>SharePoint / OneDrive</strong></td>
+            <td>List Item, Document Library File, Site, Drive Item, Folder, Permission, User/Group</td>
+            <td>id, name, webUrl, createdDateTime, lastModifiedDateTime, file{mimeType}, folder{childCount}, listItem{fields}, @microsoft.graph.downloadUrl, eTag</td>
+          </tr>
+          <tr data-system="oracle erp cloud oracle">
+            <td><strong>Oracle ERP Cloud</strong></td>
+            <td>Customer Account, Supplier, Purchase Order, Invoice, Payable, Receivable, General Ledger Journal, Asset, Project</td>
+            <td>PartyId, AccountNumber, TransactionNumber, SupplierName, InvoiceDate, PaymentTerms, Amount, CurrencyCode, BusinessUnit, LegalEntity, DffAttributes</td>
+          </tr>
+          <tr data-system="snowflake">
+            <td><strong>Snowflake</strong></td>
+            <td>Tables/Views (no standard objects -- schema-specific), Stages, Streams, Tasks, Pipes</td>
+            <td>Schema-defined columns; typical integration metadata: CREATED_AT, UPDATED_AT, RECORD_SOURCE, BATCH_ID, IS_DELETED, EXTERNAL_ID. Confirm exact table/column names during discovery.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PART 2: Flow Pattern Library -->
+  <div class="section">
+    <div class="section-title">
+      <i data-lucide="git-branch"></i> Flow Pattern Library
+    </div>
+    <p style="font-size:13.5px;color:var(--sub);line-height:1.65;margin-bottom:18px;">The eight flow types you'll reference when estimating scope. Each customer requirement maps to one of these. Understanding which pattern applies determines the flow count and pricing tier.</p>
+
+    <div class="matrix-wrap">
+      <table class="matrix">
+        <thead>
+          <tr>
+            <th style="width:20%">Flow Type</th>
+            <th style="width:25%">What It Does</th>
+            <th style="width:28%">When It Applies</th>
+            <th>Pricing Note</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Backfill / Historical Load</strong></td>
+            <td>One-time bulk transfer of all existing records from source to target. Runs once at go-live, then is retired or archived.</td>
+            <td>Any integration where the target system starts empty or needs historical records migrated. Almost always required alongside an incremental sync.</td>
+            <td>Priced as a separate flow from the ongoing sync. It has its own error handling, chunking logic, and QA effort -- never bundled into the incremental sync price.</td>
+          </tr>
+          <tr>
+            <td><strong>Incremental Sync (Create + Update)</strong></td>
+            <td>Ongoing sync of new and changed records from source to target on a schedule or event-trigger. The "steady-state" flow for most integrations.</td>
+            <td>Standard for any bi-system data sync where both sides need to stay in alignment after go-live.</td>
+            <td>The baseline flow. Priced per object sync direction. A sync covering 3 objects = 3 flows if unidirectional.</td>
+          </tr>
+          <tr>
+            <td><strong>Delete / Deactivation Sync</strong></td>
+            <td>Propagates record deletions or status changes (archived, inactive, cancelled) from source to target. Often a soft-delete flag, not a hard delete.</td>
+            <td>When the target must reflect deleted or deactivated records from the source. Especially relevant for user/account deprovisioning and compliance use cases.</td>
+            <td>Treated as a separate flow -- delete events require a different trigger, filter, and API action than creates/updates. Never assume it's included in the incremental sync.</td>
+          </tr>
+          <tr>
+            <td><strong>Reverse-Direction Sync</strong></td>
+            <td>Syncs data in the opposite direction of the primary flow. Creates a full bi-directional integration when paired with the forward sync.</td>
+            <td>When updates can originate from both systems (e.g. a status updated in Salesforce needs to flow back to NetSuite). Always a separate flow with separate trigger logic.</td>
+            <td>Always a separate priced flow -- never half-price or bundled. Adds conflict-resolution design work if both systems can update the same field.</td>
+          </tr>
+          <tr>
+            <td><strong>Lookup / Enrichment Flow</strong></td>
+            <td>Queries a system to fetch reference data used to enrich a record in another flow. Not a standalone sync -- invoked as a sub-flow or callout within a primary flow.</td>
+            <td>When a field in the target requires a value that must be looked up live (e.g. resolving an account ID, currency code, or price from a second system mid-transform).</td>
+            <td>Typically priced as part of the flow it supports, not as a standalone flow. Flag it during scoping because it adds latency and error-handling complexity.</td>
+          </tr>
+          <tr>
+            <td><strong>Aggregation / Rollup Flow</strong></td>
+            <td>Collects, groups, or summarizes records from one system and writes a single aggregated result to another (e.g. total revenue by account, headcount by department).</td>
+            <td>Reporting integrations, dashboards, or any case where the target system needs a computed metric rather than individual transaction records.</td>
+            <td>Complex tier -- aggregation logic, grouping keys, and incremental-vs-full refresh strategy all add build effort. Never Simple.</td>
+          </tr>
+          <tr>
+            <td><strong>Notification / Alert Flow</strong></td>
+            <td>Monitors a condition in one system and sends an outbound notification (email, Slack, SMS, webhook) when that condition is met. No record is written to a target system.</td>
+            <td>SLA breach alerts, threshold triggers, approval reminders, event-driven notifications. Common as a Phase 2 add-on once the core data sync is live.</td>
+            <td>Priced as a Simple flow -- the trigger and send logic are straightforward. Price goes up if the condition logic involves cross-system lookups.</td>
+          </tr>
+          <tr>
+            <td><strong>Error Handling / Retry</strong></td>
+            <td>Dead-letter queue, retry-with-backoff, and alert routing for failed records. Built into every production flow as infrastructure, not a separate feature.</td>
+            <td>Always required. Every flow above must have error handling. Surfaces failures to a named owner (email/Slack) and retries transient failures automatically.</td>
+            <td><span class="badge navy">Not separately priced</span> -- included in the base flow effort. Mention it on discovery to establish expectations, not to add a line item.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Flow count formula callout -->
+    <div class="callout blue" style="margin-top:4px;">
+      <strong>Flow count formula:</strong> Flow count &asymp; (Objects &times; Directions) &times; (1 or 2, depending on whether a backfill is needed)<br>
+      <span style="font-size:12.5px;margin-top:6px;display:block;color:inherit;opacity:.85;">Example: 3 objects, bi-directional, with backfill = 3 &times; 2 &times; 2 = <strong>12 flows</strong>. Unidirectional, no backfill = 3 &times; 1 &times; 1 = <strong>3 flows</strong>.</span>
+    </div>
+  </div>
+
+</div>
+</div><!-- /tab-objects -->
+
 <!-- END PANELS -->
 </main>
 
 <script>
 lucide.createIcons();
+
+function filterSystems(){
+  const q=(document.getElementById('obj-search').value||'').toLowerCase().trim();
+  const rows=document.querySelectorAll('#obj-table tbody tr');
+  let vis=0;
+  rows.forEach(r=>{
+    const sys=(r.dataset.system||'');
+    const show=!q||sys.includes(q);
+    r.style.display=show?'':'none';
+    if(show)vis++;
+  });
+  const total=rows.length;
+  const el=document.getElementById('obj-count');
+  if(el){el.textContent=q?vis+' of '+total+' systems':total+' systems';}
+}
+filterSystems();
 
 document.querySelectorAll('.tab-btn').forEach(btn=>{
   btn.addEventListener('click',()=>{
