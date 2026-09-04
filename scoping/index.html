@@ -512,6 +512,10 @@ html,body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text
   .kt-doc-grid{grid-template-columns:1fr;}
   .kt-pane{height:auto;max-height:80vh;}
 }
+
+/* ── MECHANICS FULL-WIDTH BREAKOUT ───────────── */
+main.wide{max-width:none;padding:0;}
+#tab-mechanics{padding:40px 52px 72px;}
 </style>
 </head>
 <body>
@@ -1612,160 +1616,172 @@ html,body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text
 
 <!-- ── ANYPOINT INTEGRATION MECHANICS ──────────── -->
 <div id="tab-mechanics" class="tab-panel">
-<div class="content" style="max-width:none;padding:32px 36px 72px;">
+<div>
 
-  <div class="section">
-    <div class="section-title">
-      <i data-lucide="workflow"></i> Anypoint Integration Mechanics
-    </div>
-    <p style="font-size:15px;color:var(--sub);line-height:1.7;margin-bottom:24px;">How Anypoint identifies, retrieves, transforms, deduplicates, and reliably delivers data between any two systems. Reference during technical discovery to set accurate expectations on both sides.</p>
+  <div class="section-title" style="font-size:22px;margin-bottom:10px;">
+    <i data-lucide="workflow"></i> Anypoint Integration Mechanics
+  </div>
+  <p style="font-size:16px;color:var(--sub);line-height:1.7;margin-bottom:28px;max-width:900px;">How Anypoint identifies, retrieves, transforms, deduplicates, and reliably delivers data between any two systems. Reference during technical discovery to set accurate expectations.</p>
 
-    <!-- ARCHITECTURE DIAGRAM -->
-    <div style="background:#edf0f7;border-radius:16px;padding:24px 24px 18px;margin-bottom:28px;">
+  <!-- ARCHITECTURE DIAGRAM -->
+  <div style="background:#edf0f7;border-radius:20px;padding:28px 28px 20px;margin-bottom:32px;overflow-x:auto;">
+    <div style="display:flex;align-items:stretch;gap:0;min-width:1000px;">
 
-        <!-- three-column grid -->
-        <div style="display:grid;grid-template-columns:1fr 64px 2fr 64px 1fr;align-items:stretch;margin-bottom:16px;gap:0;">
+      <!-- LEFT: Source System -->
+      <div style="width:290px;flex-shrink:0;display:flex;flex-direction:column;">
+        <div style="background:var(--navy);color:#fff;border-radius:12px 12px 0 0;padding:14px 20px;font-family:'Outfit',sans-serif;font-weight:800;font-size:13px;letter-spacing:.05em;text-transform:uppercase;text-align:center;">Source System<span style="font-weight:400;opacity:.5;font-size:11.5px;display:block;margin-top:3px;letter-spacing:0;text-transform:none;">e.g. NetSuite, SAP, HubSpot</span></div>
+        <div style="background:#fff;border:2px solid var(--border-strong);border-top:none;border-radius:0 0 14px 14px;padding:20px;flex:1;display:flex;flex-direction:column;gap:14px;">
 
-          <!-- LEFT: Source System -->
-          <div style="display:flex;flex-direction:column;">
-            <div style="background:var(--navy);color:#fff;border-radius:10px 10px 0 0;padding:12px 18px;font-family:'Outfit',sans-serif;font-weight:800;font-size:13px;letter-spacing:.05em;text-transform:uppercase;text-align:center;">Source System <span style="font-weight:400;opacity:.5;font-size:11px;display:block;margin-top:2px;letter-spacing:0;text-transform:none;">e.g. NetSuite, Salesforce, SAP</span></div>
-            <div style="background:#fff;border:1.5px solid var(--border-strong);border-top:none;border-radius:0 0 14px 14px;padding:18px;flex:1;display:flex;flex-direction:column;gap:14px;">
-
-              <div style="background:#f8fafd;border:1px solid var(--border);border-radius:12px;padding:16px 18px;">
-                <div style="margin-bottom:8px;"><span style="background:#eef5ff;color:#1a3560;border:1px solid #c2d8fa;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:3px 11px;">Polling</span></div>
-                <div style="font-weight:700;font-size:15px;color:var(--text);margin-bottom:6px;">Filtered Query / Saved Search</div>
-                <div style="font-size:13.5px;color:var(--sub);line-height:1.6;">Pre-filtered query run against the source system's own query engine. Returns only records matching the defined filter -- e.g. modified since the last watermark. Anypoint does not scan the entire source system.</div>
-              </div>
-
-              <div style="background:#f8fafd;border:1px solid var(--border);border-radius:12px;padding:16px 18px;">
-                <div style="margin-bottom:8px;"><span style="background:#fdf4ff;color:#6b21a8;border:1px solid #e9d5ff;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:3px 11px;">Event-Driven</span></div>
-                <div style="font-weight:700;font-size:15px;color:var(--text);margin-bottom:6px;">Inbound Webhook / Event Trigger</div>
-                <div style="font-size:13.5px;color:var(--sub);line-height:1.6;">The source system fires a webhook or outbound message the moment a record changes, calling Mule's HTTP listener directly. Data arrives instantly -- no polling interval required.</div>
-              </div>
-
-            </div>
+          <div style="background:#f4f7ff;border:1.5px solid #c2d8fa;border-radius:12px;padding:18px 20px;">
+            <span style="background:#1a3560;color:#fff;border-radius:20px;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 11px;display:inline-block;margin-bottom:10px;">Polling</span>
+            <div style="font-weight:800;font-size:16px;color:var(--text);margin-bottom:7px;font-family:'Outfit',sans-serif;">Filtered Query</div>
+            <div style="font-size:14px;color:var(--sub);line-height:1.65;">Pre-filtered query runs against the source system's own engine -- returns only records matching the defined criteria (e.g. modified since last watermark). Anypoint does not scan the entire dataset.</div>
           </div>
 
-          <!-- ARROWS col 1 -->
-          <div style="display:flex;align-items:center;justify-content:center;">
-            <svg width="64" height="80" viewBox="0 0 64 80" style="overflow:visible;">
-              <path d="M2 24 H50" stroke="#b0bbd0" stroke-width="2.5" stroke-dasharray="5,3" fill="none"/>
-              <polygon points="50,18 62,24 50,30" fill="#b0bbd0"/>
-              <path d="M2 56 H50" stroke="#b0bbd0" stroke-width="2.5" fill="none"/>
-              <polygon points="50,50 62,56 50,62" fill="#b0bbd0"/>
-            </svg>
-          </div>
-
-          <!-- CENTER: Anypoint Platform -->
-          <div style="display:flex;flex-direction:column;">
-            <div style="background:#0092cc;color:#fff;border-radius:10px 10px 0 0;padding:12px 18px;font-family:'Outfit',sans-serif;font-weight:800;font-size:13px;letter-spacing:.05em;text-transform:uppercase;text-align:center;">Anypoint Platform <span style="font-weight:400;opacity:.65;font-size:11px;display:block;margin-top:2px;letter-spacing:0;text-transform:none;">Mule Runtime / Integration Engine</span></div>
-            <div style="background:#fff;border:1.5px solid #b3e5f9;border-top:none;border-radius:0 0 14px 14px;padding:18px;flex:1;display:flex;flex-direction:column;gap:0;">
-
-              <div style="background:#e5f6fd;border:1px solid #b3e5f9;border-radius:12px;padding:14px 18px;">
-                <div style="font-weight:700;font-size:15px;color:#00516f;margin-bottom:5px;">Scheduler + Watermark</div>
-                <div style="font-size:13.5px;color:#005b7a;line-height:1.6;">Fires at configured interval. Reads the last-run timestamp from Object Store and passes it as the filter on the next query call -- making each sync incremental rather than a full re-pull every time.</div>
-              </div>
-
-              <div style="display:flex;justify-content:center;padding:8px 0;"><svg width="2" height="20"><line x1="1" y1="0" x2="1" y2="20" stroke="#b3e5f9" stroke-width="2" stroke-dasharray="5,3"/></svg></div>
-
-              <div style="background:#f8fafd;border:1px solid var(--border);border-radius:12px;padding:14px 18px;">
-                <div style="font-weight:700;font-size:15px;color:var(--text);margin-bottom:5px;">Source System Connector <span style="font-weight:400;font-size:12px;color:var(--muted);">REST / SOAP / SDK</span></div>
-                <div style="font-size:13.5px;color:var(--sub);line-height:1.6;">Communicates with the source system via its native API protocol. Returns structured records -- one object per row, fields matching the defined query columns. Also retrieves binary files for file-transfer flows.</div>
-              </div>
-
-              <div style="display:flex;justify-content:center;padding:8px 0;"><svg width="2" height="20"><line x1="1" y1="0" x2="1" y2="20" stroke="#c8cedc" stroke-width="2" stroke-dasharray="5,3"/></svg></div>
-
-              <div style="background:#f8fafd;border:1px solid var(--border);border-radius:12px;padding:14px 18px;">
-                <div style="font-weight:700;font-size:15px;color:var(--text);margin-bottom:5px;">DataWeave Transform</div>
-                <div style="font-size:13.5px;color:var(--sub);line-height:1.6;">Maps each source field to the target schema. Handles type conversions, default values, and conditional logic -- e.g. what to do when a field is null. Field renames, enum translations, and lookup logic all live here.</div>
-              </div>
-
-              <div style="display:flex;justify-content:center;padding:8px 0;"><svg width="2" height="20"><line x1="1" y1="0" x2="1" y2="20" stroke="#c8cedc" stroke-width="2" stroke-dasharray="5,3"/></svg></div>
-
-              <div style="background:#f0fdf4;border:1px solid rgba(22,163,74,.28);border-radius:12px;padding:14px 18px;">
-                <div style="font-weight:700;font-size:15px;color:#166534;margin-bottom:5px;">Batch Job <span style="font-weight:400;font-size:12px;color:#16a34a;">high-volume flows only</span></div>
-                <div style="font-size:13.5px;color:#166534;line-height:1.6;opacity:.9;">Processes records in chunks rather than one at a time. Per-record retry means one bad record does not fail the entire run. Used for large datasets -- item catalogs, inventory quantities, historical loads.</div>
-              </div>
-
-              <div style="display:flex;justify-content:center;padding:8px 0;"><svg width="2" height="20"><line x1="1" y1="0" x2="1" y2="20" stroke="#c8cedc" stroke-width="2" stroke-dasharray="5,3"/></svg></div>
-
-              <div style="background:#fff7ed;border:1px solid rgba(249,115,22,.28);border-radius:12px;padding:14px 18px;">
-                <div style="font-weight:700;font-size:15px;color:#9a3412;margin-bottom:5px;">Error Handler / DLQ</div>
-                <div style="font-size:13.5px;color:#9a3412;line-height:1.6;opacity:.9;">Each flow has a dedicated error block. Failed records are logged or routed to a dead-letter path -- nothing is silently dropped. Built into every flow; not a separately priced item.</div>
-              </div>
-
-            </div>
-          </div>
-
-          <!-- ARROWS col 2 -->
-          <div style="display:flex;align-items:center;justify-content:center;">
-            <svg width="64" height="80" viewBox="0 0 64 80" style="overflow:visible;">
-              <path d="M2 24 H50" stroke="#b0bbd0" stroke-width="2.5" stroke-dasharray="5,3" fill="none"/>
-              <polygon points="50,18 62,24 50,30" fill="#b0bbd0"/>
-              <path d="M2 56 H50" stroke="#b0bbd0" stroke-width="2.5" fill="none"/>
-              <polygon points="50,50 62,56 50,62" fill="#b0bbd0"/>
-            </svg>
-          </div>
-
-          <!-- RIGHT: Target System -->
-          <div style="display:flex;flex-direction:column;">
-            <div style="background:#1c4d7c;color:#fff;border-radius:10px 10px 0 0;padding:12px 18px;font-family:'Outfit',sans-serif;font-weight:800;font-size:13px;letter-spacing:.05em;text-transform:uppercase;text-align:center;">Target System <span style="font-weight:400;opacity:.5;font-size:11px;display:block;margin-top:2px;letter-spacing:0;text-transform:none;">e.g. Salesforce, HubSpot, Workday</span></div>
-            <div style="background:#fff;border:1.5px solid var(--border-strong);border-top:none;border-radius:0 0 14px 14px;padding:18px;flex:1;display:flex;flex-direction:column;gap:14px;">
-
-              <div style="background:#f8fafd;border:1px solid var(--border);border-radius:12px;padding:16px 18px;">
-                <div style="font-weight:700;font-size:15px;color:var(--text);margin-bottom:6px;">Upsert (External ID)</div>
-                <div style="font-size:13.5px;color:var(--sub);line-height:1.6;">Matches incoming records against the source system's ID stored as a custom field on the target. Match found -- update. No match -- create. Prevents duplicates on every sync run.</div>
-                <div style="margin-top:10px;background:#fff8e1;border:1px solid #fde68a;border-radius:8px;padding:9px 12px;font-size:13px;color:#78350f;line-height:1.55;"><strong>Pre-build dependency:</strong> The External ID field must exist on every relevant target object before any flow can safely run.</div>
-              </div>
-
-              <div style="background:#f8fafd;border:1px solid var(--border);border-radius:12px;padding:16px 18px;">
-                <div style="font-weight:700;font-size:15px;color:var(--text);margin-bottom:6px;">File Upload <span style="font-size:12px;font-weight:400;color:var(--muted);">file-transfer flows</span></div>
-                <div style="font-size:13.5px;color:var(--sub);line-height:1.6;">Binary file pulled from the source system's file storage and uploaded to the target system's document store. A file-transfer operation -- not a field-mapping one. DataWeave is minimal; the upload step is the core.</div>
-              </div>
-
-            </div>
+          <div style="background:#faf4ff;border:1.5px solid #d8b4fe;border-radius:12px;padding:18px 20px;">
+            <span style="background:#6b21a8;color:#fff;border-radius:20px;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 11px;display:inline-block;margin-bottom:10px;">Event-Driven</span>
+            <div style="font-weight:800;font-size:16px;color:var(--text);margin-bottom:7px;font-family:'Outfit',sans-serif;">Webhook / Outbound Event</div>
+            <div style="font-size:14px;color:var(--sub);line-height:1.65;">The source system fires an event the moment a record is saved and calls Mule's HTTP listener directly. Data arrives instantly -- no polling interval or watermark needed.</div>
           </div>
 
         </div>
+      </div>
 
-        <!-- Bottom trigger-type legend -->
-        <div style="display:flex;gap:0;border-radius:10px;overflow:hidden;border:1.5px solid var(--border-strong);">
-          <div style="flex:1;background:#eef5ff;padding:12px 20px;border-right:1px solid var(--border-strong);">
-            <div style="font-size:11.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#1a3560;margin-bottom:4px;">Polling (Scheduled)</div>
-            <div style="font-size:13.5px;color:#1a3560;opacity:.8;">Scheduler fires at interval -- watermark passed to source query -- only records changed since last run are returned</div>
-          </div>
-          <div style="flex:1;background:#fdf4ff;padding:12px 20px;">
-            <div style="font-size:11.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#6b21a8;margin-bottom:4px;">Event-Driven (Webhook)</div>
-            <div style="font-size:13.5px;color:#6b21a8;opacity:.8;">Source system fires webhook on record change -- HTTP call to Mule listener -- data arrives the instant the record is saved</div>
-          </div>
+      <!-- ARROW 1 -->
+      <div style="width:64px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:48px;padding:0 4px;">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+          <svg width="56" height="20" viewBox="0 0 56 20"><path d="M0 10 H44" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5,3" fill="none"/><polygon points="44,5 54,10 44,15" fill="#94a3b8"/></svg>
+          <span style="font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#94a3b8;">poll</span>
         </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+          <svg width="56" height="20" viewBox="0 0 56 20"><path d="M0 10 H44" stroke="#94a3b8" stroke-width="2" fill="none"/><polygon points="44,5 54,10 44,15" fill="#94a3b8"/></svg>
+          <span style="font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#94a3b8;">event</span>
+        </div>
+      </div>
+
+      <!-- CENTER: Anypoint Platform -->
+      <div style="flex:1;min-width:0;display:flex;flex-direction:column;">
+        <div style="background:#0092cc;color:#fff;border-radius:12px 12px 0 0;padding:14px 24px;font-family:'Outfit',sans-serif;font-weight:800;font-size:13px;letter-spacing:.05em;text-transform:uppercase;text-align:center;">Anypoint Platform<span style="font-weight:400;opacity:.7;font-size:11.5px;display:block;margin-top:3px;letter-spacing:0;text-transform:none;">Mule Runtime / Integration Engine</span></div>
+        <div style="background:#fff;border:2px solid #b3e5f9;border-top:none;border-radius:0 0 14px 14px;padding:20px 24px;flex:1;display:flex;flex-direction:column;gap:10px;">
+
+          <!-- Pipeline card: two-column inside -->
+          <div style="background:#e5f6fd;border:1.5px solid #b3e5f9;border-radius:12px;padding:18px 22px;display:flex;gap:20px;align-items:flex-start;">
+            <div style="min-width:200px;">
+              <div style="font-weight:800;font-size:17px;color:#004d6e;font-family:'Outfit',sans-serif;margin-bottom:5px;">Scheduler + Watermark</div>
+              <div style="font-size:12px;color:#006a96;font-weight:600;opacity:.8;">Detection / Triggering</div>
+            </div>
+            <div style="font-size:14.5px;color:#005b7a;line-height:1.65;flex:1;">Fires at the configured interval. Reads the last-run timestamp from Object Store and passes it as the filter on the next query -- so only records changed since that timestamp come back. This is what makes the sync incremental rather than a full re-pull every run.</div>
+          </div>
+
+          <div style="display:flex;justify-content:center;"><svg width="2" height="18"><line x1="1" y1="0" x2="1" y2="18" stroke="#b3e5f9" stroke-width="2.5" stroke-dasharray="5,3"/></svg></div>
+
+          <div style="background:#f8fafd;border:1.5px solid var(--border);border-radius:12px;padding:18px 22px;display:flex;gap:20px;align-items:flex-start;">
+            <div style="min-width:200px;">
+              <div style="font-weight:800;font-size:17px;color:var(--text);font-family:'Outfit',sans-serif;margin-bottom:5px;">Source Connector</div>
+              <div style="font-size:12px;color:var(--muted);font-weight:600;">REST / SOAP / SDK</div>
+            </div>
+            <div style="font-size:14.5px;color:var(--sub);line-height:1.65;flex:1;">Talks to the source system via its native API protocol and returns structured records -- one object per row, fields matching the defined query. For file-transfer flows, the connector retrieves the binary file from the source system's file storage instead of structured data.</div>
+          </div>
+
+          <div style="display:flex;justify-content:center;"><svg width="2" height="18"><line x1="1" y1="0" x2="1" y2="18" stroke="#c8cedc" stroke-width="2.5" stroke-dasharray="5,3"/></svg></div>
+
+          <div style="background:#f8fafd;border:1.5px solid var(--border);border-radius:12px;padding:18px 22px;display:flex;gap:20px;align-items:flex-start;">
+            <div style="min-width:200px;">
+              <div style="font-weight:800;font-size:17px;color:var(--text);font-family:'Outfit',sans-serif;margin-bottom:5px;">DataWeave Transform</div>
+              <div style="font-size:12px;color:var(--muted);font-weight:600;">Mapping / Logic</div>
+            </div>
+            <div style="font-size:14.5px;color:var(--sub);line-height:1.65;flex:1;">Maps each source field to the target schema. Handles type conversions, default values, and conditional logic (e.g. what to do when a field is null). Field renames, enum translations, value lookups, and routing decisions all live here.</div>
+          </div>
+
+          <div style="display:flex;justify-content:center;"><svg width="2" height="18"><line x1="1" y1="0" x2="1" y2="18" stroke="#c8cedc" stroke-width="2.5" stroke-dasharray="5,3"/></svg></div>
+
+          <div style="background:#f0fdf4;border:1.5px solid rgba(22,163,74,.3);border-radius:12px;padding:18px 22px;display:flex;gap:20px;align-items:flex-start;">
+            <div style="min-width:200px;">
+              <div style="font-weight:800;font-size:17px;color:#166534;font-family:'Outfit',sans-serif;margin-bottom:5px;">Batch Job</div>
+              <div style="font-size:12px;color:#16a34a;font-weight:600;">High-volume flows only</div>
+            </div>
+            <div style="font-size:14.5px;color:#166534;line-height:1.65;flex:1;opacity:.9;">Processes records in chunks rather than one at a time. Per-record retry means one bad record does not fail the entire run. Used for high-volume flows -- large catalogs, bulk historical loads, inventory quantity updates.</div>
+          </div>
+
+          <div style="display:flex;justify-content:center;"><svg width="2" height="18"><line x1="1" y1="0" x2="1" y2="18" stroke="#c8cedc" stroke-width="2.5" stroke-dasharray="5,3"/></svg></div>
+
+          <div style="background:#fff7ed;border:1.5px solid rgba(249,115,22,.3);border-radius:12px;padding:18px 22px;display:flex;gap:20px;align-items:flex-start;">
+            <div style="min-width:200px;">
+              <div style="font-weight:800;font-size:17px;color:#9a3412;font-family:'Outfit',sans-serif;margin-bottom:5px;">Error Handler / DLQ</div>
+              <div style="font-size:12px;color:#c2410c;font-weight:600;">Every flow, always</div>
+            </div>
+            <div style="font-size:14.5px;color:#9a3412;line-height:1.65;flex:1;opacity:.9;">Each flow has a dedicated error block. Failed records are logged or routed to a dead-letter queue -- nothing is silently dropped. Monitored by a named owner (email or Slack alert). Built into every flow; not a separately priced item.</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ARROW 2 -->
+      <div style="width:64px;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+          <svg width="56" height="20" viewBox="0 0 56 20"><path d="M0 10 H44" stroke="#94a3b8" stroke-width="2" fill="none"/><polygon points="44,5 54,10 44,15" fill="#94a3b8"/></svg>
+          <span style="font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#94a3b8;">write</span>
+        </div>
+      </div>
+
+      <!-- RIGHT: Target System -->
+      <div style="width:290px;flex-shrink:0;display:flex;flex-direction:column;">
+        <div style="background:#1c4d7c;color:#fff;border-radius:12px 12px 0 0;padding:14px 20px;font-family:'Outfit',sans-serif;font-weight:800;font-size:13px;letter-spacing:.05em;text-transform:uppercase;text-align:center;">Target System<span style="font-weight:400;opacity:.5;font-size:11.5px;display:block;margin-top:3px;letter-spacing:0;text-transform:none;">e.g. Salesforce, Workday, Zendesk</span></div>
+        <div style="background:#fff;border:2px solid var(--border-strong);border-top:none;border-radius:0 0 14px 14px;padding:20px;flex:1;display:flex;flex-direction:column;gap:14px;">
+
+          <div style="background:#f8fafd;border:1.5px solid var(--border);border-radius:12px;padding:18px 20px;">
+            <div style="font-weight:800;font-size:16px;color:var(--text);margin-bottom:8px;font-family:'Outfit',sans-serif;">Upsert (External ID)</div>
+            <div style="font-size:14px;color:var(--sub);line-height:1.65;margin-bottom:12px;">Matches incoming records against the source ID stored as a custom field on the target. Match -- update. No match -- create. Prevents duplicates on every sync run.</div>
+            <div style="background:#fffbeb;border:1.5px solid #fde68a;border-radius:9px;padding:11px 14px;font-size:13.5px;color:#78350f;line-height:1.6;"><strong>Pre-build dependency:</strong> The External ID field must exist on every target object before any flow can run safely.</div>
+          </div>
+
+          <div style="background:#f8fafd;border:1.5px solid var(--border);border-radius:12px;padding:18px 20px;">
+            <div style="font-weight:800;font-size:16px;color:var(--text);margin-bottom:4px;font-family:'Outfit',sans-serif;">File Upload</div>
+            <div style="font-size:12.5px;color:var(--muted);font-weight:600;margin-bottom:8px;">File-transfer flows only</div>
+            <div style="font-size:14px;color:var(--sub);line-height:1.65;">Binary file retrieved from the source file store and written to the target document store. A transfer operation -- not field mapping. DataWeave is minimal; the upload step is the core work.</div>
+          </div>
+
+        </div>
+      </div>
 
     </div>
 
-    <!-- Supporting reference cards -->
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;">
-
-      <div class="card">
-        <div style="font-weight:700;font-size:15px;color:var(--text);margin-bottom:9px;display:flex;align-items:center;gap:8px;"><i data-lucide="timer" style="width:16px;height:16px;color:var(--red);flex-shrink:0;"></i> Watermark Mechanics</div>
-        <div style="font-size:13.5px;color:var(--sub);line-height:1.65;">Anypoint stores the timestamp of the last successful run in Object Store (or a small database table). On the next run, that value is passed into the source query. The source system returns only records changed after that point. No watermark = full re-pull every run.</div>
+    <!-- Bottom trigger legend -->
+    <div style="display:flex;gap:12px;margin-top:16px;">
+      <div style="flex:1;background:#eef5ff;border:1.5px solid #c2d8fa;border-radius:12px;padding:14px 20px;display:flex;align-items:center;gap:14px;">
+        <svg width="36" height="18" viewBox="0 0 36 18" style="flex-shrink:0;"><path d="M0 9 H26" stroke="#1a3560" stroke-width="2" stroke-dasharray="5,3" fill="none"/><polygon points="26,4 36,9 26,14" fill="#1a3560"/></svg>
+        <div><div style="font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#1a3560;margin-bottom:3px;">Polling (Scheduled)</div><div style="font-size:14px;color:#1a3560;opacity:.8;">Scheduler fires at interval -- watermark passed to query -- only new/changed records returned</div></div>
       </div>
-
-      <div class="card">
-        <div style="font-weight:700;font-size:15px;color:var(--text);margin-bottom:9px;display:flex;align-items:center;gap:8px;"><i data-lucide="key-round" style="width:16px;height:16px;color:var(--red);flex-shrink:0;"></i> External ID -- Critical Setup Step</div>
-        <div style="font-size:13.5px;color:var(--sub);line-height:1.65;">The upsert's External ID field is the single most important pre-build dependency. If it doesn't exist on the relevant target objects, that's a setup task that must complete before any flow can run without creating duplicates. Confirm this on every scoping call.</div>
+      <div style="flex:1;background:#faf4ff;border:1.5px solid #d8b4fe;border-radius:12px;padding:14px 20px;display:flex;align-items:center;gap:14px;">
+        <svg width="36" height="18" viewBox="0 0 36 18" style="flex-shrink:0;"><path d="M0 9 H26" stroke="#6b21a8" stroke-width="2" fill="none"/><polygon points="26,4 36,9 26,14" fill="#6b21a8"/></svg>
+        <div><div style="font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#6b21a8;margin-bottom:3px;">Event-Driven (Webhook)</div><div style="font-size:14px;color:#6b21a8;opacity:.8;">Source system fires on record save -- HTTP call to Mule listener -- data arrives instantly</div></div>
       </div>
-
-      <div class="card">
-        <div style="font-weight:700;font-size:15px;color:var(--text);margin-bottom:9px;display:flex;align-items:center;gap:8px;"><i data-lucide="layers" style="width:16px;height:16px;color:var(--red);flex-shrink:0;"></i> Batch vs. Single-Record Processing</div>
-        <div style="font-size:13.5px;color:var(--sub);line-height:1.65;">High-volume syncs use the Batch Job component -- records processed in chunks with per-record retry. Event-triggered flows typically process records one at a time. Batch adds architecture complexity and should be flagged as a scope driver above a volume threshold.</div>
-      </div>
-
-      <div class="card">
-        <div style="font-weight:700;font-size:15px;color:var(--text);margin-bottom:9px;display:flex;align-items:center;gap:8px;"><i data-lucide="file-scan" style="width:16px;height:16px;color:var(--red);flex-shrink:0;"></i> File-Transfer Flows -- Different Architecture</div>
-        <div style="font-size:13.5px;color:var(--sub);line-height:1.65;">Flows that move binary files (PDFs, attachments, documents) between systems are fundamentally different from data-mapping flows. The DataWeave step is minimal; the retrieve-and-upload step is the core. Scope these separately -- they have their own error handling and monitoring requirements.</div>
-      </div>
-
     </div>
+  </div>
+
+  <!-- Supporting reference cards -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:18px;">
+
+    <div class="card" style="padding:22px 24px;">
+      <div style="font-weight:700;font-size:15.5px;color:var(--text);margin-bottom:10px;display:flex;align-items:center;gap:9px;"><i data-lucide="timer" style="width:17px;height:17px;color:var(--red);flex-shrink:0;"></i> Watermark Mechanics</div>
+      <div style="font-size:14px;color:var(--sub);line-height:1.7;">Anypoint stores the last-run timestamp in Object Store (or a small database table). On the next run, that value is passed as the filter into the source query -- only records changed after that timestamp come back. No watermark means a full re-pull on every run.</div>
+    </div>
+
+    <div class="card" style="padding:22px 24px;">
+      <div style="font-weight:700;font-size:15.5px;color:var(--text);margin-bottom:10px;display:flex;align-items:center;gap:9px;"><i data-lucide="key-round" style="width:17px;height:17px;color:var(--red);flex-shrink:0;"></i> External ID -- Critical Setup</div>
+      <div style="font-size:14px;color:var(--sub);line-height:1.7;">The upsert External ID field is the single most important pre-build dependency. If it doesn't exist on the relevant target objects, that's a setup task that must complete before any flow can safely run without creating duplicates. Confirm this on every scoping call.</div>
+    </div>
+
+    <div class="card" style="padding:22px 24px;">
+      <div style="font-weight:700;font-size:15.5px;color:var(--text);margin-bottom:10px;display:flex;align-items:center;gap:9px;"><i data-lucide="layers" style="width:17px;height:17px;color:var(--red);flex-shrink:0;"></i> Batch vs. Single-Record</div>
+      <div style="font-size:14px;color:var(--sub);line-height:1.7;">High-volume flows use the Batch Job component -- records in chunks, per-record retry. Event-triggered flows typically process one record at a time. Batch adds meaningful architecture complexity and should be explicitly flagged as a scope driver when volume is high.</div>
+    </div>
+
+    <div class="card" style="padding:22px 24px;">
+      <div style="font-weight:700;font-size:15.5px;color:var(--text);margin-bottom:10px;display:flex;align-items:center;gap:9px;"><i data-lucide="file-scan" style="width:17px;height:17px;color:var(--red);flex-shrink:0;"></i> File-Transfer Architecture</div>
+      <div style="font-size:14px;color:var(--sub);line-height:1.7;">Flows that move binary files between systems are fundamentally different from data-mapping flows -- the connector retrieves a binary object, not structured records, and DataWeave is minimal. Scope file-transfer flows separately; they carry their own error handling and monitoring patterns.</div>
+    </div>
+
   </div>
 
 </div>
@@ -1793,12 +1809,14 @@ function filterSystems(){
 }
 filterSystems();
 
+const mainEl=document.querySelector('main');
 document.querySelectorAll('.tab-btn').forEach(btn=>{
   btn.addEventListener('click',()=>{
     document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
     document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
     btn.classList.add('active');
     document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+    mainEl.classList.toggle('wide', btn.dataset.tab==='mechanics');
     window.scrollTo(0,0);
     lucide.createIcons();
   });
